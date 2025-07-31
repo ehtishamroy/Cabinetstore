@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Aura Cabinets - Modern Kitchens, Simply Delivered')
+@section('title', 'BH Cabinetry - Modern Kitchens, Simply Delivered')
 
 @section('content')
 <main>
@@ -43,7 +43,7 @@
                     <p class="text-accent font-semibold mb-2">OUR STORY</p>
                     <h2 class="text-3xl md:text-4xl font-semibold mb-4">Designed & Crafted with Passion</h2>
                     <p class="text-gray-600 leading-relaxed">
-                        Aura Cabinets was founded on a simple idea: everyone deserves a beautiful, high-quality kitchen without the luxury price tag. We are a team of passionate designers, craftspeople, and innovators dedicated to creating premium, ready-to-assemble cabinets that bring your vision to life.
+                        BH Cabinetry was founded on a simple idea: everyone deserves a beautiful, high-quality kitchen without the luxury price tag. We are a team of passionate designers, craftspeople, and innovators dedicated to creating premium, ready-to-assemble cabinets that bring your vision to life.
                     </p>
                 </div>
             </div>
@@ -295,7 +295,7 @@
                                 <i data-lucide="star" class="w-5 h-5 fill-current"></i>
                                 <i data-lucide="star" class="w-5 h-5 fill-current"></i>
                             </div>
-                            <p class="text-gray-700 leading-relaxed flex-grow">"I'm a contractor and I've started using Aura for all my projects. My clients love the look and I love the price and fast shipping. It's a game-changer."</p>
+                            <p class="text-gray-700 leading-relaxed flex-grow">"I'm a contractor and I've started using BH Cabinetry for all my projects. My clients love the look and I love the price and fast shipping. It's a game-changer."</p>
                             <div class="mt-6 flex items-center">
                                 <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1974&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/48x48/cccccc/666666?text=MB';" alt="Avatar of Michael B." class="w-12 h-12 rounded-full mr-4 object-cover">
                                 <div>
@@ -372,7 +372,7 @@
                              <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
                          </a>
                     </div>
-                    <p class="mt-6 text-sm text-gray-500">Or, email us at <a href="mailto:hello@aura.com" class="text-accent font-semibold">hello@aura.com</a></p>
+                    <p class="mt-6 text-sm text-gray-500">Or, email us at <a href="mailto:hello@bhcabinetry.com" class="text-accent font-semibold">hello@bhcabinetry.com</a></p>
                 </div>
             </div>
         </div>

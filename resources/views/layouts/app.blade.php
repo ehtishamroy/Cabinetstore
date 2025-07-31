@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Aura Cabinets - Modern Kitchens, Simply Delivered')</title>
+    <title>@yield('title', 'BH Cabinetry - Modern Kitchens, Simply Delivered')</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -149,19 +149,21 @@
     <header id="main-header" class="fixed left-0 right-0 z-50 py-4 px-6 md:px-10">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <!-- Logo -->
-            <a href="/" class="text-2xl font-bold" id="logo">AURA</a>
+            <a href="/" class="text-2xl font-bold" id="logo">BH CABINETRY</a>
 
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex items-center space-x-8">
-                <a href="#styles" class="hover:text-accent transition-colors duration-300">Cabinet Styles</a>
-                <a href="#" class="hover:text-accent transition-colors duration-300">Bathroom</a>
-                <a href="#" class="hover:text-accent transition-colors duration-300">Resources</a>
+                <a href="/shop" class="hover:text-accent transition-colors duration-300">Shop</a>
+                <a href="/product" class="hover:text-accent transition-colors duration-300">Products</a>
+                <a href="/about" class="hover:text-accent transition-colors duration-300">About Us</a>
+                <a href="/blog" class="hover:text-accent transition-colors duration-300">Blog</a>
+                <a href="/contact" class="hover:text-accent transition-colors duration-300">Contact</a>
             </nav>
 
             <!-- Icons -->
             <div class="hidden md:flex items-center space-x-6">
                 <button id="search-button" class="hover:text-accent transition-colors duration-300"><i data-lucide="search"></i></button>
-                <a href="#" class="hover:text-accent transition-colors duration-300"><i data-lucide="user"></i></a>
+                <a href="{{ route('login') }}" class="hover:text-accent transition-colors duration-300"><i data-lucide="user"></i></a>
                 <button id="cart-button" class="hover:text-accent transition-colors duration-300 relative">
                     <i data-lucide="shopping-cart"></i>
                     <span class="absolute -top-2 -right-2 bg-accent text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">3</span>
@@ -181,13 +183,15 @@
             <i data-lucide="x"></i>
         </button>
         <nav class="flex flex-col space-y-6 text-lg mt-12">
-            <a href="#styles" class="hover:text-accent transition-colors duration-300">Cabinet Styles</a>
-            <a href="#" class="hover:text-accent transition-colors duration-300">Bathroom</a>
-            <a href="#" class="hover:text-accent transition-colors duration-300">Resources</a>
+            <a href="/shop" class="hover:text-accent transition-colors duration-300">Shop</a>
+            <a href="/product" class="hover:text-accent transition-colors duration-300">Products</a>
+            <a href="/about" class="hover:text-accent transition-colors duration-300">About Us</a>
+            <a href="/blog" class="hover:text-accent transition-colors duration-300">Blog</a>
+            <a href="/contact" class="hover:text-accent transition-colors duration-300">Contact</a>
             <hr class="border-secondary"/>
+            <a href="/cart" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="shopping-cart" class="mr-2"></i> Cart</a>
             <a href="#" id="mobile-search-button" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="search" class="mr-2"></i> Search</a>
-            <a href="#" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="user" class="mr-2"></i> Account</a>
-            <a href="#" id="mobile-cart-button" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="shopping-cart" class="mr-2"></i> Cart</a>
+            <a href="{{ route('login') }}" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="user" class="mr-2"></i> Account</a>
         </nav>
     </div>
 
@@ -283,7 +287,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <!-- Column 1: Brand -->
                 <div class="md:col-span-1">
-                    <h3 class="text-2xl font-bold text-white mb-4">AURA</h3>
+                    <h3 class="text-2xl font-bold text-white mb-4">BH CABINETRY</h3>
                     <p class="text-sm">Our mission is to make beautiful, high-quality kitchen design accessible to everyone.</p>
                 </div>
                 <!-- Column 2: Shop -->
@@ -322,7 +326,7 @@
             </div>
             <hr class="border-gray-700 my-8">
             <div class="text-center text-sm text-gray-500">
-                &copy; 2025 Aura Cabinets. All Rights Reserved.
+                &copy; 2025 BH Cabinetry. All Rights Reserved.
             </div>
         </div>
     </footer>
@@ -430,7 +434,6 @@
 
             // --- Flyout Cart & Search Logic ---
             const cartButton = document.getElementById('cart-button');
-            const mobileCartButton = document.getElementById('mobile-cart-button');
             const closeCartButton = document.getElementById('close-cart-button');
             const cartFlyout = document.getElementById('cart-flyout');
             const cartBackdrop = document.getElementById('cart-flyout-backdrop');
@@ -458,11 +461,6 @@
             };
             
             cartButton.addEventListener('click', () => openOverlay(cartBackdrop, cartFlyout));
-            mobileCartButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                closeMenu();
-                setTimeout(() => openOverlay(cartBackdrop, cartFlyout), 300);
-            });
             closeCartButton.addEventListener('click', () => closeOverlay(cartBackdrop, cartFlyout));
             cartBackdrop.addEventListener('click', () => closeOverlay(cartBackdrop, cartFlyout));
 
