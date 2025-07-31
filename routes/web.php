@@ -1,12 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\DoorStyleController;
+use App\Http\Controllers\Admin\DoorColorController;
+use App\Http\Controllers\Admin\ProductLineController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\SubCategoryController;
+use App\Http\Controllers\Admin\ProductController;
 
 Route::get('/', function () {
     return view('home');
 })->name('home');
-
-
 
 Route::get('/shop', function () {
     return view('shop');
@@ -53,17 +59,15 @@ Route::get('/thankyou', function () {
 })->name('thankyou');
 
 // Authentication Routes
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/register', function () {
-    return view('register');
-})->name('register');
-
-// Admin Panel Routes
-Route::prefix('admin')->group(function () {
-    Route::get('/', function () {
+// Admin Panel Routes (Protected by AdminMiddleware)
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
     
@@ -79,10 +83,6 @@ Route::prefix('admin')->group(function () {
         return view('admin.categories');
     })->name('admin.categories');
     
-    Route::get('/customers', function () {
-        return view('admin.customers');
-    })->name('admin.customers');
-    
     Route::get('/blog', function () {
         return view('admin.blog');
     })->name('admin.blog');
@@ -90,5 +90,26 @@ Route::prefix('admin')->group(function () {
     Route::get('/settings', function () {
         return view('admin.settings');
     })->name('admin.settings');
+
+    // User Management Routes
+    Route::resource('users', UserController::class, ['as' => 'admin']);
+
+    // Door Styles Management
+    Route::resource('door-styles', DoorStyleController::class, ['as' => 'admin']);
+
+    // Door Colors Management
+    Route::resource('door-colors', DoorColorController::class, ['as' => 'admin']);
+
+    // Product Lines Management
+    Route::resource('product-lines', ProductLineController::class, ['as' => 'admin']);
+
+    // Categories Management
+    Route::resource('categories', CategoryController::class, ['as' => 'admin']);
+
+    // Sub Categories Management
+    Route::resource('sub-categories', SubCategoryController::class, ['as' => 'admin']);
+
+    // Products Management
+    Route::resource('products', ProductController::class, ['as' => 'admin']);
 });
 

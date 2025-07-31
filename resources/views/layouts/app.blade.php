@@ -163,7 +163,28 @@
             <!-- Icons -->
             <div class="hidden md:flex items-center space-x-6">
                 <button id="search-button" class="hover:text-accent transition-colors duration-300"><i data-lucide="search"></i></button>
-                <a href="{{ route('login') }}" class="hover:text-accent transition-colors duration-300"><i data-lucide="user"></i></a>
+                @auth
+                    <div class="relative group">
+                        <button class="hover:text-accent transition-colors duration-300 flex items-center">
+                            <i data-lucide="user"></i>
+                            <span class="ml-1 text-sm">{{ Auth::user()->name }}</span>
+                        </button>
+                        <!-- Extended hover area -->
+                        <div class="absolute -top-2 -left-2 -right-2 -bottom-2 bg-transparent"></div>
+                        <div class="absolute right-0 top-full pt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out">
+                            @if(Auth::user()->isAdmin())
+                                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150">Admin Dashboard</a>
+                            @endif
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150">My Account</a>
+                            <form action="{{ route('logout') }}" method="POST" class="block">
+                                @csrf
+                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150">Logout</button>
+                            </form>
+                        </div>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="hover:text-accent transition-colors duration-300"><i data-lucide="user"></i></a>
+                @endauth
                 <button id="cart-button" class="hover:text-accent transition-colors duration-300 relative">
                     <i data-lucide="shopping-cart"></i>
                     <span class="absolute -top-2 -right-2 bg-accent text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">3</span>
@@ -191,7 +212,21 @@
             <hr class="border-secondary"/>
             <a href="/cart" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="shopping-cart" class="mr-2"></i> Cart</a>
             <a href="#" id="mobile-search-button" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="search" class="mr-2"></i> Search</a>
-            <a href="{{ route('login') }}" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="user" class="mr-2"></i> Account</a>
+            @auth
+                <div class="space-y-2">
+                    <div class="text-sm text-gray-600">{{ Auth::user()->name }}</div>
+                    @if(Auth::user()->isAdmin())
+                        <a href="{{ route('admin.dashboard') }}" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="shield" class="mr-2"></i> Admin Dashboard</a>
+                    @endif
+                    <a href="#" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="user" class="mr-2"></i> My Account</a>
+                    <form action="{{ route('logout') }}" method="POST" class="block">
+                        @csrf
+                        <button type="submit" class="w-full text-left hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="log-out" class="mr-2"></i> Logout</button>
+                    </form>
+                </div>
+            @else
+                <a href="{{ route('login') }}" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="user" class="mr-2"></i> Account</a>
+            @endauth
         </nav>
     </div>
 

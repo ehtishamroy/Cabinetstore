@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'Dashboard - Aura Admin Panel')
+@section('title', 'Dashboard - BH Cabinetry Admin Panel')
 
 @section('content')
 <div class="p-6 sm:p-8">

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Aura Admin Panel')</title>
+            <title>@yield('title', 'BH Cabinetry Admin Panel')</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -79,7 +79,7 @@
     <aside class="w-64 flex-shrink-0 bg-white border-r border-gray-200 flex flex-col">
         <!-- Logo -->
         <div class="h-16 flex items-center justify-center border-b border-gray-200">
-            <h1 class="text-2xl font-bold text-gray-800">AURA</h1>
+            <h1 class="text-2xl font-bold text-gray-800">BH CABINETRY</h1>
         </div>
         <!-- Navigation -->
         <nav class="flex-grow p-4 space-y-2">
@@ -92,17 +92,41 @@
                 <span>Orders</span>
                 <span class="ml-auto bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">3</span>
             </a>
-            <a href="{{ route('admin.products') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.products') ? 'active' : '' }}">
-                <i data-lucide="package" class="w-5 h-5 mr-3"></i>
-                <span>Products</span>
-            </a>
-            <a href="{{ route('admin.categories') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.categories') ? 'active' : '' }}">
-                <i data-lucide="folder-tree" class="w-5 h-5 mr-3"></i>
-                <span>Categories</span>
-            </a>
-            <a href="{{ route('admin.customers') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.customers') ? 'active' : '' }}">
+            
+            <!-- Product Management Section -->
+            <div class="pt-4">
+                <h3 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Product Management</h3>
+                <div class="mt-2 space-y-1">
+                    <a href="{{ route('admin.door-styles.index') }}" class="sidebar-link flex items-center px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.door-styles.*') ? 'active' : '' }}">
+                        <i data-lucide="square" class="w-4 h-4 mr-3"></i>
+                        <span>Door Styles</span>
+                    </a>
+                    <a href="{{ route('admin.door-colors.index') }}" class="sidebar-link flex items-center px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.door-colors.*') ? 'active' : '' }}">
+                        <i data-lucide="palette" class="w-4 h-4 mr-3"></i>
+                        <span>Door Colors</span>
+                    </a>
+                    <a href="{{ route('admin.product-lines.index') }}" class="sidebar-link flex items-center px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.product-lines.*') ? 'active' : '' }}">
+                        <i data-lucide="layers" class="w-4 h-4 mr-3"></i>
+                        <span>Product Lines</span>
+                    </a>
+                    <a href="{{ route('admin.categories.index') }}" class="sidebar-link flex items-center px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+                        <i data-lucide="folder-tree" class="w-4 h-4 mr-3"></i>
+                        <span>Categories</span>
+                    </a>
+                    <a href="{{ route('admin.sub-categories.index') }}" class="sidebar-link flex items-center px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.sub-categories.*') ? 'active' : '' }}">
+                        <i data-lucide="folder" class="w-4 h-4 mr-3"></i>
+                        <span>Sub Categories</span>
+                    </a>
+                    <a href="{{ route('admin.products.index') }}" class="sidebar-link flex items-center px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
+                        <i data-lucide="package" class="w-4 h-4 mr-3"></i>
+                        <span>Products</span>
+                    </a>
+                </div>
+            </div>
+            
+            <a href="{{ route('admin.users.index') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                 <i data-lucide="users" class="w-5 h-5 mr-3"></i>
-                <span>Customers</span>
+                <span>User Management</span>
             </a>
             <a href="{{ route('admin.blog') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.blog') ? 'active' : '' }}">
                 <i data-lucide="file-text" class="w-5 h-5 mr-3"></i>

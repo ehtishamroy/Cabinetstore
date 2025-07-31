@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Product extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'product_line_id',
+        'sub_category_id',
+        'sku',
+        'name',
+        'price',
+        'assembly_cost',
+        'hinge_type',
+        'is_modifiable',
+        'width',
+        'height',
+        'depth',
+    ];
+
+    protected $casts = [
+        'price' => 'decimal:2',
+        'assembly_cost' => 'decimal:2',
+        'is_modifiable' => 'boolean',
+        'width' => 'decimal:2',
+        'height' => 'decimal:2',
+        'depth' => 'decimal:2',
+    ];
+
+    public function productLine()
+    {
+        return $this->belongsTo(ProductLine::class);
+    }
+
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategory::class);
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
+    // Helper method to get the display name with dimensions
+    public function getDisplayNameAttribute()
+    {
+        return $this->name . ' (' . $this->width . '"W x ' . $this->height . '"H x ' . $this->depth . '"D)';
+    }
+}
