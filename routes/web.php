@@ -111,5 +111,6 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
 
     // Products Management
     Route::resource('products', ProductController::class, ['as' => 'admin']);
+    Route::get('products/{product}/duplicate', [ProductController::class, 'duplicate'])->name('admin.products.duplicate');
 });
 

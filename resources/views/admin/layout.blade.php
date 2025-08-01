@@ -87,51 +87,64 @@
                 <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i>
                 <span>Dashboard</span>
             </a>
-            <a href="{{ route('admin.orders') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.orders') ? 'active' : '' }}">
-                <i data-lucide="shopping-cart" class="w-5 h-5 mr-3"></i>
-                <span>Orders</span>
-                <span class="ml-auto bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">3</span>
-            </a>
             
             <!-- Product Management Section -->
             <div class="pt-4">
                 <h3 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Product Management</h3>
                 <div class="mt-2 space-y-1">
-                    <a href="{{ route('admin.door-styles.index') }}" class="sidebar-link flex items-center px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.door-styles.*') ? 'active' : '' }}">
-                        <i data-lucide="square" class="w-4 h-4 mr-3"></i>
+                    <a href="{{ route('admin.door-styles.index') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.door-styles.*') ? 'active' : '' }}">
+                        <i data-lucide="palette" class="w-5 h-5 mr-3"></i>
                         <span>Door Styles</span>
                     </a>
-                    <a href="{{ route('admin.door-colors.index') }}" class="sidebar-link flex items-center px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.door-colors.*') ? 'active' : '' }}">
-                        <i data-lucide="palette" class="w-4 h-4 mr-3"></i>
+                    <a href="{{ route('admin.door-colors.index') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.door-colors.*') ? 'active' : '' }}">
+                        <i data-lucide="droplets" class="w-5 h-5 mr-3"></i>
                         <span>Door Colors</span>
                     </a>
-                    <a href="{{ route('admin.product-lines.index') }}" class="sidebar-link flex items-center px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.product-lines.*') ? 'active' : '' }}">
-                        <i data-lucide="layers" class="w-4 h-4 mr-3"></i>
+                    <a href="{{ route('admin.product-lines.index') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.product-lines.*') ? 'active' : '' }}">
+                        <i data-lucide="layers" class="w-5 h-5 mr-3"></i>
                         <span>Product Lines</span>
                     </a>
-                    <a href="{{ route('admin.categories.index') }}" class="sidebar-link flex items-center px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
-                        <i data-lucide="folder-tree" class="w-4 h-4 mr-3"></i>
+                    <a href="{{ route('admin.categories.index') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
+                        <i data-lucide="folder-tree" class="w-5 h-5 mr-3"></i>
                         <span>Categories</span>
                     </a>
-                    <a href="{{ route('admin.sub-categories.index') }}" class="sidebar-link flex items-center px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.sub-categories.*') ? 'active' : '' }}">
-                        <i data-lucide="folder" class="w-4 h-4 mr-3"></i>
+                    <a href="{{ route('admin.sub-categories.index') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.sub-categories.*') ? 'active' : '' }}">
+                        <i data-lucide="folder-open" class="w-5 h-5 mr-3"></i>
                         <span>Sub Categories</span>
                     </a>
-                    <a href="{{ route('admin.products.index') }}" class="sidebar-link flex items-center px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
-                        <i data-lucide="package" class="w-4 h-4 mr-3"></i>
+                    <a href="{{ route('admin.products.index') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
+                        <i data-lucide="package" class="w-5 h-5 mr-3"></i>
                         <span>Products</span>
                     </a>
                 </div>
             </div>
-            
-            <a href="{{ route('admin.users.index') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
-                <i data-lucide="users" class="w-5 h-5 mr-3"></i>
-                <span>User Management</span>
-            </a>
-            <a href="{{ route('admin.blog') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.blog') ? 'active' : '' }}">
-                <i data-lucide="file-text" class="w-5 h-5 mr-3"></i>
-                <span>Blog</span>
-            </a>
+
+            <!-- Business Management Section -->
+            <div class="pt-4">
+                <h3 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Business</h3>
+                <div class="mt-2 space-y-1">
+                    <a href="{{ route('admin.orders') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.orders') ? 'active' : '' }}">
+                        <i data-lucide="shopping-cart" class="w-5 h-5 mr-3"></i>
+                        <span>Orders</span>
+                        <span class="ml-auto bg-red-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">3</span>
+                    </a>
+                    <a href="{{ route('admin.users.index') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                        <i data-lucide="users" class="w-5 h-5 mr-3"></i>
+                        <span>User Management</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Content Management Section -->
+            <div class="pt-4">
+                <h3 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Content</h3>
+                <div class="mt-2 space-y-1">
+                    <a href="{{ route('admin.blog') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.blog') ? 'active' : '' }}">
+                        <i data-lucide="file-text" class="w-5 h-5 mr-3"></i>
+                        <span>Blog</span>
+                    </a>
+                </div>
+            </div>
         </nav>
         <!-- Footer -->
         <div class="p-4 border-t border-gray-200">
