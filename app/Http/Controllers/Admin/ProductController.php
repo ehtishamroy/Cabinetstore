@@ -98,7 +98,19 @@ class ProductController extends Controller
     {
         // Create a new product with the same data
         $duplicate = $product->replicate();
-        $duplicate->sku = $product->sku . '-COPY';
+        
+        // Generate a unique SKU
+        $baseSku = $product->sku;
+        $counter = 1;
+        $newSku = $baseSku . '-COPY';
+        
+        // Keep trying until we find a unique SKU
+        while (Product::where('sku', $newSku)->exists()) {
+            $newSku = $baseSku . '-COPY-' . $counter;
+            $counter++;
+        }
+        
+        $duplicate->sku = $newSku;
         $duplicate->name = $product->name . ' (Copy)';
         $duplicate->save();
 

@@ -45,7 +45,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 @if($subCategory->image_url)
-                                    <img src="{{ $subCategory->image_url }}" alt="{{ $subCategory->name }}" class="h-10 w-10 rounded object-cover">
+                                    <img src="{{ asset($subCategory->image_url) }}" alt="{{ $subCategory->name }}" class="h-10 w-10 rounded object-cover">
                                 @else
                                     <span class="text-gray-400">No image</span>
                                 @endif

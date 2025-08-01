@@ -14,9 +14,14 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-Route::get('/shop', function () {
-    return view('shop');
-})->name('shop');
+Route::get('/shop', [App\Http\Controllers\ShopController::class, 'index'])->name('shop');
+Route::get('/shop/door-colors', [App\Http\Controllers\ShopController::class, 'getDoorColors'])->name('shop.door-colors');
+Route::get('/shop/door-styles', [App\Http\Controllers\ShopController::class, 'getDoorStyles'])->name('shop.door-styles');
+
+// Test route to verify shop functionality
+Route::get('/test-shop', function () {
+    return redirect()->route('shop');
+})->name('test-shop');
 
 Route::get('/product', function () {
     return view('product');

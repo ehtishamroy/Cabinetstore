@@ -20,11 +20,11 @@
     }
     
     /* New Color Filter Item Style */
-    .color-filter-item img {
+    .door-color-filter-item img {
         transition: transform 0.2s, box-shadow 0.2s;
         border: 2px solid #EAEAEA;
     }
-    .color-filter-item.selected img {
+    .door-color-filter-item.selected img {
         transform: scale(1.1);
         box-shadow: 0 0 0 2px white, 0 0 0 4px #2D2D2D;
     }
@@ -78,16 +78,63 @@
     .product-card:hover .product-card-image {
         transform: scale(1.05);
     }
+
+    /* Breadcrumb and Navigation */
+    .breadcrumb-item {
+        transition: color 0.2s;
+    }
+    .breadcrumb-item:hover {
+        color: #2D2D2D;
+    }
+    .breadcrumb-item.active {
+        color: #6B7280;
+        cursor: default;
+    }
+
+    /* Back Button */
+    .back-button {
+        transition: all 0.2s;
+    }
+    .back-button:hover {
+        transform: translateX(-2px);
+    }
+
+    /* Color Grid */
+    .color-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+
+    /* Loading States */
+    .loading-skeleton {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+    }
+    @keyframes loading {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
 </style>
 @endsection
 
 @section('content')
 <main>
     <div class="max-w-7xl mx-auto px-6 md:px-10 py-8">
+        <!-- Breadcrumb Navigation -->
+        <nav id="breadcrumb-nav" class="mb-6">
+            <div class="flex items-center space-x-2 text-sm text-gray-600">
+                <a href="{{ route('home') }}" class="breadcrumb-item hover:underline">Home</a>
+                <span>/</span>
+                <span class="breadcrumb-item active">Shop</span>
+            </div>
+        </nav>
+
         <!-- Page Header -->
         <div class="text-center py-8">
-            <h1 class="text-4xl md:text-5xl font-light">All Cabinet Styles</h1>
-            <p class="mt-4 text-gray-600 max-w-2xl mx-auto">From timeless shaker designs to sleek modern aesthetics, find the perfect foundation for your dream kitchen. Each collection is crafted for quality, style, and simplicity.</p>
+            <h1 id="page-title" class="text-4xl md:text-5xl font-light">Choose Your Door Style</h1>
+            <p id="page-description" class="mt-4 text-gray-600 max-w-2xl mx-auto">Select your preferred door style to see all available colors and start building your perfect kitchen.</p>
         </div>
         
         <div class="flex">
@@ -95,31 +142,19 @@
             <aside id="filters-sidebar" class="hidden lg:block w-1/4 pr-8">
                 <div class="sticky top-28">
                      <div id="filter-content" class="bg-[#F8F7F4] p-6 rounded-xl">
-                        <!-- Category Filter -->
+                        <!-- Door Style Filter -->
                         <div class="mb-8">
-                            <h3 class="font-semibold mb-4">Category</h3>
-                            <div id="category-filters" class="space-y-3">
-                                <!-- Populated by JS -->
-                            </div>
-                        </div>
-
-                        <!-- Color Filter -->
-                        <div class="mb-8">
-                            <h3 class="font-semibold mb-4">Color</h3>
-                            <div id="color-filters" class="grid grid-cols-4 gap-4">
-                                <!-- Populated by JS -->
-                            </div>
-                        </div>
-                        
-                        <!-- Price Range Filter -->
-                        <div>
-                            <h3 class="font-semibold mb-4">Price Range</h3>
-                            <div class="relative">
-                                 <input type="range" id="price-range" min="0" max="2000" value="2000" class="w-full">
-                                 <div class="flex justify-between text-sm text-gray-500 mt-2">
-                                     <span>$0</span>
-                                     <span id="price-value">$2000</span>
-                                 </div>
+                            <h3 class="font-semibold mb-4">Door Styles</h3>
+                            <div id="door-style-filters" class="space-y-3">
+                                                                 @foreach($doorStyles as $doorStyle)
+                                     @php
+                                         $colorCount = isset($doorColorsByStyle[$doorStyle['name']]) ? count($doorColorsByStyle[$doorStyle['name']]) : 0;
+                                     @endphp
+                                     <label class="flex items-center space-x-3 cursor-pointer">
+                                         <input type="checkbox" value="{{ $doorStyle['name'] }}" class="door-style-filter custom-checkbox h-5 w-5 rounded-md border-gray-300 text-gray-900 focus:ring-gray-900">
+                                         <span class="text-sm">{{ $doorStyle['name'] }} ({{ $colorCount }} colors)</span>
+                                     </label>
+                                 @endforeach
                             </div>
                         </div>
                      </div>
@@ -134,12 +169,20 @@
                         <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
                         <span>Filter</span>
                     </button>
-                    <p id="product-count" class="text-sm text-gray-500 hidden lg:block">Loading products...</p>
+                    <p id="product-count" class="text-sm text-gray-500 hidden lg:block">Loading styles...</p>
                     <select id="sort-by" class="border border-secondary rounded-md px-4 py-2 text-sm focus:outline-none bg-white">
                         <option value="featured">Sort by: Featured</option>
-                        <option value="price-asc">Price: Low to High</option>
-                        <option value="price-desc">Price: High to Low</option>
+                        <option value="name-asc">Name: A to Z</option>
+                        <option value="name-desc">Name: Z to A</option>
                     </select>
+                </div>
+
+                <!-- Back to Styles Button (Hidden initially) -->
+                <div id="back-to-styles" class="hidden mb-6">
+                    <button class="back-button flex items-center space-x-2 text-gray-600 hover:text-gray-900 font-medium">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                        <span>Back to Door Styles</span>
+                    </button>
                 </div>
 
                 <!-- Product Grid -->
@@ -169,29 +212,14 @@
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // --- MOCK DATA ---
-    const allProducts = [
-        { id: 1, name: 'Classic White Shaker', price: 1250, category: 'Shaker', subCategory: 'Standard', color: 'White', colorHex: '#FFFFFF', imageUrl: 'https://placehold.co/400x400/FFFFFF/333?text=White+Shaker' },
-        { id: 2, name: 'Modern Gray Slab', price: 1600, category: 'Modern', subCategory: 'Slab Door', color: 'Gray', colorHex: '#9CA3AF', imageUrl: 'https://placehold.co/400x400/9CA3AF/FFFFFF?text=Gray+Slab' },
-        { id: 3, name: 'Navy Blue Shaker', price: 1450, category: 'Shaker', subCategory: 'Deep Color', color: 'Blue', colorHex: '#3B82F6', imageUrl: 'https://placehold.co/400x400/3B82F6/FFFFFF?text=Blue+Shaker' },
-        { id: 4, name: 'Natural Oak Raised', price: 1800, category: 'Traditional', subCategory: 'Raised Panel', color: 'Wood', colorHex: '#D6C7B9', imageUrl: 'https://placehold.co/400x400/D6C7B9/333?text=Oak+Raised' },
-        { id: 5, name: 'Charcoal Modern', price: 1700, category: 'Modern', subCategory: 'SuperMatte', color: 'Black', colorHex: '#374151', imageUrl: 'https://placehold.co/400x400/374151/FFFFFF?text=Charcoal+Modern' },
-        { id: 6, name: 'Light Gray Shaker', price: 1300, category: 'Shaker', subCategory: 'Standard', color: 'Gray', colorHex: '#E5E7EB', imageUrl: 'https://placehold.co/400x400/E5E7EB/333?text=Light+Gray' },
-        { id: 7, name: 'Espresso Traditional', price: 1550, category: 'Traditional', subCategory: 'Raised Panel', color: 'Wood', colorHex: '#5d4037', imageUrl: 'https://placehold.co/400x400/5d4037/FFFFFF?text=Espresso' },
-        { id: 8, name: 'Matte Black Slab', price: 1950, category: 'Modern', subCategory: 'Slab Door', color: 'Black', colorHex: '#1F2937', imageUrl: 'https://placehold.co/400x400/1F2937/FFFFFF?text=Matte+Black' },
-        { id: 9, name: 'Sage Green Shaker', price: 1500, category: 'Shaker', subCategory: 'Deep Color', color: 'Green', colorHex: '#86EFAC', imageUrl: 'https://placehold.co/400x400/86EFAC/333?text=Sage+Green' },
-    ];
-
-    const categories = [...new Set(allProducts.map(p => p.category))];
-    const colors = [...new Map(allProducts.map(p => [p.color, {color: p.color, hex: p.colorHex}])).values()];
+    // --- DYNAMIC DATA FROM CONTROLLER ---
+    const doorStyles = @json($doorStyles);
+    const doorColorsByStyle = @json($doorColorsByStyle);
 
     // --- ELEMENTS ---
     const productGrid = document.getElementById('product-grid');
     const productCount = document.getElementById('product-count');
-    const categoryFilters = document.getElementById('category-filters');
-    const colorFilters = document.getElementById('color-filters');
-    const priceRange = document.getElementById('price-range');
-    const priceValue = document.getElementById('price-value');
+    const doorStyleFilters = document.getElementById('door-style-filters');
     const sortBy = document.getElementById('sort-by');
     const mobileFilterButton = document.getElementById('mobile-filter-button');
     const mobileFilterMenu = document.getElementById('mobile-filter-menu');
@@ -199,58 +227,101 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeMobileFilter = document.getElementById('close-mobile-filter');
     const filterContent = document.getElementById('filter-content');
     const mobileFilterContent = document.getElementById('mobile-filter-content');
+    const backToStyles = document.getElementById('back-to-styles');
+    const pageTitle = document.getElementById('page-title');
+    const pageDescription = document.getElementById('page-description');
+    const breadcrumbNav = document.getElementById('breadcrumb-nav');
 
     // --- STATE ---
-    let filters = {
-        categories: [],
-        colors: [],
-        maxPrice: 2000,
-        sort: 'featured'
-    };
+    let currentView = 'styles'; // 'styles' or 'colors'
+    let selectedDoorStyle = null;
+    let currentDoorColors = [];
 
     // --- RENDER FUNCTIONS ---
-    function renderFilters() {
-        // Categories
-        categoryFilters.innerHTML = categories.map(cat => `
-            <label class="flex items-center space-x-3 cursor-pointer">
-                <input type="checkbox" value="${cat}" class="category-filter custom-checkbox h-5 w-5 rounded-md border-gray-300 text-gray-900 focus:ring-gray-900">
-                <span class="text-sm">${cat}</span>
-            </label>
-        `).join('');
-        
-        // Colors
-        colorFilters.innerHTML = colors.map(c => `
-            <button class="color-filter-item flex flex-col items-center group" data-color="${c.color}">
-                <img src="https://placehold.co/48x48/${c.hex.substring(1)}/${c.hex.substring(1)}?text=" alt="${c.color}" class="w-12 h-12 rounded-full object-cover">
-                <span class="text-xs text-gray-600 mt-2 group-hover:text-black">${c.color}</span>
-            </button>
-        `).join('');
-
-        // Clone filters for mobile
-        mobileFilterContent.innerHTML = filterContent.innerHTML;
-    }
-
-    function renderProducts(productsToRender) {
-        if (productsToRender.length === 0) {
+    function renderDoorStyles() {
+        if (doorStyles.length === 0) {
             productGrid.innerHTML = `<div class="sm:col-span-2 xl:col-span-3 text-center text-gray-500 py-16">
-                <p class="font-semibold text-lg">No products found</p>
-                <p class="mt-2">Try adjusting your filters.</p>
+                <p class="font-semibold text-lg">No door styles available</p>
+                <p class="mt-2">Please check back later.</p>
             </div>`;
-            productCount.textContent = '0 products';
+            productCount.textContent = '0 styles';
             return;
         }
 
-        productGrid.innerHTML = productsToRender.map(p => `
+        // Apply sorting
+        let sortedStyles = [...doorStyles];
+        switch(sortBy.value) {
+            case 'name-asc':
+                sortedStyles.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+            case 'name-desc':
+                sortedStyles.sort((a, b) => b.name.localeCompare(a.name));
+                break;
+            case 'featured':
+            default:
+                // Just use the default order
+                break;
+        }
+
+        productGrid.innerHTML = sortedStyles.map(style => {
+            const colorCount = doorColorsByStyle[style.name]?.length || 0;
+            
+            return `
+                <div class="product-card bg-[#F8F7F4] p-4 rounded-xl border border-transparent hover:border-gray-200 hover:shadow-lg transition-all ${colorCount > 0 ? 'cursor-pointer' : 'cursor-not-allowed opacity-60'}" data-style="${style.name}" data-color-count="${colorCount}">
+                    <div class="product-card-image-wrapper bg-white rounded-md mb-4">
+                        <img src="${style.image_url || 'https://placehold.co/400x400/EAEAEA/333?text=' + encodeURIComponent(style.name)}" 
+                             alt="${style.name}" 
+                             class="w-full h-auto aspect-square object-cover product-card-image">
+                    </div>
+                    <div class="text-left">
+                        <h3 class="font-semibold text-lg mb-2">${style.name}</h3>
+                        <p class="text-sm text-gray-600 mb-3">${colorCount} color${colorCount !== 1 ? 's' : ''} available</p>
+                        <button class="btn-minimal inline-block text-sm font-bold py-2 px-5 rounded-md w-full ${colorCount === 0 ? 'opacity-50 cursor-not-allowed' : ''}">
+                            ${colorCount > 0 ? 'View Colors' : 'No Colors Available'}
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        productCount.textContent = `${sortedStyles.length} styles`;
+    }
+
+    function renderDoorColors(doorColors, doorStyleName) {
+        if (doorColors.length === 0) {
+            productGrid.innerHTML = `<div class="sm:col-span-2 xl:col-span-3 text-center text-gray-500 py-16">
+                <p class="font-semibold text-lg">No colors available</p>
+                <p class="mt-2">No colors are currently available for ${doorStyleName}.</p>
+            </div>`;
+            productCount.textContent = '0 colors';
+            return;
+        }
+
+        // Apply sorting
+        let sortedColors = [...doorColors];
+        switch(sortBy.value) {
+            case 'name-asc':
+                sortedColors.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+            case 'name-desc':
+                sortedColors.sort((a, b) => b.name.localeCompare(a.name));
+                break;
+            case 'featured':
+            default:
+                // Just use the default order
+                break;
+        }
+
+        productGrid.innerHTML = sortedColors.map(color => `
             <div class="product-card bg-[#F8F7F4] p-4 rounded-xl border border-transparent hover:border-gray-200 hover:shadow-lg transition-all">
                 <a href="#">
                      <div class="product-card-image-wrapper bg-white rounded-md">
-                         <img src="${p.imageUrl}" alt="${p.name}" class="w-full h-auto aspect-square object-cover product-card-image">
+                         <img src="${color.image_url}" alt="${color.name}" class="w-full h-auto aspect-square object-cover product-card-image">
                      </div>
                 </a>
                 <div class="mt-4 text-left">
-                     <p class="text-xs text-gray-500">${p.category} / ${p.subCategory}</p>
-                     <h3 class="font-semibold mt-1">${p.name}</h3>
-                     <p class="text-gray-800 mt-1">$${p.price.toFixed(2)}</p>
+                     <p class="text-xs text-gray-500">${color.door_style}</p>
+                     <h3 class="font-semibold mt-1">${color.name}</h3>
                      <a href="#" class="btn-minimal inline-block text-sm font-bold py-2 px-5 mt-3 rounded-md">
                         View Details
                     </a>
@@ -258,77 +329,125 @@ document.addEventListener('DOMContentLoaded', function () {
             </div>
         `).join('');
         
-        productCount.textContent = `${productsToRender.length} products`;
+        productCount.textContent = `${doorColors.length} colors`;
+    }
+
+    function updatePageHeader(view, doorStyleName = null) {
+        if (view === 'styles') {
+            pageTitle.textContent = 'Choose Your Door Style';
+            pageDescription.textContent = 'Select your preferred door style to see all available colors and start building your perfect kitchen.';
+            backToStyles.classList.add('hidden');
+        } else if (view === 'colors') {
+            pageTitle.textContent = `${doorStyleName} Colors`;
+            pageDescription.textContent = `Browse all available colors for the ${doorStyleName} door style.`;
+            backToStyles.classList.remove('hidden');
+        }
+    }
+
+    function updateBreadcrumb(view, doorStyleName = null) {
+        if (view === 'styles') {
+            breadcrumbNav.innerHTML = `
+                <div class="flex items-center space-x-2 text-sm text-gray-600">
+                    <a href="{{ route('home') }}" class="breadcrumb-item hover:underline">Home</a>
+                    <span>/</span>
+                    <span class="breadcrumb-item active">Shop</span>
+                </div>
+            `;
+        } else if (view === 'colors') {
+            breadcrumbNav.innerHTML = `
+                <div class="flex items-center space-x-2 text-sm text-gray-600">
+                    <a href="{{ route('home') }}" class="breadcrumb-item hover:underline">Home</a>
+                    <span>/</span>
+                    <a href="#" class="breadcrumb-item hover:underline" id="breadcrumb-shop">Shop</a>
+                    <span>/</span>
+                    <span class="breadcrumb-item active">${doorStyleName}</span>
+                </div>
+            `;
+        }
     }
     
     // --- LOGIC ---
-    function applyFiltersAndSort() {
-        let filtered = [...allProducts];
+    function showDoorStyles() {
+        currentView = 'styles';
+        selectedDoorStyle = null;
+        renderDoorStyles();
+        updatePageHeader('styles');
+        updateBreadcrumb('styles');
+    }
 
-        // Category filter
-        if (filters.categories.length > 0) {
-            filtered = filtered.filter(p => filters.categories.includes(p.category));
-        }
-        
-        // Color filter
-        if (filters.colors.length > 0) {
-            filtered = filtered.filter(p => filters.colors.includes(p.color));
-        }
-        
-        // Price filter
-        filtered = filtered.filter(p => p.price <= filters.maxPrice);
-
-        // Sorting
-        switch(filters.sort) {
-            case 'price-asc':
-                filtered.sort((a, b) => a.price - b.price);
-                break;
-            case 'price-desc':
-                filtered.sort((a, b) => b.price - a.price);
-                break;
-            case 'featured':
-            default:
-                // Just use the default order for now
-                break;
-        }
-
-        renderProducts(filtered);
+    function showDoorColors(doorStyleName) {
+        currentView = 'colors';
+        selectedDoorStyle = doorStyleName;
+        const doorColors = doorColorsByStyle[doorStyleName] || [];
+        currentDoorColors = doorColors;
+        renderDoorColors(doorColors, doorStyleName);
+        updatePageHeader('colors', doorStyleName);
+        updateBreadcrumb('colors', doorStyleName);
     }
 
     // --- EVENT LISTENERS ---
     function setupEventListeners(container) {
         container.addEventListener('change', e => {
-            if (e.target.matches('.category-filter')) {
-                const checkedCategories = [...container.querySelectorAll('.category-filter:checked')].map(cb => cb.value);
-                filters.categories = checkedCategories;
-                applyFiltersAndSort();
+            if (e.target.matches('.door-style-filter')) {
+                const checkedDoorStyles = [...container.querySelectorAll('.door-style-filter:checked')].map(cb => cb.value);
+                
+                if (checkedDoorStyles.length > 0) {
+                    selectedDoorStyle = checkedDoorStyles[0]; // Take the first selected style
+                    const colorCount = doorColorsByStyle[selectedDoorStyle]?.length || 0;
+                    
+                    if (colorCount > 0) {
+                        showDoorColors(selectedDoorStyle);
+                    } else {
+                        alert('No colors are currently available for this door style. Please check back later.');
+                        // Uncheck the filter since there are no colors
+                        e.target.checked = false;
+                    }
+                } else {
+                    selectedDoorStyle = null;
+                    showDoorStyles();
+                }
             }
         });
-
-        container.addEventListener('click', e => {
-            const colorButton = e.target.closest('.color-filter-item');
-            if (colorButton) {
-                colorButton.classList.toggle('selected');
-                const selectedColors = [...container.querySelectorAll('.color-filter-item.selected')].map(btn => btn.dataset.color);
-                filters.colors = selectedColors;
-                applyFiltersAndSort();
-            }
-        });
-        
-        const priceRangeInput = container.querySelector('#price-range');
-        if(priceRangeInput) {
-            priceRangeInput.addEventListener('input', e => {
-                filters.maxPrice = parseInt(e.target.value);
-                const priceValueSpan = container.querySelector('#price-value');
-                if(priceValueSpan) priceValueSpan.textContent = `$${filters.maxPrice}`;
-                applyFiltersAndSort();
-            });
-        }
     }
+
+    // Product grid click handler
+    productGrid.addEventListener('click', e => {
+        if (currentView === 'styles') {
+            const styleCard = e.target.closest('.product-card');
+            if (styleCard) {
+                const styleName = styleCard.dataset.style;
+                const colorCount = parseInt(styleCard.dataset.colorCount) || 0;
+                
+                if (colorCount > 0) {
+                    showDoorColors(styleName);
+                } else {
+                    // Show a message that no colors are available
+                    alert('No colors are currently available for this door style. Please check back later.');
+                }
+            }
+        }
+    });
+
+    // Back to styles button
+    backToStyles.addEventListener('click', () => {
+        showDoorStyles();
+    });
+
+    // Breadcrumb navigation
+    breadcrumbNav.addEventListener('click', e => {
+        if (e.target.id === 'breadcrumb-shop') {
+            e.preventDefault();
+            showDoorStyles();
+        }
+    });
     
     sortBy.addEventListener('change', e => {
-        filters.sort = e.target.value;
-        applyFiltersAndSort();
+        if (currentView === 'styles') {
+            renderDoorStyles();
+        } else if (currentView === 'colors' && selectedDoorStyle) {
+            const doorColors = doorColorsByStyle[selectedDoorStyle] || [];
+            renderDoorColors(doorColors, selectedDoorStyle);
+        }
     });
 
     // Mobile filter menu toggle
@@ -351,10 +470,12 @@ document.addEventListener('DOMContentLoaded', function () {
     mobileFilterBackdrop.addEventListener('click', closeMenu);
 
     // --- INITIALIZATION ---
-    renderFilters();
-    applyFiltersAndSort();
     setupEventListeners(document.getElementById('filters-sidebar'));
     setupEventListeners(document.getElementById('mobile-filter-content'));
+    
+    // Start with door styles view
+    showDoorStyles();
+    
     lucide.createIcons();
 });
 </script>
