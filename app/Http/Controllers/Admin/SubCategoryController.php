@@ -35,14 +35,22 @@ class SubCategoryController extends Controller
         $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
-            'image_url' => 'nullable|string|max:500',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        SubCategory::create([
+        $data = [
             'category_id' => $request->category_id,
             'name' => $request->name,
-            'image_url' => $request->image_url,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads/sub-categories'), $imageName);
+            $data['image_url'] = 'uploads/sub-categories/' . $imageName;
+        }
+
+        SubCategory::create($data);
 
         return redirect()->route('admin.sub-categories.index')
             ->with('success', 'Sub category created successfully.');
@@ -74,14 +82,27 @@ class SubCategoryController extends Controller
         $request->validate([
             'category_id' => 'required|exists:categories,id',
             'name' => 'required|string|max:255',
-            'image_url' => 'nullable|string|max:500',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $subCategory->update([
+        $data = [
             'category_id' => $request->category_id,
             'name' => $request->name,
-            'image_url' => $request->image_url,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($subCategory->image_url && file_exists(public_path($subCategory->image_url))) {
+                unlink(public_path($subCategory->image_url));
+            }
+            
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads/sub-categories'), $imageName);
+            $data['image_url'] = 'uploads/sub-categories/' . $imageName;
+        }
+
+        $subCategory->update($data);
 
         return redirect()->route('admin.sub-categories.index')
             ->with('success', 'Sub category updated successfully.');

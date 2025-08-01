@@ -50,9 +50,6 @@ class ProductController extends Controller
             'assembly_cost' => 'nullable|numeric|min:0',
             'hinge_type' => 'required|string|max:255',
             'is_modifiable' => 'boolean',
-            'width' => 'required|numeric|min:0',
-            'height' => 'required|numeric|min:0',
-            'depth' => 'required|numeric|min:0',
         ]);
 
         $product = Product::create([
@@ -64,9 +61,6 @@ class ProductController extends Controller
             'assembly_cost' => $request->assembly_cost ?? 0,
             'hinge_type' => $request->hinge_type,
             'is_modifiable' => $request->boolean('is_modifiable'),
-            'width' => $request->width,
-            'height' => $request->height,
-            'depth' => $request->depth,
         ]);
 
         // Attach categories and sub-categories
@@ -133,9 +127,6 @@ class ProductController extends Controller
             'assembly_cost' => 'nullable|numeric|min:0',
             'hinge_type' => 'required|string|max:255',
             'is_modifiable' => 'boolean',
-            'width' => 'required|numeric|min:0',
-            'height' => 'required|numeric|min:0',
-            'depth' => 'required|numeric|min:0',
         ]);
 
         $product->update([
@@ -147,9 +138,6 @@ class ProductController extends Controller
             'assembly_cost' => $request->assembly_cost ?? 0,
             'hinge_type' => $request->hinge_type,
             'is_modifiable' => $request->boolean('is_modifiable'),
-            'width' => $request->width,
-            'height' => $request->height,
-            'depth' => $request->depth,
         ]);
 
         // Sync categories and sub-categories

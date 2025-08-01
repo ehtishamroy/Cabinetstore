@@ -32,11 +32,21 @@ class DoorColorController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:door_colors',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        DoorColor::create([
+        $data = [
             'name' => $request->name,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads/door-colors'), $imageName);
+            $data['image'] = 'uploads/door-colors/' . $imageName;
+        }
+
+        DoorColor::create($data);
 
         return redirect()->route('admin.door-colors.index')
             ->with('success', 'Door color created successfully.');
@@ -65,11 +75,26 @@ class DoorColorController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:door_colors,name,' . $doorColor->id,
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $doorColor->update([
+        $data = [
             'name' => $request->name,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($doorColor->image && file_exists(public_path($doorColor->image))) {
+                unlink(public_path($doorColor->image));
+            }
+            
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads/door-colors'), $imageName);
+            $data['image'] = 'uploads/door-colors/' . $imageName;
+        }
+
+        $doorColor->update($data);
 
         return redirect()->route('admin.door-colors.index')
             ->with('success', 'Door color updated successfully.');

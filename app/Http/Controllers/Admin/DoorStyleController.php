@@ -32,11 +32,21 @@ class DoorStyleController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:door_styles',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        DoorStyle::create([
+        $data = [
             'name' => $request->name,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads/door-styles'), $imageName);
+            $data['image'] = 'uploads/door-styles/' . $imageName;
+        }
+
+        DoorStyle::create($data);
 
         return redirect()->route('admin.door-styles.index')
             ->with('success', 'Door style created successfully.');
@@ -65,11 +75,26 @@ class DoorStyleController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:door_styles,name,' . $doorStyle->id,
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $doorStyle->update([
+        $data = [
             'name' => $request->name,
-        ]);
+        ];
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($doorStyle->image && file_exists(public_path($doorStyle->image))) {
+                unlink(public_path($doorStyle->image));
+            }
+            
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('uploads/door-styles'), $imageName);
+            $data['image'] = 'uploads/door-styles/' . $imageName;
+        }
+
+        $doorStyle->update($data);
 
         return redirect()->route('admin.door-styles.index')
             ->with('success', 'Door style updated successfully.');

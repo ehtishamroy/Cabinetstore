@@ -145,41 +145,7 @@
                         @enderror
                     </div>
 
-                    <!-- Width -->
-                    <div>
-                        <label for="width" class="block text-sm font-medium text-gray-700">Width (inches)</label>
-                        <input type="number" name="width" id="width" value="{{ old('width', $product->width) }}" 
-                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
-                               step="0.1" min="0"
-                               required>
-                        @error('width')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
 
-                    <!-- Height -->
-                    <div>
-                        <label for="height" class="block text-sm font-medium text-gray-700">Height (inches)</label>
-                        <input type="number" name="height" id="height" value="{{ old('height', $product->height) }}" 
-                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
-                               step="0.1" min="0"
-                               required>
-                        @error('height')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Depth -->
-                    <div>
-                        <label for="depth" class="block text-sm font-medium text-gray-700">Depth (inches)</label>
-                        <input type="number" name="depth" id="depth" value="{{ old('depth', $product->depth) }}" 
-                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
-                               step="0.1" min="0"
-                               required>
-                        @error('depth')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
                 </div>
 
                 <div class="flex justify-end space-x-3 mt-6">

@@ -11,7 +11,7 @@
 
     <div class="bg-white shadow sm:rounded-lg">
         <div class="px-4 py-5 sm:p-6">
-            <form action="{{ route('admin.door-styles.update', $doorStyle) }}" method="POST">
+            <form action="{{ route('admin.door-styles.update', $doorStyle) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 
@@ -22,6 +22,23 @@
                            placeholder="e.g., HDF Doors, MDF Doors, Solid Wood"
                            required>
                     @error('name')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label for="image" class="block text-sm font-medium text-gray-700">Door Style Image</label>
+                    @if($doorStyle->image)
+                        <div class="mb-2">
+                            <img src="{{ asset($doorStyle->image) }}" alt="{{ $doorStyle->name }}" class="h-20 w-20 rounded object-cover">
+                            <p class="text-sm text-gray-500 mt-1">Current image</p>
+                        </div>
+                    @endif
+                    <input type="file" name="image" id="image" 
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
+                           accept="image/*">
+                    <p class="mt-1 text-sm text-gray-500">Upload a new image for this door style (optional). Supported formats: JPEG, PNG, JPG, GIF. Max size: 2MB.</p>
+                    @error('image')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>

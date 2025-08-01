@@ -11,7 +11,7 @@
 
     <div class="bg-white shadow sm:rounded-lg">
         <div class="px-4 py-5 sm:p-6">
-            <form action="{{ route('admin.sub-categories.store') }}" method="POST">
+            <form action="{{ route('admin.sub-categories.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 
                 <div class="mb-4">
@@ -43,11 +43,12 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="image_url" class="block text-sm font-medium text-gray-700">Image URL (Optional)</label>
-                    <input type="url" name="image_url" id="image_url" value="{{ old('image_url') }}" 
+                    <label for="image" class="block text-sm font-medium text-gray-700">Sub Category Image</label>
+                    <input type="file" name="image" id="image" 
                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
-                           placeholder="https://example.com/image.jpg">
-                    @error('image_url')
+                           accept="image/*">
+                    <p class="mt-1 text-sm text-gray-500">Upload an image for this sub category (optional). Supported formats: JPEG, PNG, JPG, GIF. Max size: 2MB.</p>
+                    @error('image')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>

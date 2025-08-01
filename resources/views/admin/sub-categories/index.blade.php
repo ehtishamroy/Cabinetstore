@@ -24,36 +24,55 @@
     @endif
 
     <div class="bg-white shadow overflow-hidden sm:rounded-md">
-        <ul class="divide-y divide-gray-200">
-            @forelse($subCategories as $subCategory)
-                <li class="px-6 py-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <div class="text-sm font-medium text-gray-900">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Parent Category</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($subCategories as $subCategory)
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                 {{ $subCategory->name }}
-                            </div>
-                            <span class="ml-2 bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded">
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {{ $subCategory->category->name }}
-                            </span>
-                        </div>
-                        <div class="flex space-x-2">
-                            <a href="{{ route('admin.sub-categories.edit', $subCategory) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                            <form action="{{ route('admin.sub-categories.destroy', $subCategory) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure you want to delete this sub category?')">
-                                    Delete
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </li>
-            @empty
-                <li class="px-6 py-4 text-center text-gray-500">
-                    No sub categories found.
-                </li>
-            @endforelse
-        </ul>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                @if($subCategory->image_url)
+                                    <img src="{{ $subCategory->image_url }}" alt="{{ $subCategory->name }}" class="h-10 w-10 rounded object-cover">
+                                @else
+                                    <span class="text-gray-400">No image</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <div class="flex space-x-2">
+                                    <a href="{{ route('admin.sub-categories.edit', $subCategory) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                    <form action="{{ route('admin.sub-categories.destroy', $subCategory) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure you want to delete this sub category?')">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+                                No sub categories found.
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <div class="mt-6">

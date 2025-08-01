@@ -29,6 +29,9 @@
                 <li class="px-6 py-4">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
+                            @if($doorColor->image)
+                                <img src="{{ asset($doorColor->image) }}" alt="{{ $doorColor->name }}" class="h-10 w-10 rounded object-cover mr-3">
+                            @endif
                             <div class="text-sm font-medium text-gray-900">
                                 {{ $doorColor->name }}
                             </div>

@@ -11,6 +11,7 @@ class DoorColor extends Model
 
     protected $fillable = [
         'name',
+        'image',
     ];
 
     public function productLines()

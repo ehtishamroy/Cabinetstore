@@ -11,7 +11,7 @@
 
     <div class="bg-white shadow sm:rounded-lg">
         <div class="px-4 py-5 sm:p-6">
-            <form action="{{ route('admin.door-styles.store') }}" method="POST">
+            <form action="{{ route('admin.door-styles.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 
                 <div class="mb-4">
@@ -20,6 +20,17 @@
                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
                            required>
                     @error('name')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label for="image" class="block text-sm font-medium text-gray-700">Door Style Image</label>
+                    <input type="file" name="image" id="image" 
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
+                           accept="image/*">
+                    <p class="mt-1 text-sm text-gray-500">Upload an image for this door style (optional). Supported formats: JPEG, PNG, JPG, GIF. Max size: 2MB.</p>
+                    @error('image')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>

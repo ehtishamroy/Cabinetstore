@@ -18,18 +18,12 @@ class Product extends Model
         'assembly_cost',
         'hinge_type',
         'is_modifiable',
-        'width',
-        'height',
-        'depth',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
         'assembly_cost' => 'decimal:2',
         'is_modifiable' => 'boolean',
-        'width' => 'decimal:2',
-        'height' => 'decimal:2',
-        'depth' => 'decimal:2',
     ];
 
     public function productLine()
@@ -57,9 +51,9 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
-    // Helper method to get the display name with dimensions
+    // Helper method to get the display name
     public function getDisplayNameAttribute()
     {
-        return $this->name . ' (' . $this->width . '"W x ' . $this->height . '"H x ' . $this->depth . '"D)';
+        return $this->name;
     }
 }
