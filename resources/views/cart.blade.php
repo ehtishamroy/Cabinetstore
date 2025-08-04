@@ -1,202 +1,200 @@
 @extends('layouts.app')
 
-@section('title', 'Shopping Cart - Aura Cabinets')
-
-@section('styles')
-<style>
-    /* Cart page specific styles */
-    body {
-        background-color: #F8F7F4; /* Lightest brown background */
-    }
-    
-    #main-header {
-        position: sticky;
-        top: 0;
-        background-color: rgba(248, 247, 244, 0.8); /* Match body bg */
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        border-bottom: 1px solid #EAEAEA;
-    }
-</style>
-@endsection
+@section('title', 'Shopping Cart - BH Cabinetry')
 
 @section('content')
-<main>
-    <div class="max-w-7xl mx-auto px-6 md:px-10 py-12 md:py-20">
-        <div class="text-left mb-10">
-            <h1 class="text-4xl md:text-5xl font-light">Shopping Cart</h1>
-        </div>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12 items-start">
-            <!-- Left Column: Cart Items -->
-            <div class="lg:col-span-2 bg-white rounded-xl shadow-sm p-6 md:p-8">
-                <div class="space-y-6">
-                    <!-- Cart Item 1 -->
-                    <div class="cart-item flex flex-col sm:flex-row items-start gap-6 pb-6 border-b border-secondary">
-                        <img src="https://placehold.co/120x120/EAEAEA/333333?text=WSS+B15" alt="Weston Sand Shaker B15" class="w-32 h-32 rounded-lg object-cover flex-shrink-0">
-                        <div class="flex-grow">
-                            <h3 class="font-semibold text-lg">Weston Sand Shaker - B15 Base</h3>
-                            <p class="text-sm text-gray-500">Assembly: Yes (+ $35.00)</p>
-                            <p class="text-sm text-gray-500">Hinge: L</p>
-                        </div>
-                        <div class="flex flex-col items-end gap-3 w-full sm:w-auto">
-                            <p class="font-semibold text-lg item-price" data-unit-price="210">$420.00</p>
-                            <div class="flex items-center border border-secondary rounded-md">
-                                <button class="quantity-change px-3 py-1" data-change="-1">-</button>
-                                <input type="number" class="quantity-input w-12 text-center focus:outline-none" value="2" min="1">
-                                <button class="quantity-change px-3 py-1" data-change="1">+</button>
-                            </div>
-                            <button class="remove-item text-xs text-red-500 hover:underline">Remove</button>
-                        </div>
-                    </div>
-
-                    <!-- Cart Item 2 -->
-                    <div class="cart-item flex flex-col sm:flex-row items-start gap-6 pb-6 border-b border-secondary">
-                        <img src="https://placehold.co/120x120/D6C7B9/333333?text=WSS+W1230" alt="Weston Sand Shaker W1230" class="w-32 h-32 rounded-lg object-cover flex-shrink-0">
-                        <div class="flex-grow">
-                            <h3 class="font-semibold text-lg">Weston Sand Shaker - W1230 Wall</h3>
-                            <p class="text-sm text-gray-500">Assembly: No</p>
-                            <p class="text-sm text-gray-500">Hinge: R</p>
-                        </div>
-                        <div class="flex flex-col items-end gap-3 w-full sm:w-auto">
-                            <p class="font-semibold text-lg item-price" data-unit-price="120">$120.00</p>
-                            <div class="flex items-center border border-secondary rounded-md">
-                                <button class="quantity-change px-3 py-1" data-change="-1">-</button>
-                                <input type="number" class="quantity-input w-12 text-center focus:outline-none" value="1" min="1">
-                                <button class="quantity-change px-3 py-1" data-change="1">+</button>
-                            </div>
-                            <button class="remove-item text-xs text-red-500 hover:underline">Remove</button>
-                        </div>
-                    </div>
-                    
-                     <!-- Cart Item 3 -->
-                    <div class="cart-item flex flex-col sm:flex-row items-start gap-6">
-                        <img src="https://placehold.co/120x120/374151/FFFFFF?text=Handle+10" alt="Matte Black Handle" class="w-32 h-32 rounded-lg object-cover flex-shrink-0">
-                        <div class="flex-grow">
-                            <h3 class="font-semibold text-lg">Matte Black Handle - Pack of 10</h3>
-                            <p class="text-sm text-gray-500">Hardware</p>
-                        </div>
-                        <div class="flex flex-col items-end gap-3 w-full sm:w-auto">
-                            <p class="font-semibold text-lg item-price" data-unit-price="45">$45.00</p>
-                            <div class="flex items-center border border-secondary rounded-md">
-                                <button class="quantity-change px-3 py-1" data-change="-1">-</button>
-                                <input type="number" class="quantity-input w-12 text-center focus:outline-none" value="1" min="1">
-                                <button class="quantity-change px-3 py-1" data-change="1">+</button>
-                            </div>
-                            <button class="remove-item text-xs text-red-500 hover:underline">Remove</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-8 pt-6 border-t border-secondary">
-                    <a href="{{ route('shop') }}" class="text-accent font-medium flex items-center gap-2">
-                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                        Continue Shopping
-                    </a>
-                </div>
+<main class="pt-32 pb-16">
+    <div class="max-w-7xl mx-auto px-6 md:px-10">
+        <!-- Breadcrumb -->
+        <nav class="mb-8">
+            <div class="flex items-center space-x-2 text-sm text-gray-600">
+                <a href="{{ route('home') }}" class="hover:underline">Home</a>
+                <span>/</span>
+                <span class="text-gray-400">Cart</span>
             </div>
+        </nav>
 
-            <!-- Right Column: Order Summary -->
-            <div class="lg:col-span-1 w-full">
-                <div class="bg-white rounded-xl shadow-sm p-6 md:p-8 sticky top-28">
-                    <h2 class="text-2xl font-semibold border-b border-secondary pb-4 mb-4">Order Summary</h2>
-                    <div class="space-y-3 text-gray-700">
-                        <div class="flex justify-between">
-                            <span>Subtotal</span>
-                            <span id="summary-subtotal">$585.00</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Shipping</span>
-                            <span>Calculated at next step</span>
-                        </div>
-                        <div class="flex justify-between">
-                            <span>Taxes</span>
-                            <span>Calculated at next step</span>
-                        </div>
-                    </div>
-                    <div class="mt-6 pt-6 border-t border-secondary">
-                        <div class="flex justify-between items-center font-semibold text-lg">
-                            <span>Estimated Total</span>
-                            <span id="summary-total">$585.00</span>
-                        </div>
-                    </div>
-                    <div class="mt-8">
-                        <a href="{{ route('checkout') }}" class="w-full btn-minimal text-lg font-bold py-3 px-8 rounded-md inline-block text-center">
-                            Proceed to Checkout
-                        </a>
-                    </div>
+        <!-- Page Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-light mb-4">Shopping Cart</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">Review your selected items and proceed to checkout</p>
+        </div>
+
+        <!-- Cart Content -->
+        <div id="cart-content" class="max-w-4xl mx-auto">
+            <!-- Cart Items will be populated by JavaScript -->
+        </div>
+
+        <!-- Empty Cart State -->
+        <div id="empty-cart" class="hidden text-center py-16">
+            <div class="max-w-md mx-auto">
+                <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i data-lucide="shopping-cart" class="w-12 h-12 text-gray-400"></i>
                 </div>
+                <h2 class="text-2xl font-semibold mb-4">Your cart is empty</h2>
+                <p class="text-gray-600 mb-8">Looks like you haven't added any items to your cart yet.</p>
+                <a href="/shop" class="bg-accent text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors duration-200">
+                    Start Shopping
+                </a>
             </div>
         </div>
     </div>
 </main>
+
+
 @endsection
 
 @section('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const cartItemsContainer = document.querySelector('.lg\\:col-span-2');
+document.addEventListener('DOMContentLoaded', function() {
+    const cartContent = document.getElementById('cart-content');
+    const emptyCart = document.getElementById('empty-cart');
 
-        function updateItemPrice(cartItem) {
-            const priceEl = cartItem.querySelector('.item-price');
-            const quantityInput = cartItem.querySelector('.quantity-input');
-            
-            const unitPrice = parseFloat(priceEl.dataset.unitPrice);
-            const quantity = parseInt(quantityInput.value);
-            const itemTotal = unitPrice * quantity;
-            
-            priceEl.textContent = `$${itemTotal.toFixed(2)}`;
-            updateOrderSummary();
+    // Load cart data from localStorage
+    let cart = JSON.parse(localStorage.getItem('cart')) || {};
+
+    // Load shipping settings
+    let shippingSettings = {
+        free_shipping_threshold: 2500,
+        default_shipping_rate: 50
+    };
+
+    // Fetch shipping settings from backend
+    async function loadShippingSettings() {
+        try {
+            const response = await fetch('/api/shipping-settings');
+            const data = await response.json();
+            shippingSettings = data;
+        } catch (error) {
+            console.error('Error loading shipping settings:', error);
+        }
+    }
+
+    // Calculate shipping cost
+    function calculateShippingCost(subtotal) {
+        if (subtotal >= shippingSettings.free_shipping_threshold) {
+            return 0;
+        }
+        return shippingSettings.default_shipping_rate;
+    }
+
+    async function renderCart() {
+        // Load shipping settings first
+        await loadShippingSettings();
+        
+        const itemCount = Object.keys(cart).length;
+        
+        if (itemCount === 0) {
+            cartContent.classList.add('hidden');
+            emptyCart.classList.remove('hidden');
+            return;
         }
 
-        function updateOrderSummary() {
-            let subtotal = 0;
-            document.querySelectorAll('.cart-item').forEach(item => {
-                const priceEl = item.querySelector('.item-price');
-                const quantityInput = item.querySelector('.quantity-input');
-                subtotal += parseFloat(priceEl.dataset.unitPrice) * parseInt(quantityInput.value);
-            });
+        cartContent.classList.remove('hidden');
+        emptyCart.classList.add('hidden');
 
-            const subtotalEl = document.getElementById('summary-subtotal');
-            const totalEl = document.getElementById('summary-total');
+        let total = 0;
+        let itemsHtml = '';
 
-            subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
-            totalEl.textContent = `$${subtotal.toFixed(2)}`;
+        Object.keys(cart).forEach(productId => {
+            const item = cart[productId];
+            const itemTotal = item.qty * item.unitPrice + (item.assembly ? item.qty * item.laborCost : 0);
+            total += itemTotal;
+
+            itemsHtml += `
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold mb-2">${item.name}</h3>
+                            <div class="text-sm text-gray-600 space-y-1">
+                                <p>Quantity: ${item.qty}</p>
+                                <p>Unit Price: $${item.unitPrice.toFixed(2)}</p>
+                                <p>Assembly: ${item.assembly ? 'Yes (+$${item.laborCost.toFixed(2)} each)' : 'No'}</p>
+                            </div>
+                        </div>
+                        <div class="text-right ml-6">
+                            <div class="text-xl font-bold mb-2">$${itemTotal.toFixed(2)}</div>
+                            <button onclick="removeFromCart('${productId}')" class="text-sm text-red-500 hover:text-red-700 font-medium">
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        const shipping = calculateShippingCost(total);
+        const finalTotal = total + shipping;
+
+        cartContent.innerHTML = `
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2">
+                    <h2 class="text-2xl font-semibold mb-6">Cart Items (${itemCount})</h2>
+                    ${itemsHtml}
+                </div>
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-32">
+                        <h3 class="text-xl font-semibold mb-4">Order Summary</h3>
+                        <div class="space-y-3 mb-6">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Subtotal</span>
+                                <span class="font-semibold">$${total.toFixed(2)}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Shipping</span>
+                                <span class="font-semibold ${shipping === 0 ? 'text-green-600' : ''}">${shipping === 0 ? 'Free' : '$' + shipping.toFixed(2)}</span>
+                            </div>
+                            <hr class="border-gray-200">
+                            <div class="flex justify-between text-lg">
+                                <span class="font-semibold">Total</span>
+                                <span class="font-bold">$${finalTotal.toFixed(2)}</span>
+                            </div>
+                        </div>
+                                    <a href="/checkout" class="w-full bg-gray-900 text-white py-3 px-6 rounded-lg font-semibold hover:bg-black transition-colors duration-200 mb-4 inline-block text-center">
+                Proceed to Checkout
+            </a>
+                        <button onclick="clearCart()" class="w-full bg-gray-200 text-gray-800 py-2 px-6 rounded-lg font-semibold hover:bg-gray-300 transition-colors duration-200">
+                            Clear Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Remove from cart function
+    window.removeFromCart = function(productId) {
+        delete cart[productId];
+        localStorage.setItem('cart', JSON.stringify(cart));
+        renderCart();
+        
+        // Update header cart count
+        const cartCount = document.getElementById('cart-count');
+        if (cartCount) {
+            const itemCount = Object.keys(cart).length;
+            cartCount.textContent = itemCount;
+            cartCount.style.display = itemCount === 0 ? 'none' : 'flex';
         }
+    };
 
-        cartItemsContainer.addEventListener('click', function(e) {
-            const cartItem = e.target.closest('.cart-item');
-            if (!cartItem) return;
+    // Clear cart function
+    window.clearCart = function() {
+        cart = {};
+        localStorage.setItem('cart', JSON.stringify(cart));
+        renderCart();
+        
+        // Update header cart count
+        const cartCount = document.getElementById('cart-count');
+        if (cartCount) {
+            cartCount.textContent = '0';
+            cartCount.style.display = 'none';
+        }
+    };
 
-            // Handle quantity changes
-            if (e.target.matches('.quantity-change')) {
-                const quantityInput = cartItem.querySelector('.quantity-input');
-                let newQuantity = parseInt(quantityInput.value) + parseInt(e.target.dataset.change);
-                if (newQuantity < 1) newQuantity = 1;
-                quantityInput.value = newQuantity;
-                updateItemPrice(cartItem);
-            }
 
-            // Handle remove item
-            if (e.target.matches('.remove-item')) {
-                cartItem.remove();
-                updateOrderSummary();
-            }
-        });
 
-        cartItemsContainer.addEventListener('change', function(e) {
-            if(e.target.matches('.quantity-input')) {
-                const cartItem = e.target.closest('.cart-item');
-                if (parseInt(e.target.value) < 1) {
-                    e.target.value = 1;
-                }
-                updateItemPrice(cartItem);
-            }
-        });
-
-        // Initial calculation
-        updateOrderSummary();
-        lucide.createIcons();
-    });
+    // Initialize cart display
+    renderCart();
+});
 </script>
 @endsection 

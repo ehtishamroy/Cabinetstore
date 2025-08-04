@@ -28,8 +28,13 @@ class ProductController extends Controller
     public function create()
     {
         $productLines = ProductLine::with(['doorStyle', 'doorColor'])->get();
-        $categories = Category::all();
-        $subCategories = SubCategory::with('category')->get();
+        
+        // Get all categories that are related to any product line
+        $categories = Category::whereHas('productLines')->get();
+        
+        // Get all subcategories that are related to any product line
+        $subCategories = SubCategory::whereHas('category.productLines')->with('category')->get();
+        
         return view('admin.products.create', compact('productLines', 'categories', 'subCategories'));
     }
 
@@ -40,14 +45,13 @@ class ProductController extends Controller
     {
         $request->validate([
             'product_line_id' => 'required|exists:product_lines,id',
-            'categories' => 'required|array|min:1',
-            'categories.*' => 'exists:categories,id',
+            'category_id' => 'required|exists:categories,id',
             'sub_categories' => 'required|array|min:1',
             'sub_categories.*' => 'exists:sub_categories,id',
             'sku' => 'required|string|max:255|unique:products',
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
-            'assembly_cost' => 'nullable|numeric|min:0',
+            'labor_cost' => 'nullable|numeric|min:0',
             'hinge_type' => 'required|string|max:255',
             'is_modifiable' => 'boolean',
         ]);
@@ -58,13 +62,13 @@ class ProductController extends Controller
             'sku' => $request->sku,
             'name' => $request->name,
             'price' => $request->price,
-            'assembly_cost' => $request->assembly_cost ?? 0,
+            'labor_cost' => $request->has('labor_cost') ? $request->labor_cost : 30,
             'hinge_type' => $request->hinge_type,
             'is_modifiable' => $request->boolean('is_modifiable'),
         ]);
 
-        // Attach categories and sub-categories
-        $product->categories()->attach($request->categories);
+        // Attach single category and sub-categories
+        $product->categories()->attach([$request->category_id]);
         $product->subCategories()->attach($request->sub_categories);
 
         return redirect()->route('admin.products.index')
@@ -86,8 +90,13 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $productLines = ProductLine::with(['doorStyle', 'doorColor'])->get();
-        $categories = Category::all();
-        $subCategories = SubCategory::with('category')->get();
+        
+        // Get all categories that are related to any product line
+        $categories = Category::whereHas('productLines')->get();
+        
+        // Get all subcategories that are related to any product line
+        $subCategories = SubCategory::whereHas('category.productLines')->with('category')->get();
+        
         return view('admin.products.edit', compact('product', 'productLines', 'categories', 'subCategories'));
     }
 
@@ -129,14 +138,13 @@ class ProductController extends Controller
     {
         $request->validate([
             'product_line_id' => 'required|exists:product_lines,id',
-            'categories' => 'required|array|min:1',
-            'categories.*' => 'exists:categories,id',
+            'category_id' => 'required|exists:categories,id',
             'sub_categories' => 'required|array|min:1',
             'sub_categories.*' => 'exists:sub_categories,id',
             'sku' => 'required|string|max:255|unique:products,sku,' . $product->id,
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
-            'assembly_cost' => 'nullable|numeric|min:0',
+            'labor_cost' => 'nullable|numeric|min:0',
             'hinge_type' => 'required|string|max:255',
             'is_modifiable' => 'boolean',
         ]);
@@ -147,13 +155,13 @@ class ProductController extends Controller
             'sku' => $request->sku,
             'name' => $request->name,
             'price' => $request->price,
-            'assembly_cost' => $request->assembly_cost ?? 0,
+            'labor_cost' => $request->has('labor_cost') ? $request->labor_cost : 30,
             'hinge_type' => $request->hinge_type,
             'is_modifiable' => $request->boolean('is_modifiable'),
         ]);
 
-        // Sync categories and sub-categories
-        $product->categories()->sync($request->categories);
+        // Sync single category and sub-categories
+        $product->categories()->sync([$request->category_id]);
         $product->subCategories()->sync($request->sub_categories);
 
         return redirect()->route('admin.products.index')
@@ -175,5 +183,105 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Product deleted successfully.');
+    }
+
+    /**
+     * Get categories for a specific product line (AJAX)
+     */
+    public function getCategoriesForProductLine(ProductLine $productLine)
+    {
+        $categories = $productLine->categories()->with('subCategories')->get();
+        
+        return response()->json([
+            'categories' => $categories->map(function ($category) {
+                return [
+                    'id' => $category->id,
+                    'name' => $category->name,
+                    'sub_categories' => $category->subCategories->map(function ($subCategory) {
+                        return [
+                            'id' => $subCategory->id,
+                            'name' => $subCategory->name,
+                            'category_id' => $subCategory->category_id,
+                        ];
+                    })
+                ];
+            })
+        ]);
+    }
+
+    /**
+     * Get products for a specific category (AJAX)
+     */
+    public function getProductsByCategory($categoryId)
+    {
+        $products = Product::whereHas('categories', function ($query) use ($categoryId) {
+            $query->where('categories.id', $categoryId);
+        })->with(['productLine.doorStyle', 'productLine.doorColor'])->get();
+        
+        return response()->json([
+            'products' => $products->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'sku' => $product->sku,
+                    'stock' => 'In Stock', // You can add stock logic later
+                    'unitPrice' => (float) $product->price,
+                    'laborCost' => (float) ($product->labor_cost ?? 30),
+                    'hingeOptions' => $this->parseHingeType($product->hinge_type),
+                    'modifications' => (bool) $product->is_modifiable,
+                ];
+            })
+        ]);
+    }
+
+    /**
+     * Get products for a specific subcategory (AJAX)
+     */
+    public function getProductsBySubcategory($subcategoryId)
+    {
+        $products = Product::whereHas('subCategories', function ($query) use ($subcategoryId) {
+            $query->where('sub_categories.id', $subcategoryId);
+        })->with(['productLine.doorStyle', 'productLine.doorColor'])->get();
+        
+        return response()->json([
+            'products' => $products->map(function ($product) {
+                return [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'sku' => $product->sku,
+                    'stock' => 'In Stock', // You can add stock logic later
+                    'unitPrice' => (float) $product->price,
+                    'laborCost' => (float) ($product->labor_cost ?? 30),
+                    'hingeOptions' => $this->parseHingeType($product->hinge_type),
+                    'modifications' => (bool) $product->is_modifiable,
+                ];
+            })
+        ]);
+    }
+
+    /**
+     * Parse hinge type string into array format
+     */
+    private function parseHingeType($hingeType)
+    {
+        if (empty($hingeType)) {
+            return ['N/A'];
+        }
+        
+        $hingeType = strtoupper(trim($hingeType));
+        
+        if ($hingeType === 'BOTH') {
+            return ['L', 'R'];
+        }
+        
+        if (strpos($hingeType, ',') !== false) {
+            return array_map('trim', explode(',', $hingeType));
+        }
+        
+        if (strpos($hingeType, '/') !== false) {
+            return array_map('trim', explode('/', $hingeType));
+        }
+        
+        return [$hingeType];
     }
 }

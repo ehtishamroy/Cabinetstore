@@ -32,18 +32,42 @@ class DoorColorController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:door_colors',
+            'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'main_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gallery_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = [
             'name' => $request->name,
+            'description' => $request->description,
         ];
 
+        // Handle main image
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move(public_path('uploads/door-colors'), $imageName);
             $data['image'] = 'uploads/door-colors/' . $imageName;
+        }
+
+        // Handle main_image
+        if ($request->hasFile('main_image')) {
+            $mainImage = $request->file('main_image');
+            $mainImageName = time() . '_main_' . $mainImage->getClientOriginalName();
+            $mainImage->move(public_path('uploads/door-colors'), $mainImageName);
+            $data['main_image'] = 'uploads/door-colors/' . $mainImageName;
+        }
+
+        // Handle gallery images
+        if ($request->hasFile('gallery_images')) {
+            $galleryImages = [];
+            foreach ($request->file('gallery_images') as $galleryImage) {
+                $galleryImageName = time() . '_gallery_' . uniqid() . '_' . $galleryImage->getClientOriginalName();
+                $galleryImage->move(public_path('uploads/door-colors'), $galleryImageName);
+                $galleryImages[] = 'uploads/door-colors/' . $galleryImageName;
+            }
+            $data['gallery_images'] = $galleryImages;
         }
 
         DoorColor::create($data);
@@ -75,13 +99,18 @@ class DoorColorController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255|unique:door_colors,name,' . $doorColor->id,
+            'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'main_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gallery_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = [
             'name' => $request->name,
+            'description' => $request->description,
         ];
 
+        // Handle main image
         if ($request->hasFile('image')) {
             // Delete old image if exists
             if ($doorColor->image && file_exists(public_path($doorColor->image))) {
@@ -92,6 +121,39 @@ class DoorColorController extends Controller
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move(public_path('uploads/door-colors'), $imageName);
             $data['image'] = 'uploads/door-colors/' . $imageName;
+        }
+
+        // Handle main_image
+        if ($request->hasFile('main_image')) {
+            // Delete old main image if exists
+            if ($doorColor->main_image && file_exists(public_path($doorColor->main_image))) {
+                unlink(public_path($doorColor->main_image));
+            }
+            
+            $mainImage = $request->file('main_image');
+            $mainImageName = time() . '_main_' . $mainImage->getClientOriginalName();
+            $mainImage->move(public_path('uploads/door-colors'), $mainImageName);
+            $data['main_image'] = 'uploads/door-colors/' . $mainImageName;
+        }
+
+        // Handle gallery images
+        if ($request->hasFile('gallery_images')) {
+            // Delete old gallery images if exist
+            if ($doorColor->gallery_images) {
+                foreach ($doorColor->gallery_images as $oldGalleryImage) {
+                    if (file_exists(public_path($oldGalleryImage))) {
+                        unlink(public_path($oldGalleryImage));
+                    }
+                }
+            }
+            
+            $galleryImages = [];
+            foreach ($request->file('gallery_images') as $galleryImage) {
+                $galleryImageName = time() . '_gallery_' . uniqid() . '_' . $galleryImage->getClientOriginalName();
+                $galleryImage->move(public_path('uploads/door-colors'), $galleryImageName);
+                $galleryImages[] = 'uploads/door-colors/' . $galleryImageName;
+            }
+            $data['gallery_images'] = $galleryImages;
         }
 
         $doorColor->update($data);

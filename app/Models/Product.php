@@ -15,14 +15,14 @@ class Product extends Model
         'sku',
         'name',
         'price',
-        'assembly_cost',
+        'labor_cost',
         'hinge_type',
         'is_modifiable',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
-        'assembly_cost' => 'decimal:2',
+        'labor_cost' => 'decimal:2',
         'is_modifiable' => 'boolean',
     ];
 

@@ -186,7 +186,7 @@
                 </div>
 
                 <!-- Product Grid -->
-                <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div id="product-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     <!-- Products populated by JS -->
                 </div>
             </div>
@@ -271,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="product-card-image-wrapper bg-white rounded-md mb-4">
                         <img src="${style.image_url || 'https://placehold.co/400x400/EAEAEA/333?text=' + encodeURIComponent(style.name)}" 
                              alt="${style.name}" 
-                             class="w-full h-auto aspect-square object-cover product-card-image">
+                             class="w-full h-auto aspect-square object-contain product-card-image">
                     </div>
                     <div class="text-left">
                         <h3 class="font-semibold text-lg mb-2">${style.name}</h3>
@@ -314,15 +314,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
         productGrid.innerHTML = sortedColors.map(color => `
             <div class="product-card bg-[#F8F7F4] p-4 rounded-xl border border-transparent hover:border-gray-200 hover:shadow-lg transition-all">
-                <a href="#">
+                <a href="/product/${color.door_color_id}">
                      <div class="product-card-image-wrapper bg-white rounded-md">
-                         <img src="${color.image_url}" alt="${color.name}" class="w-full h-auto aspect-square object-cover product-card-image">
+                         <img src="${color.image_url}" alt="${color.name}" class="w-full h-auto aspect-square object-contain product-card-image">
                      </div>
                 </a>
                 <div class="mt-4 text-left">
                      <p class="text-xs text-gray-500">${color.door_style}</p>
                      <h3 class="font-semibold mt-1">${color.name}</h3>
-                     <a href="#" class="btn-minimal inline-block text-sm font-bold py-2 px-5 mt-3 rounded-md">
+                     <a href="/product/${color.door_color_id}" class="btn-minimal inline-block text-sm font-bold py-2 px-5 mt-3 rounded-md">
                         View Details
                     </a>
                 </div>

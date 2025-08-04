@@ -1,13 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Weston Sand Shaker - Aura Cabinets')
+@section('title', $doorColor->name . ' - BH Cabinetry')
 
 @section('styles')
 <style>
     /* Product page specific styles */
     body {
         background-color: #ffffff;
-        padding-bottom: 80px; /* Add padding for the sticky totals bar */
     }
     
     .info-box { position: relative; }
@@ -89,24 +88,43 @@
                 <!-- Left Column -->
                 <div class="lg:sticky lg:top-36 self-start">
                     <nav class="text-sm mb-4 text-gray-500">
-                        <a href="#" class="hover:underline">Home</a> / <span>Weston Sand Shaker</span>
+                        <a href="{{ route('home') }}" class="hover:underline">Home</a> / 
+                        <a href="{{ route('shop') }}" class="hover:underline">Shop</a> / 
+                        <span>{{ $doorColor->name }}</span>
                     </nav>
                     <div class="mb-4">
-                        <img id="featured-image" src="https://placehold.co/600x600/D6C7B9/333333?text=Main+View" alt="Main view" class="w-full h-auto rounded-lg">
+                        <img id="featured-image" 
+                             src="{{ $doorColor->main_image_url ?? $doorColor->image_url ?? 'https://placehold.co/600x600/D6C7B9/333333?text=Main+View' }}" 
+                             alt="{{ $doorColor->name }}" 
+                             class="w-full h-[400px] md:h-[500px] rounded-lg object-contain">
                     </div>
                     <div class="grid grid-cols-5 gap-2">
-                        <a href="https://placehold.co/600x600/D6C7B9/333333?text=Main+View" class="gallery-thumbnail block border-2 rounded-md overflow-hidden active">
-                            <img src="https://placehold.co/100x100/D6C7B9/333333?text=View+1" alt="Thumbnail 1" class="w-full h-auto">
-                        </a>
-                        <a href="https://placehold.co/600x600/A99D8E/FFFFFF?text=Kitchen+Angle" class="gallery-thumbnail block border-2 rounded-md overflow-hidden">
-                            <img src="https://placehold.co/100x100/A99D8E/FFFFFF?text=View+2" alt="Thumbnail 2" class="w-full h-auto">
-                        </a>
+                        @if($doorColor->main_image_url)
+                            <a href="{{ $doorColor->main_image_url }}" class="gallery-thumbnail block border-2 rounded-md overflow-hidden active">
+                                <img src="{{ $doorColor->main_image_url }}" alt="{{ $doorColor->name }}" class="w-full h-20 object-cover">
+                            </a>
+                        @endif
+                        @if($doorColor->gallery_images_urls && count($doorColor->gallery_images_urls) > 0)
+                            @foreach($doorColor->gallery_images_urls as $galleryImage)
+                                <a href="{{ $galleryImage }}" class="gallery-thumbnail block border-2 rounded-md overflow-hidden">
+                                    <img src="{{ $galleryImage }}" alt="{{ $doorColor->name }}" class="w-full h-20 object-cover">
+                                </a>
+                            @endforeach
+                        @endif
+                        @if(!$doorColor->main_image_url && !$doorColor->gallery_images_urls)
+                            <a href="https://placehold.co/600x600/D6C7B9/333333?text=Main+View" class="gallery-thumbnail block border-2 rounded-md overflow-hidden active">
+                                <img src="https://placehold.co/100x100/D6C7B9/333333?text=View+1" alt="Thumbnail 1" class="w-full h-20 object-cover">
+                            </a>
+                            <a href="https://placehold.co/600x600/A99D8E/FFFFFF?text=Kitchen+Angle" class="gallery-thumbnail block border-2 rounded-md overflow-hidden">
+                                <img src="https://placehold.co/100x100/A99D8E/FFFFFF?text=View+2" alt="Thumbnail 2" class="w-full h-20 object-cover">
+                            </a>
+                        @endif
                     </div>
                 </div>
                 
                 <!-- Right Column -->
                 <div>
-                    <h1 class="text-3xl md:text-4xl font-light mb-6 lg:mt-12 fade-in-section">Weston Sand Shaker</h1>
+                    <h1 class="text-3xl md:text-4xl font-light mb-6 lg:mt-12 fade-in-section">{{ $doorColor->name }}</h1>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 fade-in-section">
                        <div class="info-box flex items-center bg-gray-100 p-3 rounded-md">
                            <i data-lucide="warehouse" class="w-5 h-5 mr-3 text-gray-600"></i>
@@ -124,32 +142,17 @@
                         <i data-lucide="arrow-down" class="ml-3 w-6 h-6 animate-bounce"></i>
                     </a>
                     
-                    <!-- Specifications Section -->
-                    <div class="bg-gray-50/50 backdrop-blur-lg border border-gray-200/50 rounded-xl p-6 mb-8 fade-in-section">
-                        <h3 class="text-xl font-semibold mb-4">Door Specifications</h3>
-                        <dl class="space-y-4 text-sm">
-                            <div>
-                                <dt class="font-semibold text-gray-800">Door Construction</dt>
-                                <dd class="text-gray-600">5 Piece HDF Door/Drawer</dd>
+                    <!-- Dynamic Description Section -->
+                    @if($doorColor->description)
+                        <div class="bg-gray-50/50 backdrop-blur-lg border border-gray-200/50 rounded-xl p-6 mb-8 fade-in-section">
+                            <h3 class="text-xl font-semibold mb-4">Product Description</h3>
+                            <div class="text-sm text-gray-700 leading-relaxed">
+                                {!! $doorColor->description !!}
                             </div>
-                            <div>
-                                <dt class="font-semibold text-gray-800">Overlay</dt>
-                                <dd class="text-gray-600">Full Overlay Door/Drawer Front</dd>
-                            </div>
-                            <div>
-                                <dt class="font-semibold text-gray-800">Box Construction</dt>
-                                <dd class="text-gray-600">¾" Solid Hardwood Frame, ½" Plywood Box with Matching Interior/Exterior Veneer Finish, 3/16" Plywood Skin on a ½" Plywood Frame Back, 5/8" Solid Wood Dovetailed Drawer Box with ½" Plywood Drawer Bottom</dd>
-                            </div>
-                            <div>
-                                <dt class="font-semibold text-gray-800">Hardware</dt>
-                                <dd class="text-gray-600">90 Degree Metal Corner L Brackets, Soft-Close Undermount Drawer Slides, Concealed 6-Way Adjustable Slow-Close Door Hinges, Rubber Door/Drawer Bumpers, Clear Plastic Shelf Brackets</dd>
-                            </div>
-                            <div>
-                                <dt class="font-semibold text-gray-800">Assembly</dt>
-                                <dd class="text-gray-600">Metal Brackets, Screws, Finishing Nails, and Staples (optional – with local pick up only)</dd>
-                            </div>
-                        </dl>
-                    </div>
+                        </div>
+                    @endif
+                    
+
                     
                     <!-- Materials Section -->
                     <div class="bg-gray-50/50 backdrop-blur-lg border border-gray-200/50 rounded-xl p-6 mb-8 fade-in-section">
@@ -207,7 +210,7 @@
 <section id="product-list" class="py-16 bg-white border-t border-secondary">
     <div class="max-w-7xl mx-auto px-6 md:px-10">
         <div class="text-center mb-6">
-            <h2 class="text-3xl font-semibold">Shop Weston Sand Shaker Collection</h2>
+            <h2 class="text-3xl font-semibold">Shop {{ $doorColor->name }} Collection</h2>
             <p class="text-gray-600 mt-2">Select the cabinets you need to build your perfect kitchen.</p>
         </div>
         <div class="text-center mb-12 text-sm text-gray-500 flex items-center justify-center">
@@ -224,11 +227,19 @@
             <!-- Sub-filters populated by JS -->
         </div>
 
+        <!-- Sub-Category Showcase -->
+        <div id="subcategory-showcase" class="hidden mb-12 text-center transition-all duration-500 ease-in-out">
+            <div class="max-w-xl mx-auto">
+                <img id="subcategory-showcase-image" src="" alt="" class="w-full rounded-lg shadow-lg mb-4 h-80 object-contain">
+                <h3 id="subcategory-showcase-title" class="text-2xl font-semibold text-gray-800"></h3>
+            </div>
+        </div>
+
         <!-- Product Grid -->
         <div id="product-grid-container" class="hidden">
             <!-- Product Table Header -->
             <div class="hidden lg:grid grid-cols-12 gap-4 items-center font-bold text-xs text-gray-500 mb-4 px-4 uppercase tracking-wider">
-                <div class="col-span-2">Product</div>
+                <div class="col-span-3">Product</div>
                 <div class="text-center">Stock</div>
                 <div class="text-center">Qty</div>
                 <div class="col-span-2 text-center">Assembly?</div>
@@ -236,7 +247,7 @@
                 <div class="text-center">Hinge</div>
                 <div class="text-center">Mods</div>
                 <div class="text-center">Labor</div>
-                <div class="col-span-2 text-right">Sub Total</div>
+                <div class="text-right">Sub Total</div>
             </div>
             <div id="product-grid" class="grid grid-cols-1 gap-4">
                 <!-- Product cards populated by JS -->
@@ -252,7 +263,7 @@
             <span class="text-lg font-semibold">Grand Total:</span>
             <span id="grand-total" class="text-2xl font-bold ml-2">$0.00</span>
         </div>
-        <button class="bg-gray-900 hover:bg-black font-bold py-3 px-8 rounded-lg text-lg text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">Add to Cart</button>
+        <button id="add-to-cart-btn" class="bg-gray-900 hover:bg-black font-bold py-3 px-8 rounded-lg text-lg text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">Add to Cart</button>
     </div>
 </div>
 @endsection
@@ -261,43 +272,28 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     // --- DATA ---
-    const productsData = {
-        "base-cabinets": {
-            name: "Base Cabinets",
-            icon: "https://placehold.co/80x50/8c7a6b/ffffff?text=Base",
-            subCategories: {
-                "single-door": {
-                    name: "Single Door",
-                    icon: "https://placehold.co/60x40/a6988d/ffffff?text=1-Door",
-                    items: [
-                        { id: 1, name: "B12 Base", stock: "In Stock", unitPrice: 150.00, assemblyCost: 30, laborCost: 15, hingeOptions: ['L', 'R'], modifications: true },
-                        { id: 2, name: "B15 Base", stock: "In Stock", unitPrice: 175.00, assemblyCost: 35, laborCost: 18, hingeOptions: ['L'], modifications: true },
-                    ]
-                },
-                "double-door": {
-                    name: "Double Door",
-                    icon: "https://placehold.co/60x40/a6988d/ffffff?text=2-Door",
-                    items: [
-                        { id: 3, name: "B24 Base", stock: "In Stock", unitPrice: 250.00, assemblyCost: 50, laborCost: 25, hingeOptions: ['N/A'], modifications: true },
-                        { id: 4, name: "B30 Base", stock: "In Stock", unitPrice: 280.00, assemblyCost: 55, laborCost: 28, hingeOptions: ['Both'], modifications: true },
-                    ]
-                },
-            }
-        },
-        "wall-cabinets": {
-            name: "Wall Cabinets",
-            icon: "https://placehold.co/80x50/8c7a6b/ffffff?text=Wall",
-            subCategories: {
-                "small-wall": {
-                    name: "Small Wall",
-                    icon: "https://placehold.co/60x40/a6988d/ffffff?text=Small",
-                    items: [
-                       { id: 5, name: "W1230 Wall", stock: "Low Stock", unitPrice: 120.00, assemblyCost: 25, laborCost: 12, hingeOptions: ['L', 'R'], modifications: false },
-                    ]
-                }
-            }
-        },
-    };
+    // productsData is now populated dynamically from the backend via Blade
+    const categoriesData = @json($categories); // This is the new dynamic data source
+    const doorColorId = {{ $doorColor->id }};
+
+    // Map categoriesData to the old productsData structure for compatibility with existing JS
+    const productsData = {};
+    categoriesData.forEach(category => {
+        const categoryKey = category.name.toLowerCase().replace(/\s/g, '-');
+        productsData[categoryKey] = {
+            name: category.name,
+            icon: category.image_url,
+            subCategories: {}
+        };
+        category.sub_categories.forEach(subCategory => {
+            const subCategoryKey = subCategory.name.toLowerCase().replace(/\s/g, '-');
+            productsData[categoryKey].subCategories[subCategoryKey] = {
+                name: subCategory.name,
+                icon: subCategory.image_url,
+                items: [] // Products will be loaded dynamically later
+            };
+        });
+    });
 
     // --- ELEMENTS ---
     const mainFiltersContainer = document.getElementById('main-filters');
@@ -306,43 +302,37 @@ document.addEventListener('DOMContentLoaded', function () {
     const productGrid = document.getElementById('product-grid');
     const stickyTotalsBar = document.getElementById('sticky-totals-bar');
     const grandTotalEl = document.getElementById('grand-total');
+    const subcategoryShowcase = document.getElementById('subcategory-showcase');
+    const subcategoryShowcaseImage = document.getElementById('subcategory-showcase-image');
+    const subcategoryShowcaseTitle = document.getElementById('subcategory-showcase-title');
 
     // --- STATE ---
     let cart = {};
+    let productCache = {};
 
     // --- HELPER FUNCTIONS ---
     function findProductById(id) {
-        for (const categoryKey in productsData) {
-            const category = productsData[categoryKey];
-            for (const subCategoryKey in category.subCategories) {
-                const subCategory = category.subCategories[subCategoryKey];
-                const foundItem = subCategory.items.find(item => item.id === parseInt(id));
-                if (foundItem) {
-                    return foundItem;
-                }
-            }
-        }
-        return null;
+        return productCache[id] || null;
     }
 
     // --- RENDER FUNCTIONS ---
     function renderMainFilters() {
-        mainFiltersContainer.innerHTML = Object.keys(productsData).map(key => {
-            const category = productsData[key];
-            return `<button class="filter-button flex-shrink-0 flex flex-col items-center justify-center w-36 h-36 p-4 rounded-lg transition-colors duration-200" data-category="${key}"><img src="${category.icon}" alt="${category.name}" class="h-16 mb-2"><span class="text-sm font-medium">${category.name}</span></button>`;
+        mainFiltersContainer.innerHTML = categoriesData.map(category => {
+            const categoryKey = category.name.toLowerCase().replace(/\s/g, '-');
+            return `<button class="filter-button flex-shrink-0 flex flex-col items-center justify-center w-36 h-36 p-4 rounded-lg transition-colors duration-200" data-category="${categoryKey}" data-category-id="${category.id}"><img src="${category.image_url}" alt="${category.name}" class="h-16 mb-2"><span class="text-sm font-medium">${category.name}</span></button>`;
         }).join('');
     }
 
     function renderSubFilters(categoryKey) {
-        const category = productsData[categoryKey];
-        if (!category || !category.subCategories) {
+        const category = categoriesData.find(cat => cat.name.toLowerCase().replace(/\s/g, '-') === categoryKey);
+        if (!category || !category.sub_categories) {
             subFiltersContainer.innerHTML = '';
             subFiltersContainer.classList.add('hidden');
             return;
         }
-        subFiltersContainer.innerHTML = Object.keys(category.subCategories).map(key => {
-            const subCategory = category.subCategories[key];
-            return `<button class="sub-filter-button flex-shrink-0 flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200" data-category="${categoryKey}" data-subcategory="${key}"><img src="${subCategory.icon}" alt="${subCategory.name}" class="h-8"><span class="text-sm font-medium">${subCategory.name}</span></button>`;
+        subFiltersContainer.innerHTML = category.sub_categories.map(subCategory => {
+            const subCategoryKey = subCategory.name.toLowerCase().replace(/\s/g, '-');
+            return `<button class="sub-filter-button flex-shrink-0 flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200" data-category="${categoryKey}" data-subcategory="${subCategoryKey}" data-category-id="${category.id}" data-subcategory-id="${subCategory.id}"><img src="${subCategory.image_url}" alt="${subCategory.name}" class="h-8"><span class="text-sm font-medium">${subCategory.name}</span></button>`;
         }).join('');
         subFiltersContainer.classList.remove('hidden');
     }
@@ -367,7 +357,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const cartItem = cart[item.id] || { qty: 0, assembly: false };
             let subTotal = cartItem.qty * item.unitPrice;
             if (cartItem.assembly) {
-                subTotal += cartItem.qty * (item.assemblyCost + item.laborCost);
+                subTotal += cartItem.qty * item.laborCost;
             }
             const assemblyChecked = cartItem.assembly ? 'checked' : '';
             const activeClass = cartItem.qty > 0 ? 'active' : '';
@@ -376,14 +366,8 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="product-card border rounded-lg p-4 transition-colors duration-200 ${activeClass}" data-id="${item.id}">
                 <!-- Desktop Grid -->
                 <div class="hidden lg:grid grid-cols-12 gap-4 items-center">
-                    <div class="col-span-2 flex items-center space-x-4">
-                        <img src="https://placehold.co/60x60/f0f0f0/333?text=${item.name.split(' ')[0]}" alt="${item.name}" class="w-16 h-16 rounded-md">
-                        <div>
-                            <p class="font-bold">${item.name}</p>
-                            <div class="text-xs text-gray-500 mt-1">
-                                <a href="#" class="hover:text-accent hover:underline">View Product</a>
-                            </div>
-                        </div>
+                    <div class="col-span-3">
+                        <p class="font-bold">${item.name}</p>
                     </div>
                     <div class="text-center text-sm">${item.stock}</div>
                     <div class="flex justify-center"><input type="number" value="${cartItem.qty}" min="0" class="qty-input w-16 text-center border border-gray-300 rounded-md p-1 bg-white"></div>
@@ -396,27 +380,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="text-center hinge-container">${renderHingeSelector(item)}</div>
                     <div class="flex justify-center">${item.modifications ? `<button class="mod-button"><i data-lucide="edit-2" class="w-4 h-4 text-gray-500 hover:text-accent"></i></button>` : 'N/A'}</div>
                     <div class="text-center text-sm text-gray-500">$<span class="labor-cost">${item.laborCost.toFixed(2)}</span></div>
-                    <div class="col-span-2 text-right font-bold text-lg">$<span class="sub-total">${subTotal.toFixed(2)}</span></div>
+                    <div class="text-right font-bold text-lg">$<span class="sub-total">${subTotal.toFixed(2)}</span></div>
                 </div>
                 <!-- Mobile View -->
                 <div class="lg:hidden">
-                    <div class="flex items-start justify-between">
-                         <div class="flex items-center space-x-4">
-                           <img src="https://placehold.co/60x60/f0f0f0/333?text=${item.name.split(' ')[0]}" alt="${item.name}" class="w-16 h-16 rounded-md">
-                            <div>
-                                <p class="font-bold">${item.name}</p>
-                                <p class="text-sm text-gray-500">${item.stock}</p>
-                                <div class="text-xs text-gray-500 mt-1">
-                                    <a href="#" class="hover:text-accent hover:underline">View Product</a>
-                                </div>
-                            </div>
-                        </div>
-                         <div class="text-right">
-                            <p class="font-bold text-lg">$<span class="sub-total">${subTotal.toFixed(2)}</span></p>
-                            <p class="text-xs text-gray-500">Sub Total</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-4 border-t border-secondary space-y-4">
+                    <p class="font-bold text-lg mb-4">${item.name}</p>
+                    <div class="space-y-4">
                         <div class="flex justify-between items-center">
                             <label class="font-medium text-sm">Quantity</label>
                             <input type="number" value="${cartItem.qty}" min="0" class="qty-input w-20 text-center border border-gray-300 rounded-md p-1 bg-white">
@@ -429,6 +398,14 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <span class="text-sm">Yes</span>
                             </div>
                         </div>
+                         <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600">Unit Price</span>
+                            <span class="font-medium">$${item.unitPrice.toFixed(2)}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600">Labor</span>
+                            <span class="font-medium">$${item.laborCost.toFixed(2)}</span>
+                        </div>
                         <div class="flex justify-between items-center text-sm">
                             <span class="text-gray-600">Hinge</span>
                             <div class="hinge-container">${renderHingeSelector(item)}</div>
@@ -437,6 +414,10 @@ document.addEventListener('DOMContentLoaded', function () {
                             <span class="text-gray-600">Modifications</span>
                             <span class="font-medium">${item.modifications ? `<button class="mod-button"><i data-lucide="edit-2" class="w-4 h-4 text-gray-500 hover:text-accent"></i></button>` : 'N/A'}</span>
                         </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t-2 border-gray-200 flex justify-between items-center">
+                        <span class="font-semibold text-lg">Sub Total</span>
+                        <span class="font-bold text-xl">$<span class="sub-total">${subTotal.toFixed(2)}</span></span>
                     </div>
                 </div>
             </div>
@@ -465,9 +446,53 @@ document.addEventListener('DOMContentLoaded', function () {
         button.classList.add('active');
         const categoryKey = button.dataset.category;
         const subCategoryKey = button.dataset.subcategory;
-        const items = productsData[categoryKey].subCategories[subCategoryKey].items;
-        renderProductGrid(items);
+        
+        // Update showcase
+        const categoryKeyForFilter = button.dataset.category;
+        const category = productsData[categoryKeyForFilter];
+        if (category && category.subCategories[subCategoryKey]) {
+            const subCategory = category.subCategories[subCategoryKey];
+            subcategoryShowcaseImage.src = subCategory.icon;
+            subcategoryShowcaseImage.alt = subCategory.name;
+            subcategoryShowcaseTitle.textContent = subCategory.name;
+            subcategoryShowcase.classList.remove('hidden');
+        } else {
+            subcategoryShowcase.classList.add('hidden');
+        }
+        
+        // Get the category and subcategory IDs from the data attributes
+        const categoryId = button.dataset.categoryId;
+        const subcategoryId = button.dataset.subcategoryId;
+        
+        // Load products dynamically based on subcategory
+        loadProductsBySubcategory(subcategoryId);
+    }
+    
+    function loadProductsBySubcategory(subcategoryId) {
+        // Show loading state
+        productGrid.innerHTML = '<div class="text-center py-8"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div><p class="mt-2 text-gray-600">Loading products...</p></div>';
         productGridContainer.classList.remove('hidden');
+        
+        // Fetch products from the backend
+        fetch(`/products/by-subcategory/${subcategoryId}?doorColorId=${doorColorId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.products && data.products.length > 0) {
+                    // Cache the loaded products
+                    data.products.forEach(product => {
+                        productCache[product.id] = product;
+                    });
+                    renderProductGrid(data.products);
+                    // Update grand total after loading new products
+                    updateGrandTotal();
+                } else {
+                    productGrid.innerHTML = '<div class="text-center py-8"><p class="text-gray-600">No products found for this category.</p></div>';
+                }
+            })
+            .catch(error => {
+                console.error('Error loading products:', error);
+                productGrid.innerHTML = '<div class="text-center py-8"><p class="text-red-600">Error loading products. Please try again.</p></div>';
+            });
     }
 
     function handleProductCardInteraction(e) {
@@ -482,39 +507,33 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const id = card.dataset.id;
-        const qty = card.querySelector('.qty-input').value; 
+        const qty = parseInt(card.querySelector('.qty-input').value) || 0; 
         const assembly = card.querySelector('.assembly-toggle-bg').classList.contains('checked');
         
-        updateCart(id, parseInt(qty), assembly);
+        updateCart(id, qty, assembly);
         updateCardUI(card);
         updateGrandTotal();
     }
 
     function updateCart(id, qty, assembly) {
         if (qty > 0) {
-             cart[id] = { qty, assembly };
+            cart[id] = { qty, assembly };
         } else {
-             delete cart[id];
-        }
-        
-        if (Object.keys(cart).length > 0) {
-             stickyTotalsBar.classList.remove('translate-y-full');
-        } else {
-             stickyTotalsBar.classList.add('translate-y-full');
+            delete cart[id];
         }
     }
     
     function updateCardUI(card) {
-        const id = card.dataset.id
+        const id = card.dataset.id;
         const product = findProductById(id);
         if (!product) return;
 
-        const qty = parseInt(card.querySelector('.qty-input').value);
+        const qty = parseInt(card.querySelector('.qty-input').value) || 0;
         const wantsAssembly = card.querySelector('.assembly-toggle-bg').classList.contains('checked');
 
         let subTotal = qty * product.unitPrice;
         if (wantsAssembly) {
-            subTotal += qty * (product.assemblyCost + product.laborCost);
+            subTotal += qty * product.laborCost;
         }
         
         card.querySelectorAll('.sub-total').forEach(el => {
@@ -536,12 +555,19 @@ document.addEventListener('DOMContentLoaded', function () {
             if (product) {
                 let itemTotal = cartItem.qty * product.unitPrice;
                 if (cartItem.assembly) {
-                    itemTotal += cartItem.qty * (product.assemblyCost + product.laborCost);
+                    itemTotal += cartItem.qty * product.laborCost;
                 }
                 total += itemTotal;
             }
         }
         grandTotalEl.textContent = `$${total.toFixed(2)}`;
+        
+        // Show/hide sticky totals bar based on cart items
+        if (Object.keys(cart).length > 0 && total > 0) {
+            stickyTotalsBar.classList.remove('translate-y-full');
+        } else {
+            stickyTotalsBar.classList.add('translate-y-full');
+        }
     }
 
     function handleAssemblyToggle(e) {
@@ -562,11 +588,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- INITIALIZATION ---
     function initializeShoppingSection() {
         renderMainFilters();
-        // Pre-select first main filter
-        const firstMainFilter = mainFiltersContainer.querySelector('.filter-button');
-        if (firstMainFilter) {
-            firstMainFilter.click();
-        }
+        // Use a small timeout to ensure the DOM is fully ready for the clicks
+        setTimeout(() => {
+            const firstMainFilter = mainFiltersContainer.querySelector('.filter-button');
+            if (firstMainFilter) {
+                firstMainFilter.click();
+            }
+        }, 100);
     }
     
     initializeShoppingSection();
@@ -575,6 +603,48 @@ document.addEventListener('DOMContentLoaded', function () {
     subFiltersContainer.addEventListener('click', handleSubFilterClick);
     productGrid.addEventListener('input', handleProductCardInteraction);
     productGrid.addEventListener('click', handleAssemblyToggle);
+
+    // Initialize grand total on page load
+    updateGrandTotal();
+
+    // Add to cart functionality
+    const addToCartBtn = document.getElementById('add-to-cart-btn');
+    addToCartBtn.addEventListener('click', () => {
+        const cartItems = Object.keys(cart);
+        if (cartItems.length === 0) {
+            alert('Please add some items to your cart first');
+            return;
+        }
+
+        // Add each cart item to the global cart
+        cartItems.forEach(productId => {
+            const product = findProductById(productId);
+            if (product) {
+                const cartItem = cart[productId];
+                const productData = {
+                    name: product.name,
+                    qty: cartItem.qty,
+                    unitPrice: product.unitPrice,
+                    laborCost: product.laborCost,
+                    assembly: cartItem.assembly,
+                    doorColorId: doorColorId,
+                    imageUrl: product.imageUrl
+                };
+                
+                // Use the global addToCart function from the header
+                if (window.addToCart) {
+                    window.addToCart(productId, productData);
+                }
+            }
+        });
+
+        // Clear the local cart
+        cart = {};
+        updateGrandTotal();
+        
+        // Redirect to cart page
+        window.location.href = '/cart';
+    });
 
     // --- Other page logic ---
     const subHeaderAnnouncements = ["FREE SHIPPING ON ORDERS OVER $2,500", "LIFETIME LIMITED WARRANTY"];

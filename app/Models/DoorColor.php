@@ -11,7 +11,14 @@ class DoorColor extends Model
 
     protected $fillable = [
         'name',
+        'description',
         'image',
+        'main_image',
+        'gallery_images',
+    ];
+
+    protected $casts = [
+        'gallery_images' => 'array',
     ];
 
     public function productLines()

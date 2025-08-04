@@ -23,9 +23,8 @@ Route::get('/test-shop', function () {
     return redirect()->route('shop');
 })->name('test-shop');
 
-Route::get('/product', function () {
-    return view('product');
-})->name('product');
+Route::get('/product/{doorColorId}', [App\Http\Controllers\ShopController::class, 'showProduct'])->name('product.show');
+Route::get('/products/by-subcategory/{subcategoryId}', [App\Http\Controllers\ShopController::class, 'getProductsBySubcategory'])->name('products.by-subcategory');
 
 Route::get('/privacy', function () {
     return view('privacy');
@@ -35,9 +34,10 @@ Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
 
-Route::get('/checkout', function () {
-    return view('checkout');
-})->name('checkout');
+Route::get('/checkout', [App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout');
+Route::post('/checkout/create-payment-intent', [App\Http\Controllers\CheckoutController::class, 'createPaymentIntent'])->name('checkout.create-payment-intent');
+Route::post('/checkout/process-payment', [App\Http\Controllers\CheckoutController::class, 'processPayment'])->name('checkout.process-payment');
+Route::get('/checkout/success/{orderId}', [App\Http\Controllers\CheckoutController::class, 'success'])->name('checkout.success');
 
 Route::get('/cart', function () {
     return view('cart');
@@ -92,9 +92,9 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         return view('admin.blog');
     })->name('admin.blog');
     
-    Route::get('/settings', function () {
-        return view('admin.settings');
-    })->name('admin.settings');
+    Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('admin.settings');
+    Route::put('/settings', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('admin.settings.update');
+    Route::get('/settings/shipping', [App\Http\Controllers\Admin\SettingController::class, 'getShippingSettings'])->name('admin.settings.shipping');
 
     // User Management Routes
     Route::resource('users', UserController::class, ['as' => 'admin']);
@@ -117,5 +117,15 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     // Products Management
     Route::resource('products', ProductController::class, ['as' => 'admin']);
     Route::get('products/{product}/duplicate', [ProductController::class, 'duplicate'])->name('admin.products.duplicate');
+    
+    // AJAX route to get categories for a specific product line
+    Route::get('product-lines/{productLine}/categories', [ProductController::class, 'getCategoriesForProductLine'])->name('admin.product-lines.categories');
+    
+    // AJAX route to get products for a specific category/subcategory
+    Route::get('products/by-category/{categoryId}', [ProductController::class, 'getProductsByCategory'])->name('admin.products.by-category');
+    Route::get('products/by-subcategory/{subcategoryId}', [ProductController::class, 'getProductsBySubcategory'])->name('admin.products.by-subcategory');
 });
+
+// Public route for shipping settings (used by checkout and cart)
+Route::get('/api/shipping-settings', [App\Http\Controllers\Admin\SettingController::class, 'getShippingSettings'])->name('api.shipping-settings');
 

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'BH Cabinetry - Modern Kitchens, Simply Delivered')</title>
     
     <!-- Tailwind CSS -->
@@ -162,7 +163,6 @@
 
             <!-- Icons -->
             <div class="hidden md:flex items-center space-x-6">
-                <button id="search-button" class="hover:text-accent transition-colors duration-300"><i data-lucide="search"></i></button>
                 @auth
                     <div class="relative group">
                         <button class="hover:text-accent transition-colors duration-300 flex items-center">
@@ -185,9 +185,25 @@
                 @else
                     <a href="{{ route('login') }}" class="hover:text-accent transition-colors duration-300"><i data-lucide="user"></i></a>
                 @endauth
-                <button id="cart-button" class="hover:text-accent transition-colors duration-300 relative">
+                <button id="cart-button" class="hover:text-accent transition-colors duration-300 relative group">
                     <i data-lucide="shopping-cart"></i>
-                    <span class="absolute -top-2 -right-2 bg-accent text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">3</span>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-accent text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span>
+                    
+                    <!-- Cart Dropdown -->
+                    <div id="cart-dropdown" class="absolute right-0 top-full pt-2 w-80 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out">
+                        <div id="cart-items" class="max-h-64 overflow-y-auto">
+                            <!-- Cart items will be populated here -->
+                        </div>
+                        <div id="cart-footer" class="border-t border-gray-200 p-3">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="font-semibold">Total:</span>
+                                <span id="cart-total" class="font-bold">$0.00</span>
+                            </div>
+                            <button id="view-cart-btn" class="w-full bg-gray-900 text-white py-2 px-4 rounded-md hover:bg-black transition-colors duration-200 text-sm font-semibold">
+                                View Cart
+                            </button>
+                        </div>
+                    </div>
                 </button>
             </div>
 
@@ -211,7 +227,6 @@
             <a href="/contact" class="hover:text-accent transition-colors duration-300">Contact</a>
             <hr class="border-secondary"/>
             <a href="/cart" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="shopping-cart" class="mr-2"></i> Cart</a>
-            <a href="#" id="mobile-search-button" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="search" class="mr-2"></i> Search</a>
             @auth
                 <div class="space-y-2">
                     <div class="text-sm text-gray-600">{{ Auth::user()->name }}</div>
@@ -228,89 +243,6 @@
                 <a href="{{ route('login') }}" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="user" class="mr-2"></i> Account</a>
             @endauth
         </nav>
-    </div>
-
-    <!-- ===== Flyout Cart ===== -->
-    <div id="cart-flyout-backdrop" class="fixed inset-0 bg-black/50 z-[70] hidden opacity-0 transition-opacity duration-300"></div>
-    <div id="cart-flyout" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-[80] transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
-        <!-- Cart Header -->
-        <div class="flex justify-between items-center p-6 border-b border-secondary">
-            <h2 class="text-2xl font-semibold">Your Cart</h2>
-            <button id="close-cart-button">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-        </div>
-        <!-- Cart Body -->
-        <div class="flex-grow overflow-y-auto p-6 space-y-4">
-            <!-- Cart Item 1 -->
-            <div class="flex space-x-4">
-                <img src="https://placehold.co/80x80/EAEAEA/333333?text=Door" alt="Cabinet Door" class="w-20 h-20">
-                <div class="flex-grow">
-                    <h3 class="font-semibold">Classic White Door</h3>
-                    <p class="text-sm text-gray-500">24" x 30"</p>
-                    <div class="flex items-center justify-between mt-2">
-                        <div class="flex items-center border border-secondary">
-                            <button class="px-2 py-1">-</button>
-                            <span class="px-3">1</span>
-                            <button class="px-2 py-1">+</button>
-                        </div>
-                        <p class="font-semibold">$125.00</p>
-                    </div>
-                </div>
-            </div>
-            <!-- Cart Item 2 -->
-            <div class="flex space-x-4">
-                <img src="https://placehold.co/80x80/2D2D2D/F8F7F4?text=Handle" alt="Cabinet Handle" class="w-20 h-20">
-                <div class="flex-grow">
-                    <h3 class="font-semibold">Matte Black Handle</h3>
-                    <p class="text-sm text-gray-500">5" Center</p>
-                    <div class="flex items-center justify-between mt-2">
-                        <div class="flex items-center border border-secondary">
-                            <button class="px-2 py-1">-</button>
-                            <span class="px-3">4</span>
-                            <button class="px-2 py-1">+</button>
-                        </div>
-                        <p class="font-semibold">$112.00</p>
-                    </div>
-                </div>
-            </div>
-             <!-- Cart Item 3 -->
-            <div class="flex space-x-4">
-                <img src="https://placehold.co/80x80/F8F7F4/333333?text=Shelf" alt="Floating Shelf" class="w-20 h-20">
-                <div class="flex-grow">
-                    <h3 class="font-semibold">Oak Floating Shelf</h3>
-                    <p class="text-sm text-gray-500">36" Length</p>
-                    <div class="flex items-center justify-between mt-2">
-                        <div class="flex items-center border border-secondary">
-                            <button class="px-2 py-1">-</button>
-                            <span class="px-3">2</span>
-                            <button class="px-2 py-1">+</button>
-                        </div>
-                        <p class="font-semibold">$170.00</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Cart Footer -->
-        <div class="p-6 border-t border-secondary">
-            <div class="flex justify-between items-center mb-4">
-                <p class="text-lg">Subtotal</p>
-                <p class="text-lg font-semibold">$407.00</p>
-            </div>
-            <a href="#" class="w-full block text-center btn-minimal font-bold py-3 px-8 text-lg transition-colors duration-300">
-                Proceed to Checkout
-            </a>
-        </div>
-    </div>
-
-    <!-- ===== Search Overlay ===== -->
-    <div id="search-overlay" class="fixed inset-0 bg-primary-background z-[90] hidden opacity-0 transition-opacity duration-300 flex items-center justify-center">
-        <button id="close-search-button" class="absolute top-6 right-6 md:top-10 md:right-10">
-            <i data-lucide="x" class="w-8 h-8"></i>
-        </button>
-        <div class="w-full max-w-2xl px-6">
-            <input type="search" placeholder="Search for cabinets, styles, hardware..." class="w-full bg-transparent border-b-2 border-primary text-2xl md:text-4xl text-center md:text-left font-semibold placeholder-gray-400 focus:outline-none pb-2">
-        </div>
     </div>
 
     <!-- ===== Main Content ===== -->
@@ -467,45 +399,88 @@
                 link.addEventListener('click', closeMenu);
             });
 
-            // --- Flyout Cart & Search Logic ---
-            const cartButton = document.getElementById('cart-button');
-            const closeCartButton = document.getElementById('close-cart-button');
-            const cartFlyout = document.getElementById('cart-flyout');
-            const cartBackdrop = document.getElementById('cart-flyout-backdrop');
-            const searchButton = document.getElementById('search-button');
-            const mobileSearchButton = document.getElementById('mobile-search-button');
-            const closeSearchButton = document.getElementById('close-search-button');
-            const searchOverlay = document.getElementById('search-overlay');
+            // --- Cart System ---
+            const cartCount = document.getElementById('cart-count');
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            const viewCartBtn = document.getElementById('view-cart-btn');
+            const cartFooter = document.getElementById('cart-footer');
 
-            const openOverlay = (overlay, flyout) => {
-                document.body.style.overflow = 'hidden';
-                overlay.classList.remove('hidden');
-                setTimeout(() => {
-                    overlay.classList.remove('opacity-0');
-                    if(flyout) flyout.classList.remove('translate-x-full');
-                }, 10);
-            };
-            
-            const closeOverlay = (overlay, flyout) => {
-                document.body.style.overflow = '';
-                overlay.classList.add('opacity-0');
-                if(flyout) flyout.classList.add('translate-x-full');
-                setTimeout(() => {
-                    overlay.classList.add('hidden');
-                }, 300);
-            };
-            
-            cartButton.addEventListener('click', () => openOverlay(cartBackdrop, cartFlyout));
-            closeCartButton.addEventListener('click', () => closeOverlay(cartBackdrop, cartFlyout));
-            cartBackdrop.addEventListener('click', () => closeOverlay(cartBackdrop, cartFlyout));
+            // Cart data structure
+            let cart = JSON.parse(localStorage.getItem('cart')) || {};
 
-            searchButton.addEventListener('click', () => openOverlay(searchOverlay));
-            mobileSearchButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                closeMenu();
-                setTimeout(() => openOverlay(searchOverlay), 300);
+            // Update cart display
+            function updateCartDisplay() {
+                const itemCount = Object.keys(cart).length;
+                cartCount.textContent = itemCount;
+                
+                if (itemCount === 0) {
+                    cartCount.style.display = 'none';
+                    cartItems.innerHTML = '<div class="p-4 text-center text-gray-500">Your cart is empty</div>';
+                    cartFooter.style.display = 'none';
+                    viewCartBtn.style.display = 'none';
+                } else {
+                    cartCount.style.display = 'flex';
+                    cartFooter.style.display = 'block';
+                    viewCartBtn.style.display = 'block';
+                    
+                    let total = 0;
+                    let itemsHtml = '';
+                    
+                    Object.keys(cart).forEach(productId => {
+                        const item = cart[productId];
+                        const itemTotal = item.qty * item.unitPrice + (item.assembly ? item.qty * item.laborCost : 0);
+                        total += itemTotal;
+                        
+                        itemsHtml += `
+                            <div class="flex items-center justify-between p-3 border-b border-gray-100">
+                                <div class="flex-1">
+                                    <div class="font-medium text-sm">${item.name}</div>
+                                    <div class="text-xs text-gray-500">Qty: ${item.qty} | ${item.assembly ? 'Assembly: Yes' : 'Assembly: No'}</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-medium text-sm">$${itemTotal.toFixed(2)}</div>
+                                    <button onclick="removeFromCart('${productId}')" class="text-xs text-red-500 hover:text-red-700">Remove</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    cartItems.innerHTML = itemsHtml;
+                    cartTotal.textContent = `$${total.toFixed(2)}`;
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('cart', JSON.stringify(cart));
+            }
+
+            // Add to cart function (will be called from product pages)
+            window.addToCart = function(productId, productData) {
+                cart[productId] = productData;
+                updateCartDisplay();
+            };
+
+            // Remove from cart function
+            window.removeFromCart = function(productId) {
+                delete cart[productId];
+                updateCartDisplay();
+            };
+
+            // Initialize cart display
+            updateCartDisplay();
+
+            // Clear cart function for testing (you can remove this later)
+            window.clearCart = function() {
+                cart = {};
+                localStorage.removeItem('cart');
+                updateCartDisplay();
+            };
+
+            // View cart button
+            viewCartBtn.addEventListener('click', () => {
+                // Redirect to cart page
+                window.location.href = '/cart';
             });
-            closeSearchButton.addEventListener('click', () => closeOverlay(searchOverlay));
         });
     </script>
     @yield('scripts')

@@ -36,19 +36,19 @@
 
                     <!-- Categories -->
                     <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Categories</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Category (Select One)</label>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             @foreach($categories as $category)
                                 <label class="flex items-center">
-                                    <input type="checkbox" name="categories[]" value="{{ $category->id }}" 
-                                           {{ in_array($category->id, old('categories', $product->categories->pluck('id')->toArray())) ? 'checked' : '' }}
-                                           class="category-checkbox rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                    <input type="radio" name="category_id" value="{{ $category->id }}" 
+                                           {{ old('category_id', $product->categories->first()?->id) == $category->id ? 'checked' : '' }}
+                                           class="category-radio rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                                            data-category-id="{{ $category->id }}">
                                     <span class="ml-2 text-sm text-gray-700">{{ $category->name }}</span>
                                 </label>
                             @endforeach
                         </div>
-                        @error('categories')
+                        @error('category_id')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -75,10 +75,16 @@
                     <!-- SKU -->
                     <div>
                         <label for="sku" class="block text-sm font-medium text-gray-700">SKU</label>
-                        <input type="text" name="sku" id="sku" value="{{ old('sku', $product->sku) }}" 
-                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
-                               placeholder="e.g., HDF-CG-2DR-24"
-                               required>
+                        <div class="flex space-x-2">
+                            <input type="text" name="sku" id="sku" value="{{ old('sku', $product->sku) }}" 
+                                   class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
+                                   placeholder="Auto-generated SKU"
+                                   required>
+                            <button type="button" id="generate-sku-btn" 
+                                    class="mt-1 px-3 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                Generate
+                            </button>
+                        </div>
                         @error('sku')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -108,17 +114,17 @@
                         @enderror
                     </div>
 
-                    <!-- Assembly Cost -->
-                    <div>
-                        <label for="assembly_cost" class="block text-sm font-medium text-gray-700">Assembly Cost ($)</label>
-                        <input type="number" name="assembly_cost" id="assembly_cost" value="{{ old('assembly_cost', $product->assembly_cost) }}" 
-                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
-                               step="0.01" min="0"
-                               placeholder="0.00">
-                        @error('assembly_cost')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
+                                         <!-- Labor Cost -->
+                     <div>
+                         <label for="labor_cost" class="block text-sm font-medium text-gray-700">Labor Cost ($)</label>
+                                                   <input type="number" name="labor_cost" id="labor_cost" value="{{ old('labor_cost', $product->labor_cost) }}"  
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
+                                step="0.01" min="0"
+                                placeholder="30.00">
+                         @error('labor_cost')
+                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                         @enderror
+                     </div>
 
                     <!-- Hinge Type -->
                     <div>
@@ -165,24 +171,147 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Get all category checkboxes
-    const categoryCheckboxes = document.querySelectorAll('.category-checkbox');
+    // Get all category radio buttons
+    const categoryRadios = document.querySelectorAll('.category-radio');
     
-    // Add event listener to each category checkbox
-    categoryCheckboxes.forEach(function(categoryCheckbox) {
-        categoryCheckbox.addEventListener('change', function() {
+    // Add event listener to each category radio
+    categoryRadios.forEach(function(categoryRadio) {
+        categoryRadio.addEventListener('change', function() {
             const categoryId = this.getAttribute('data-category-id');
-            const isChecked = this.checked;
             
-            // Get all subcategory checkboxes that belong to this category
+            // First, uncheck all subcategory checkboxes
+            const allSubcategoryCheckboxes = document.querySelectorAll('.subcategory-checkbox');
+            allSubcategoryCheckboxes.forEach(function(subcategoryCheckbox) {
+                subcategoryCheckbox.checked = false;
+            });
+            
+            // Then, check all subcategory checkboxes that belong to the selected category
             const subcategoryCheckboxes = document.querySelectorAll('.subcategory-checkbox[data-category-id="' + categoryId + '"]');
-            
-            // Check/uncheck all subcategories based on category selection
             subcategoryCheckboxes.forEach(function(subcategoryCheckbox) {
-                subcategoryCheckbox.checked = isChecked;
+                subcategoryCheckbox.checked = true;
             });
         });
     });
+    
+    // Auto-select subcategories for the initially selected category (if any)
+    const selectedCategoryRadio = document.querySelector('.category-radio:checked');
+    if (selectedCategoryRadio) {
+        const categoryId = selectedCategoryRadio.getAttribute('data-category-id');
+        const subcategoryCheckboxes = document.querySelectorAll('.subcategory-checkbox[data-category-id="' + categoryId + '"]');
+        subcategoryCheckboxes.forEach(function(subcategoryCheckbox) {
+            subcategoryCheckbox.checked = true;
+        });
+    }
+    
+    // SKU Generation functionality
+    const skuInput = document.getElementById('sku');
+    const generateSkuBtn = document.getElementById('generate-sku-btn');
+    const productLineSelect = document.getElementById('product_line_id');
+    const nameInput = document.getElementById('name');
+    
+    function generateSKU() {
+        const productLine = productLineSelect.options[productLineSelect.selectedIndex];
+        const name = nameInput.value.trim();
+        
+        if (!productLine.value) {
+            alert('Please select a product line first');
+            return;
+        }
+        
+        if (!name) {
+            alert('Please enter a product name first');
+            return;
+        }
+        
+        // Extract door style and color from product line text
+        const productLineText = productLine.text;
+        const parts = productLineText.split(' - ');
+        const doorStyle = parts[0] || 'STYLE';
+        const doorColor = parts[1] || 'COLOR';
+        
+        // Create SKU format: DOORSTYLE-DOORCOLOR-PRODUCTNAME-TIMESTAMP
+        const timestamp = Date.now().toString().slice(-4); // Last 4 digits of timestamp
+        const cleanName = name.replace(/[^A-Z0-9]/gi, '').toUpperCase().substring(0, 8);
+        const cleanDoorStyle = doorStyle.replace(/[^A-Z0-9]/gi, '').toUpperCase().substring(0, 6);
+        const cleanDoorColor = doorColor.replace(/[^A-Z0-9]/gi, '').toUpperCase().substring(0, 6);
+        
+        const generatedSKU = `${cleanDoorStyle}-${cleanDoorColor}-${cleanName}-${timestamp}`;
+        skuInput.value = generatedSKU;
+    }
+    
+    // Generate SKU button click
+    generateSkuBtn.addEventListener('click', generateSKU);
+    
+    // Auto-generate SKU when product line or name changes (if both are filled)
+    productLineSelect.addEventListener('change', function() {
+        if (productLineSelect.value && nameInput.value.trim()) {
+            generateSKU();
+        }
+        filterCategoriesByProductLine();
+    });
+    
+    nameInput.addEventListener('input', function() {
+        if (productLineSelect.value && nameInput.value.trim()) {
+            generateSKU();
+        }
+    });
+    
+    // Filter categories and subcategories based on selected product line
+    function filterCategoriesByProductLine() {
+        const selectedProductLineId = productLineSelect.value;
+        if (!selectedProductLineId) {
+            // Show all categories and subcategories if no product line is selected
+            document.querySelectorAll('.category-radio').forEach(radio => {
+                radio.closest('label').style.display = 'flex';
+            });
+            document.querySelectorAll('.subcategory-checkbox').forEach(checkbox => {
+                checkbox.closest('label').style.display = 'flex';
+            });
+            return;
+        }
+        
+        // Make AJAX call to get categories for the selected product line
+        fetch(`/admin/product-lines/${selectedProductLineId}/categories`)
+            .then(response => response.json())
+            .then(data => {
+                // Hide all categories and subcategories first
+                document.querySelectorAll('.category-radio').forEach(radio => {
+                    radio.closest('label').style.display = 'none';
+                });
+                document.querySelectorAll('.subcategory-checkbox').forEach(checkbox => {
+                    checkbox.closest('label').style.display = 'none';
+                });
+                
+                // Show only the categories that are related to this product line
+                data.categories.forEach(category => {
+                    const categoryRadio = document.querySelector(`.category-radio[value="${category.id}"]`);
+                    if (categoryRadio) {
+                        categoryRadio.closest('label').style.display = 'flex';
+                    }
+                    
+                    // Show subcategories for this category
+                    category.sub_categories.forEach(subCategory => {
+                        const subCategoryCheckbox = document.querySelector(`.subcategory-checkbox[value="${subCategory.id}"]`);
+                        if (subCategoryCheckbox) {
+                            subCategoryCheckbox.closest('label').style.display = 'flex';
+                        }
+                    });
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching categories:', error);
+                // Fallback: show all categories if AJAX fails
+                document.querySelectorAll('.category-radio').forEach(radio => {
+                    radio.closest('label').style.display = 'flex';
+                });
+                document.querySelectorAll('.subcategory-checkbox').forEach(checkbox => {
+                    checkbox.closest('label').style.display = 'flex';
+                });
+            });
+    }
+    
+    // Initialize category filtering on page load
+    filterCategoriesByProductLine();
 });
 </script>
 @endsection 

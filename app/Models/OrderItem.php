@@ -12,14 +12,19 @@ class OrderItem extends Model
     protected $fillable = [
         'order_id',
         'product_id',
+        'product_name',
         'quantity',
-        'price_at_time_of_purchase',
-        'assembly_selected',
+        'unit_price',
+        'labor_cost',
+        'assembly',
+        'subtotal',
     ];
 
     protected $casts = [
-        'price_at_time_of_purchase' => 'decimal:2',
-        'assembly_selected' => 'boolean',
+        'unit_price' => 'decimal:2',
+        'labor_cost' => 'decimal:2',
+        'assembly' => 'boolean',
+        'subtotal' => 'decimal:2',
     ];
 
     public function order()
