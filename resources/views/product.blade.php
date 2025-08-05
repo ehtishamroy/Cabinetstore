@@ -643,7 +643,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateGrandTotal();
         
         // Redirect to cart page
-        window.location.href = '/cart';
+        window.location.href = '{{ route('cart') }}';
     });
 
     // --- Other page logic ---

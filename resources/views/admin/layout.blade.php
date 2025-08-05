@@ -139,7 +139,7 @@
             <div class="pt-4">
                 <h3 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Content</h3>
                 <div class="mt-2 space-y-1">
-                    <a href="{{ route('admin.blog') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.blog') ? 'active' : '' }}">
+                    <a href="{{ route('admin.blog.index') }}" class="sidebar-link flex items-center px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors {{ request()->routeIs('admin.blog.*') ? 'active' : '' }}">
                         <i data-lucide="file-text" class="w-5 h-5 mr-3"></i>
                         <span>Blog</span>
                     </a>
@@ -152,7 +152,7 @@
                 <i data-lucide="settings" class="w-5 h-5 mr-3"></i>
                 <span>Settings</span>
             </a>
-            <a href="/" class="flex items-center mt-2 px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors">
+                            <a href="{{ route('home') }}" class="flex items-center mt-2 px-4 py-2.5 text-gray-600 rounded-lg hover:bg-gray-100 hover:text-gray-900 transition-colors">
                 <i data-lucide="log-out" class="w-5 h-5 mr-3"></i>
                 <span>Back to Store</span>
             </a>

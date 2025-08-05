@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         productGrid.innerHTML = sortedColors.map(color => `
             <div class="product-card bg-[#F8F7F4] p-4 rounded-xl border border-transparent hover:border-gray-200 hover:shadow-lg transition-all">
-                <a href="/product/${color.door_color_id}">
+                <a href="/product/${color.door_color_id}/${color.slug}">
                      <div class="product-card-image-wrapper bg-white rounded-md">
                          <img src="${color.image_url}" alt="${color.name}" class="w-full h-auto aspect-square object-contain product-card-image">
                      </div>
@@ -322,7 +322,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <div class="mt-4 text-left">
                      <p class="text-xs text-gray-500">${color.door_style}</p>
                      <h3 class="font-semibold mt-1">${color.name}</h3>
-                     <a href="/product/${color.door_color_id}" class="btn-minimal inline-block text-sm font-bold py-2 px-5 mt-3 rounded-md">
+                     <a href="/product/${color.door_color_id}/${color.slug}" class="btn-minimal inline-block text-sm font-bold py-2 px-5 mt-3 rounded-md">
                         View Details
                     </a>
                 </div>

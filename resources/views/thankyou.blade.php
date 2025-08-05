@@ -21,7 +21,7 @@
             </p>
 
             <div class="text-center mt-10">
-                <a href="/" class="btn-minimal text-lg font-bold py-3 px-8 rounded-md transition-colors duration-300">
+                <a href="{{ route('home') }}" class="btn-minimal text-lg font-bold py-3 px-8 rounded-md transition-colors duration-300">
                     Continue Shopping
                 </a>
             </div>

@@ -33,7 +33,7 @@
                 </div>
                 <h2 class="text-2xl font-semibold mb-4">Your cart is empty</h2>
                 <p class="text-gray-600 mb-8">Looks like you haven't added any items to your cart yet.</p>
-                <a href="/shop" class="bg-accent text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors duration-200">
+                <a href="{{ route('shop') }}" class="bg-accent text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors duration-200">
                     Start Shopping
                 </a>
             </div>
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <span class="font-bold">$${finalTotal.toFixed(2)}</span>
                             </div>
                         </div>
-                                    <a href="/checkout" class="w-full bg-gray-900 text-white py-3 px-6 rounded-lg font-semibold hover:bg-black transition-colors duration-200 mb-4 inline-block text-center">
+                                    <a href="{{ route('checkout') }}" class="w-full bg-gray-900 text-white py-3 px-6 rounded-lg font-semibold hover:bg-black transition-colors duration-200 mb-4 inline-block text-center">
                 Proceed to Checkout
             </a>
                         <button onclick="clearCart()" class="w-full bg-gray-200 text-gray-800 py-2 px-6 rounded-lg font-semibold hover:bg-gray-300 transition-colors duration-200">

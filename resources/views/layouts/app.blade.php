@@ -150,15 +150,16 @@
     <header id="main-header" class="fixed left-0 right-0 z-50 py-4 px-6 md:px-10">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <!-- Logo -->
-            <a href="/" class="text-2xl font-bold" id="logo">BH CABINETRY</a>
+            <a href="{{ route('home') }}" class="text-2xl font-bold" id="logo">BH CABINETRY</a>
 
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex items-center space-x-8">
-                <a href="/shop" class="hover:text-accent transition-colors duration-300">Shop</a>
+                <a href="{{ route('shop') }}" class="hover:text-accent transition-colors duration-300">Shop</a>
                 <a href="/product" class="hover:text-accent transition-colors duration-300">Products</a>
-                <a href="/about" class="hover:text-accent transition-colors duration-300">About Us</a>
-                <a href="/blog" class="hover:text-accent transition-colors duration-300">Blog</a>
-                <a href="/contact" class="hover:text-accent transition-colors duration-300">Contact</a>
+                <a href="{{ route('track-order') }}" class="hover:text-accent transition-colors duration-300">Track Order</a>
+                <a href="{{ route('about') }}" class="hover:text-accent transition-colors duration-300">About Us</a>
+                <a href="{{ route('blog') }}" class="hover:text-accent transition-colors duration-300">Blog</a>
+                <a href="{{ route('contact') }}" class="hover:text-accent transition-colors duration-300">Contact</a>
             </nav>
 
             <!-- Icons -->
@@ -220,13 +221,14 @@
             <i data-lucide="x"></i>
         </button>
         <nav class="flex flex-col space-y-6 text-lg mt-12">
-            <a href="/shop" class="hover:text-accent transition-colors duration-300">Shop</a>
+            <a href="{{ route('shop') }}" class="hover:text-accent transition-colors duration-300">Shop</a>
             <a href="/product" class="hover:text-accent transition-colors duration-300">Products</a>
-            <a href="/about" class="hover:text-accent transition-colors duration-300">About Us</a>
-            <a href="/blog" class="hover:text-accent transition-colors duration-300">Blog</a>
-            <a href="/contact" class="hover:text-accent transition-colors duration-300">Contact</a>
+            <a href="{{ route('track-order') }}" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="package-search" class="mr-2"></i> Track Order</a>
+            <a href="{{ route('about') }}" class="hover:text-accent transition-colors duration-300">About Us</a>
+            <a href="{{ route('blog') }}" class="hover:text-accent transition-colors duration-300">Blog</a>
+            <a href="{{ route('contact') }}" class="hover:text-accent transition-colors duration-300">Contact</a>
             <hr class="border-secondary"/>
-            <a href="/cart" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="shopping-cart" class="mr-2"></i> Cart</a>
+            <a href="{{ route('cart') }}" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="shopping-cart" class="mr-2"></i> Cart</a>
             @auth
                 <div class="space-y-2">
                     <div class="text-sm text-gray-600">{{ Auth::user()->name }}</div>
@@ -479,7 +481,7 @@
             // View cart button
             viewCartBtn.addEventListener('click', () => {
                 // Redirect to cart page
-                window.location.href = '/cart';
+                window.location.href = '{{ route('cart') }}';
             });
         });
     </script>

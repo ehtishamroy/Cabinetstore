@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
+use Stripe\Exception\ApiException;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Mail\OrderConfirmation;
 
 class CheckoutController extends Controller
 {
@@ -21,10 +24,16 @@ class CheckoutController extends Controller
         try {
             Log::info('Creating payment intent with amount: ' . $request->input('amount'));
             
-            // Set your Stripe secret key
+            // Check if Stripe is properly configured
             $stripeSecret = config('services.stripe.secret');
+            if (empty($stripeSecret)) {
+                Log::error('Stripe secret key is not configured');
+                return response()->json(['error' => 'Payment service not configured'], 500);
+            }
+            
             Log::info('Stripe secret key exists: ' . (!empty($stripeSecret) ? 'yes' : 'no'));
             
+            // Set Stripe API key
             Stripe::setApiKey($stripeSecret);
 
             $amount = $request->input('amount'); // Amount in cents
@@ -49,6 +58,9 @@ class CheckoutController extends Controller
                 'clientSecret' => $paymentIntent->client_secret,
                 'paymentIntentId' => $paymentIntent->id,
             ]);
+        } catch (ApiException $e) {
+            Log::error('Stripe API error: ' . $e->getMessage());
+            return response()->json(['error' => 'Payment setup failed: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
             Log::error('Stripe payment intent creation failed: ' . $e->getMessage());
             Log::error('Stack trace: ' . $e->getTraceAsString());
@@ -59,6 +71,10 @@ class CheckoutController extends Controller
     public function processPayment(Request $request)
     {
         try {
+            Log::info('Payment processing started', [
+                'request_data' => $request->all()
+            ]);
+
             $validated = $request->validate([
                 'payment_method' => 'required|in:stripe,paypal',
                 'payment_intent_id' => 'required_if:payment_method,stripe',
@@ -68,11 +84,20 @@ class CheckoutController extends Controller
                 'total_amount' => 'required|numeric',
             ]);
 
+            Log::info('Payment validation passed', [
+                'validated_data' => $validated
+            ]);
+
+            // Calculate shipping cost (you can implement your shipping logic here)
+            $shippingCost = 0; // Default to free shipping, you can calculate based on your logic
+            
             // Create order in database
+            Log::info('Creating order...');
             $order = Order::create([
                 'user_id' => auth()->id() ?? null,
                 'order_number' => 'ORD-' . uniqid(),
                 'total_amount' => $validated['total_amount'],
+                'shipping_cost' => $shippingCost,
                 'status' => 'pending',
                 'payment_method' => $validated['payment_method'],
                 'payment_status' => 'pending',
@@ -80,6 +105,7 @@ class CheckoutController extends Controller
                 'shipping_address' => json_encode($validated['customer_info']['shipping']),
                 'billing_address' => json_encode($validated['customer_info']['billing'] ?? $validated['customer_info']['shipping']),
             ]);
+            Log::info('Order created successfully', ['order_id' => $order->id]);
 
             // Create order items
             foreach ($validated['cart_items'] as $item) {
@@ -107,6 +133,15 @@ class CheckoutController extends Controller
                         'status' => 'processing',
                     ]);
                     
+                    // Send order confirmation email
+                    try {
+                        Mail::to($order->customer_email)->send(new OrderConfirmation($order));
+                        Log::info('Order confirmation email sent successfully', ['order_id' => $order->id, 'email' => $order->customer_email]);
+                    } catch (\Exception $e) {
+                        Log::error('Failed to send order confirmation email: ' . $e->getMessage(), ['order_id' => $order->id]);
+                        // Don't fail the order if email fails
+                    }
+                    
                     return response()->json([
                         'success' => true,
                         'order_id' => $order->id,
@@ -124,6 +159,15 @@ class CheckoutController extends Controller
                     'status' => 'processing',
                 ]);
                 
+                // Send order confirmation email
+                try {
+                    Mail::to($order->customer_email)->send(new OrderConfirmation($order));
+                    Log::info('Order confirmation email sent successfully', ['order_id' => $order->id, 'email' => $order->customer_email]);
+                } catch (\Exception $e) {
+                    Log::error('Failed to send order confirmation email: ' . $e->getMessage(), ['order_id' => $order->id]);
+                    // Don't fail the order if email fails
+                }
+                
                 return response()->json([
                     'success' => true,
                     'order_id' => $order->id,
@@ -131,9 +175,15 @@ class CheckoutController extends Controller
                 ]);
             }
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation failed: ' . $e->getMessage(), [
+                'errors' => $e->errors()
+            ]);
+            return response()->json(['error' => 'Validation failed: ' . $e->getMessage()], 422);
         } catch (\Exception $e) {
             Log::error('Payment processing failed: ' . $e->getMessage());
-            return response()->json(['error' => 'Payment processing failed'], 500);
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            return response()->json(['error' => 'Payment processing failed: ' . $e->getMessage()], 500);
         }
     }
 

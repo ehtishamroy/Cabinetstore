@@ -22,6 +22,17 @@
         border-color: #2D2D2D;
         box-shadow: 0 0 0 2px rgba(45, 45, 45, 0.2);
     }
+    .form-input:invalid {
+        border-color: #dc2626;
+    }
+    .form-input:invalid:focus {
+        border-color: #dc2626;
+        box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
+    }
+    .required-field::after {
+        content: " *";
+        color: #dc2626;
+    }
     .order-summary {
         background-color: #F8F7F4;
     }
@@ -88,6 +99,25 @@
         margin-bottom: 1rem;
     }
 
+    /* Stripe card element styles */
+    #card-element {
+        background-color: #ffffff;
+        border: 1px solid #D1D5DB;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1rem;
+        min-height: 50px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    
+    #card-element:focus-within {
+        border-color: #2D2D2D;
+        box-shadow: 0 0 0 2px rgba(45, 45, 45, 0.2);
+    }
+    
+    #card-element.StripeElement--invalid {
+        border-color: #dc2626;
+    }
+
     /* Success message styles */
     .success-message {
         color: #059669;
@@ -107,7 +137,7 @@
         <div class="py-12 px-6 md:px-12 lg:px-16 order-2 lg:order-1">
             <div class="max-w-lg mx-auto lg:mx-0 lg:max-w-none">
                  <div class="text-left mb-10">
-                    <a href="/" class="text-3xl font-bold">BH CABINETRY</a>
+                    <a href="{{ route('home') }}" class="text-3xl font-bold">BH CABINETRY</a>
                 </div>
                 
                 <!-- Stepper -->
@@ -123,39 +153,69 @@
                     </div>
                 </nav>
 
-                <!-- Error/Success Messages -->
-                <div id="message-container"></div>
+                                 <!-- Error/Success Messages -->
+                 <div id="message-container"></div>
+                 
+                 <!-- Localhost Testing Notice -->
+                 <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                     <div class="flex">
+                         <div class="flex-shrink-0">
+                             <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                 <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                             </svg>
+                         </div>
+                         <div class="ml-3">
+                             <h3 class="text-sm font-medium text-yellow-800">Testing Mode</h3>
+                             <div class="mt-2 text-sm text-yellow-700">
+                                 <p>You're testing on localhost. If payments fail, try:</p>
+                                 <ul class="list-disc list-inside mt-1">
+                                     <li>Disable browser extensions (ad-blockers)</li>
+                                     <li>Use incognito/private browsing mode</li>
+                                     <li>Use Stripe test card: <code class="bg-yellow-100 px-1 rounded">4242 4242 4242 4242</code></li>
+                                 </ul>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
 
                 <!-- Shipping Form -->
                 <div id="shipping-step">
+                    <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <p class="text-sm text-blue-800">
+                            <i data-lucide="info" class="w-4 h-4 inline mr-1"></i>
+                            Fields marked with <span class="text-red-600 font-semibold">*</span> are required
+                        </p>
+                    </div>
+                    
                     <h2 class="text-xl font-semibold mb-2">Contact Information</h2>
-                    <input type="email" id="customer-email" placeholder="Email Address" class="form-input mb-6" required>
+                    <input type="email" id="customer-email" placeholder="Email Address *" class="form-input mb-6" required>
                     
                     <h2 class="text-xl font-semibold mb-4">Shipping Address</h2>
                     <form id="shipping-form" class="space-y-4">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <input type="text" id="first-name" placeholder="First Name" class="form-input" required>
-                            <input type="text" id="last-name" placeholder="Last Name" class="form-input" required>
+                            <input type="text" id="first-name" placeholder="First Name *" class="form-input" required>
+                            <input type="text" id="last-name" placeholder="Last Name *" class="form-input" required>
                         </div>
                         <input type="text" id="company" placeholder="Company (optional)" class="form-input">
-                        <input type="text" id="address" placeholder="Address" class="form-input" required>
+                        <input type="text" id="address" placeholder="Address *" class="form-input" required>
                         <input type="text" id="apartment" placeholder="Apartment, suite, etc. (optional)" class="form-input">
                          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <input type="text" id="city" placeholder="City" class="form-input" required>
+                            <input type="text" id="city" placeholder="City *" class="form-input" required>
                             <select id="country" class="form-input" required>
+                                <option value="">Select Country *</option>
                                 <option value="US">United States</option>
                                 <option value="CA">Canada</option>
                             </select>
-                            <input type="text" id="zip-code" placeholder="ZIP code" class="form-input" required>
+                            <input type="text" id="zip-code" placeholder="ZIP code *" class="form-input" required>
                         </div>
-                        <input type="tel" id="phone" placeholder="Phone" class="form-input" required>
+                        <input type="tel" id="phone" placeholder="Phone *" class="form-input" required>
                     </form>
 
                     <div class="mt-8">
                         <button id="continue-to-payment" class="w-full btn-minimal text-lg font-bold py-3.5 px-8 rounded-md">
                             Continue to Payment
                         </button>
-                        <a href="/cart" class="block text-center mt-4 text-accent font-medium">
+                        <a href="{{ route('cart') }}" class="block text-center mt-4 text-accent font-medium">
                             <i data-lucide="arrow-left" class="inline w-4 h-4 mr-1"></i>
                             Return to cart
                         </a>
@@ -206,8 +266,9 @@
 
                    <!-- Stripe Payment Form -->
                    <div id="stripe-payment-form" class="space-y-4">
-                        <div class="border rounded-lg p-4 space-y-4">
-                            <div id="card-element" class="form-input">
+                        <div class="border-2 border-gray-200 rounded-lg p-6 space-y-4 bg-white shadow-sm">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Card Information</label>
+                            <div id="card-element" class="min-h-[50px]">
                                 <!-- Stripe Elements will be inserted here -->
                             </div>
                             <div id="card-errors" class="text-red-500 text-sm hidden"></div>
@@ -218,22 +279,6 @@
                    <div id="paypal-button-container" class="hidden">
                         <div id="paypal-button"></div>
                    </div>
-                   
-                   <h2 class="text-xl font-semibold mt-8 mb-4">Billing Address</h2>
-                   <div class="space-y-3">
-                         <div class="border rounded-lg p-4 flex items-center">
-                            <input type="radio" id="billing-same" name="billing-address" class="h-4 w-4 text-accent focus:ring-accent" checked>
-                            <label for="billing-same" class="ml-3 block text-sm font-medium text-primary">
-                                Same as shipping address
-                            </label>
-                        </div>
-                         <div class="border rounded-lg p-4 flex items-center">
-                            <input type="radio" id="billing-different" name="billing-address" class="h-4 w-4 text-accent focus:ring-accent">
-                            <label for="billing-different" class="ml-3 block text-sm font-medium text-primary">
-                                Use a different billing address
-                            </label>
-                        </div>
-                    </div>
 
                    <div class="mt-8">
                         <button id="pay-now-btn" class="w-full btn-minimal text-lg font-bold py-3.5 px-8 rounded-md">
@@ -287,7 +332,7 @@
 <!-- Stripe.js -->
 <script src="https://js.stripe.com/v3/"></script>
 <!-- PayPal SDK -->
-<script src="https://www.paypal.com/sdk/js?client-id={{ config('services.paypal.client_id') }}&currency=USD"></script>
+<script src="https://www.paypal.com/sdk/js?client-id={{ config('services.paypal.client_id', 'test') }}&currency=USD"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -301,19 +346,33 @@
         
         // Initialize Stripe
         function initializeStripe() {
-            stripe = Stripe('{{ config("services.stripe.key") }}');
+            const stripeKey = '{{ config("services.stripe.key") }}';
+            if (!stripeKey || stripeKey === '') {
+                console.error('Stripe key not configured');
+                showMessage('Payment service not configured. Please contact support.', 'error');
+                return;
+            }
+            stripe = Stripe(stripeKey);
             const elements = stripe.elements();
             card = elements.create('card', {
                 style: {
                     base: {
                         fontSize: '16px',
-                        color: '#424770',
+                        color: '#2D2D2D',
+                        backgroundColor: '#ffffff',
+                        border: '1px solid #D1D5DB',
+                        borderRadius: '8px',
+                        padding: '12px 16px',
                         '::placeholder': {
-                            color: '#aab7c4',
+                            color: '#6B7280',
+                        },
+                        ':-webkit-autofill': {
+                            color: '#2D2D2D',
                         },
                     },
                     invalid: {
-                        color: '#9e2146',
+                        color: '#dc2626',
+                        borderColor: '#dc2626',
                     },
                 },
             });
@@ -332,8 +391,13 @@
         }
         
         // Initialize PayPal
-        function initializePayPal() {
-            paypal.Buttons({
+function initializePayPal() {
+    if (typeof paypal === 'undefined') {
+        console.error('PayPal SDK not loaded');
+        return;
+    }
+    
+    paypal.Buttons({
                 createOrder: async function(data, actions) {
                     const total = await calculateTotal();
                     return actions.order.create({
@@ -453,25 +517,55 @@
             const container = document.getElementById('message-container');
             container.innerHTML = `<div class="${type === 'error' ? 'error-message' : 'success-message'}">${message}</div>`;
         }
+
+        // Show user-friendly error for ad blocker issues
+        function showAdBlockerMessage() {
+            const message = `
+                <strong>Payment Issue Detected</strong><br>
+                It looks like an ad blocker or browser extension is blocking payment processing. To complete your purchase:<br>
+                <br>
+                1. <strong>Disable your ad blocker</strong> for this website, or<br>
+                2. Try using an <strong>incognito/private browsing window</strong><br>
+                <br>
+                Don't worry - your cart items are saved and will be here when you return!
+            `;
+            showMessage(message, 'error');
+        }
         
         // Continue to payment
         document.getElementById('continue-to-payment').addEventListener('click', function() {
-            const email = document.getElementById('customer-email').value;
-            const firstName = document.getElementById('first-name').value;
-            const lastName = document.getElementById('last-name').value;
-            const address = document.getElementById('address').value;
-            const city = document.getElementById('city').value;
-            const zipCode = document.getElementById('zip-code').value;
-            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('customer-email').value.trim();
+            const firstName = document.getElementById('first-name').value.trim();
+            const lastName = document.getElementById('last-name').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const city = document.getElementById('city').value.trim();
+            const country = document.getElementById('country').value;
+            const zipCode = document.getElementById('zip-code').value.trim();
+            const phone = document.getElementById('phone').value.trim();
             
-            if (!email || !firstName || !lastName || !address || !city || !zipCode || !phone) {
-                showMessage('Please fill in all required fields.');
+            // Validate required fields
+            const requiredFields = [
+                { value: email, name: 'Email Address' },
+                { value: firstName, name: 'First Name' },
+                { value: lastName, name: 'Last Name' },
+                { value: address, name: 'Address' },
+                { value: city, name: 'City' },
+                { value: country, name: 'Country' },
+                { value: zipCode, name: 'ZIP Code' },
+                { value: phone, name: 'Phone' }
+            ];
+            
+            const missingFields = requiredFields.filter(field => !field.value);
+            
+            if (missingFields.length > 0) {
+                const fieldNames = missingFields.map(field => field.name).join(', ');
+                showMessage(`Please fill in all required fields: ${fieldNames}`);
                 return;
             }
             
             // Update summary
             document.getElementById('summary-email').textContent = email;
-            document.getElementById('summary-address').textContent = `${address}, ${city}, ${zipCode}`;
+            document.getElementById('summary-address').textContent = `${address}, ${city}, ${country} ${zipCode}`;
             
             // Switch to payment step
             document.getElementById('shipping-step').classList.add('hidden');
@@ -505,8 +599,11 @@
             document.getElementById('shipping-step-indicator').classList.add('active');
         };
         
-        // Process payment
-        async function processPayment(method, paymentIntentId = null, paypalOrderId = null) {
+                 // Process payment
+         async function processPayment(method, paymentIntentId = null, paypalOrderId = null) {
+             console.log('Processing payment with method:', method);
+             console.log('Payment intent ID:', paymentIntentId);
+             console.log('PayPal order ID:', paypalOrderId);
             const payButton = document.getElementById('pay-now-btn');
             const originalText = payButton.innerHTML;
             payButton.innerHTML = '<span class="loading"></span> Processing...';
@@ -528,37 +625,56 @@
                     }
                 };
                 
-                const cartItems = Object.keys(cart).map(productId => ({
-                    product_id: productId,
-                    ...cart[productId]
-                }));
+                                 const cartItems = Object.keys(cart).map(productId => ({
+                     product_id: productId,
+                     ...cart[productId]
+                 }));
+                 
+                 // Calculate total amount first
+                 const totalAmount = await calculateTotal();
+                 console.log('Calculated total amount:', totalAmount);
+                 
+                 const requestBody = {
+                     payment_method: method,
+                     payment_intent_id: paymentIntentId,
+                     paypal_order_id: paypalOrderId,
+                     customer_info: customerInfo,
+                     cart_items: cartItems,
+                     total_amount: totalAmount / 100
+                 };
+                 
+                 console.log('Request body:', requestBody);
+                 
+                                  console.log('Making POST request to /checkout/process-payment');
+                 console.log('CSRF Token:', document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 'NOT FOUND');
+                 
+                 const response = await fetch('/checkout/process-payment', {
+                     method: 'POST',
+                     headers: {
+                         'Content-Type': 'application/json',
+                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                         'Accept': 'application/json'
+                     },
+                     body: JSON.stringify(requestBody)
+                 });
                 
-                const response = await fetch('/checkout/process-payment', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
-                    },
-                    body: JSON.stringify({
-                        payment_method: method,
-                        payment_intent_id: paymentIntentId,
-                        paypal_order_id: paypalOrderId,
-                        customer_info: customerInfo,
-                        cart_items: cartItems,
-                        total_amount: calculateTotal() / 100
-                    })
-                });
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    // Clear cart
-                    localStorage.removeItem('cart');
-                    // Redirect to success page
-                    window.location.href = `/checkout/success/${result.order_id}`;
-                } else {
-                    showMessage(result.error || 'Payment failed. Please try again.');
-                }
+                                 if (!response.ok) {
+                     const errorText = await response.text();
+                     console.error('Process payment error response:', errorText);
+                     showMessage('Payment processing failed. Please try again.');
+                     return;
+                 }
+                 
+                 const result = await response.json();
+                 
+                 if (result.success) {
+                     // Clear cart
+                     localStorage.removeItem('cart');
+                     // Redirect to success page
+                     window.location.href = `/checkout/success/${result.order_id}`;
+                 } else {
+                     showMessage(result.error || 'Payment failed. Please try again.');
+                 }
             } catch (error) {
                 showMessage('An error occurred. Please try again.');
                 console.error('Payment error:', error);
@@ -591,6 +707,14 @@
                     });
                     
                     console.log('Response status:', response.status);
+                    
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error('Server error response:', errorText);
+                        showMessage('Server error occurred. Please try again.');
+                        return;
+                    }
+                    
                     const result = await response.json();
                     console.log('Response result:', result);
                     
@@ -598,20 +722,37 @@
                         paymentIntent = result.paymentIntentId;
                         
                         // Confirm payment
-                        const { error } = await stripe.confirmCardPayment(result.clientSecret, {
-                            payment_method: {
-                                card: card,
-                                billing_details: {
-                                    name: document.getElementById('first-name').value + ' ' + document.getElementById('last-name').value,
-                                    email: document.getElementById('customer-email').value,
+                        try {
+                            const { error } = await stripe.confirmCardPayment(result.clientSecret, {
+                                payment_method: {
+                                    card: card,
+                                    billing_details: {
+                                        name: document.getElementById('first-name').value + ' ' + document.getElementById('last-name').value,
+                                        email: document.getElementById('customer-email').value,
+                                    }
                                 }
+                            });
+                            
+                            if (error) {
+                                console.error('Stripe error:', error);
+                                // Check if it's a network/blocking issue
+                                if (error.message && (error.message.includes('network') || error.message.includes('blocked') || error.message.includes('fetch'))) {
+                                    showAdBlockerMessage();
+                                } else {
+                                    showMessage(error.message);
+                                }
+                            } else {
+                                processPayment('stripe', paymentIntent);
                             }
-                        });
-                        
-                        if (error) {
-                            showMessage(error.message);
-                        } else {
-                            processPayment('stripe', paymentIntent);
+                        } catch (confirmError) {
+                            console.error('Payment confirmation error:', confirmError);
+                            
+                            // Check if it's a network blocking issue
+                            if (confirmError.message && confirmError.message.includes('Failed to fetch')) {
+                                showMessage('Payment blocked by browser extensions. Please disable ad-blockers or try in incognito mode.', 'error');
+                            } else {
+                                showMessage('Payment confirmation failed. Please try again.', 'error');
+                            }
                         }
                     } else {
                         showMessage(result.error || 'Failed to create payment intent.');
@@ -628,7 +769,7 @@
         
         // Load initial data
         if (Object.keys(cart).length === 0) {
-            window.location.href = '/cart';
+            window.location.href = '{{ route('cart') }}';
         } else {
             loadCartData();
         }

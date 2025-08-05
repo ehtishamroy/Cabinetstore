@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ProductLineController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\OrderController;
 
 Route::get('/', function () {
     return view('home');
@@ -23,7 +24,7 @@ Route::get('/test-shop', function () {
     return redirect()->route('shop');
 })->name('test-shop');
 
-Route::get('/product/{doorColorId}', [App\Http\Controllers\ShopController::class, 'showProduct'])->name('product.show');
+Route::get('/product/{doorColorId}/{slug?}', [App\Http\Controllers\ShopController::class, 'showProduct'])->name('product.show');
 Route::get('/products/by-subcategory/{subcategoryId}', [App\Http\Controllers\ShopController::class, 'getProductsBySubcategory'])->name('products.by-subcategory');
 
 Route::get('/privacy', function () {
@@ -39,13 +40,16 @@ Route::post('/checkout/create-payment-intent', [App\Http\Controllers\CheckoutCon
 Route::post('/checkout/process-payment', [App\Http\Controllers\CheckoutController::class, 'processPayment'])->name('checkout.process-payment');
 Route::get('/checkout/success/{orderId}', [App\Http\Controllers\CheckoutController::class, 'success'])->name('checkout.success');
 
+// Order Tracking Routes
+Route::get('/track-order', [App\Http\Controllers\OrderTrackingController::class, 'index'])->name('track-order');
+Route::post('/track-order', [App\Http\Controllers\OrderTrackingController::class, 'track'])->name('track-order.search');
+
 Route::get('/cart', function () {
     return view('cart');
 })->name('cart');
 
-Route::get('/blog', function () {
-    return view('blog');
-})->name('blog');
+Route::get('/blog', [App\Http\Controllers\BlogController::class, 'index'])->name('blog');
+Route::get('/blog/{slug}', [App\Http\Controllers\BlogController::class, 'show'])->name('blog.show');
 
 Route::get('/post', function () {
     return view('post');
@@ -63,6 +67,8 @@ Route::get('/thankyou', function () {
     return view('thankyou');
 })->name('thankyou');
 
+
+
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -76,9 +82,11 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
     
-    Route::get('/orders', function () {
-        return view('admin.orders');
-    })->name('admin.orders');
+    // Orders Management
+    Route::get('/orders', [OrderController::class, 'index'])->name('admin.orders');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('admin.orders.show');
+    Route::patch('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.update-status');
+    Route::patch('/orders/{order}/payment-status', [OrderController::class, 'updatePaymentStatus'])->name('admin.orders.update-payment-status');
     
     Route::get('/products', function () {
         return view('admin.products');
@@ -88,9 +96,7 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         return view('admin.categories');
     })->name('admin.categories');
     
-    Route::get('/blog', function () {
-        return view('admin.blog');
-    })->name('admin.blog');
+    Route::resource('blog', App\Http\Controllers\Admin\BlogController::class, ['as' => 'admin']);
     
     Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('admin.settings');
     Route::put('/settings', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('admin.settings.update');

@@ -44,6 +44,7 @@ class ShopController extends Controller
                         'door_style_id' => $productLine->doorStyle->id,
                         'door_color_id' => $productLine->doorColor->id,
                         'product_line_id' => $productLine->id,
+                        'slug' => $this->generateSlug($productLine->doorColor->name),
                     ];
                 });
             $doorColorsByStyle[$doorStyle['name']] = $colors;
@@ -85,6 +86,7 @@ class ShopController extends Controller
                     'door_style_id' => $productLine->doorStyle->id,
                     'door_color_id' => $productLine->doorColor->id,
                     'product_line_id' => $productLine->id,
+                    'slug' => $this->generateSlug($productLine->doorColor->name),
                 ];
             });
 
@@ -116,9 +118,20 @@ class ShopController extends Controller
     /**
      * Display the product page for a specific door color
      */
-    public function showProduct($doorColorId)
+    public function showProduct($doorColorId, $slug = null)
     {
         $doorColor = DoorColor::findOrFail($doorColorId);
+        
+        // Generate the expected slug for this door color
+        $expectedSlug = $this->generateSlug($doorColor->name);
+        
+        // If a slug was provided but doesn't match, redirect to the correct URL
+        if ($slug && $slug !== $expectedSlug) {
+            return redirect()->route('product.show', [
+                'doorColorId' => $doorColorId,
+                'slug' => $expectedSlug
+            ]);
+        }
         
         // Get the first product line for this door color (for basic info)
         $productLine = ProductLine::where('door_color_id', $doorColorId)
@@ -161,6 +174,29 @@ class ShopController extends Controller
         $doorColor->gallery_images_urls = $this->getDoorColorGalleryImageUrls($doorColor);
         
         return view('product', compact('doorColor', 'productLine', 'allProductLines', 'categories'));
+    }
+
+    /**
+     * Generate SEO-friendly slug from door color name
+     */
+    private function generateSlug($name)
+    {
+        // Convert to lowercase and replace spaces with hyphens
+        $slug = strtolower(trim($name));
+        $slug = preg_replace('/[^a-z0-9\s-]/', '', $slug);
+        $slug = preg_replace('/[\s-]+/', '-', $slug);
+        $slug = trim($slug, '-');
+        
+        return $slug;
+    }
+
+    /**
+     * Generate product URL with slug
+     */
+    public function generateProductUrl($doorColorId, $doorColorName)
+    {
+        $slug = $this->generateSlug($doorColorName);
+        return route('product.show', ['doorColorId' => $doorColorId, 'slug' => $slug]);
     }
 
     /**
