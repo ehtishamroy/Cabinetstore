@@ -68,5 +68,24 @@ class SettingsSeeder extends Seeder
             'Store Address',
             'Physical address of the store'
         );
+
+        // Display Settings
+        Setting::setValue(
+            'top_bar_text',
+            'Free shipping on orders over $2500',
+            'string',
+            'display',
+            'Top Bar Text',
+            'Text displayed in the top announcement bar'
+        );
+
+        Setting::setValue(
+            'top_bar_enabled',
+            1,
+            'boolean',
+            'display',
+            'Top Bar Enabled',
+            'Enable or disable the top announcement bar'
+        );
     }
 }

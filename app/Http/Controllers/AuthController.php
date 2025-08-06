@@ -47,36 +47,7 @@ class AuthController extends Controller
         ])->withInput($request->only('email'));
     }
 
-    /**
-     * Show the registration form
-     */
-    public function showRegister()
-    {
-        return view('register');
-    }
 
-    /**
-     * Handle registration request
-     */
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => ['required', 'confirmed', Password::defaults()],
-        ]);
-
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'customer', // Default role for new registrations
-        ]);
-
-        Auth::login($user);
-
-        return redirect('/');
-    }
 
     /**
      * Handle logout request

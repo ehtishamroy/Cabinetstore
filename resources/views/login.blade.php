@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - BH Cabinetry</title>
+    <title>Admin Login - BH Cabinetry</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -60,9 +60,9 @@
         <div class="w-full max-w-md space-y-8">
             <div>
                 <a href="{{ route('home') }}" class="text-3xl font-bold mx-auto h-12 w-auto text-center block">BH CABINETRY</a>
-                <h2 class="mt-6 text-center text-3xl font-semibold text-gray-900">Welcome Back</h2>
+                <h2 class="mt-6 text-center text-3xl font-semibold text-gray-900">Admin Login</h2>
                  <p class="mt-2 text-center text-sm text-gray-600">
-                    Sign in to continue to your account.
+                    Sign in to access the admin panel.
                 </p>
             </div>
             <form class="mt-8 space-y-6" action="{{ route('login') }}" method="POST">
@@ -100,12 +100,7 @@
                     </button>
                 </div>
 
-                <div class="text-center">
-                    <p class="text-sm text-gray-600">
-                        Don't have an account? 
-                        <a href="{{ route('register') }}" class="font-medium text-accent hover:text-accent/80">Sign up</a>
-                    </p>
-                </div>
+
             </form>
         </div>
     </div>

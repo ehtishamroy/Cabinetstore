@@ -54,7 +54,7 @@ class Blog extends Model
     public function getFeaturedImageUrlAttribute()
     {
         if ($this->featured_image) {
-            return asset('uploads/blog/' . $this->featured_image);
+            return asset('storage/uploads/blog/' . $this->featured_image);
         }
         return 'https://placehold.co/800x600/cccccc/666666?text=Blog+Post';
     }

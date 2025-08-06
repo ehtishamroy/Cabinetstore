@@ -143,7 +143,7 @@
                                 <div class="text-gray-600 text-sm">
                                     <p>{{ $order->shipping_address['firstName'] ?? '' }} {{ $order->shipping_address['lastName'] ?? '' }}</p>
                                     <p>{{ $order->shipping_address['address'] ?? '' }}</p>
-                                    <p>{{ $order->shipping_address['city'] ?? '' }}, {{ $order->shipping_address['country'] ?? '' }} {{ $order->shipping_address['zipCode'] ?? '' }}</p>
+                                    <p>{{ $order->shipping_address['city'] ?? '' }}, {{ $order->shipping_address['state'] ?? '' }} {{ $order->shipping_address['zipCode'] ?? '' }}</p>
                                 </div>
                             @endif
                         </div>
@@ -237,7 +237,7 @@
             <h2 class="text-3xl font-semibold text-primary mb-4">Need Help?</h2>
             <p class="text-gray-600 mb-8">Can't find your order or have questions about your delivery?</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
                     <i data-lucide="mail" class="w-8 h-8 text-accent mx-auto mb-4"></i>
                     <h3 class="font-semibold text-gray-900 mb-2">Email Support</h3>
@@ -249,15 +249,10 @@
                     <i data-lucide="phone" class="w-8 h-8 text-accent mx-auto mb-4"></i>
                     <h3 class="font-semibold text-gray-900 mb-2">Phone Support</h3>
                     <p class="text-gray-600 text-sm mb-4">Speak with our team directly</p>
-                    <a href="tel:+1234567890" class="text-accent hover:text-accent-hover font-medium">(123) 456-7890</a>
+                    <a href="tel:+18324225140" class="text-accent hover:text-accent-hover font-medium">(832) 422-5140</a>
                 </div>
                 
-                <div class="p-6 rounded-lg border border-gray-200 hover:shadow-lg transition-shadow">
-                    <i data-lucide="help-circle" class="w-8 h-8 text-accent mx-auto mb-4"></i>
-                    <h3 class="font-semibold text-gray-900 mb-2">FAQ</h3>
-                    <p class="text-gray-600 text-sm mb-4">Find answers to common questions</p>
-                    <a href="#" class="text-accent hover:text-accent-hover font-medium">View FAQ</a>
-                </div>
+                
             </div>
         </div>
     </section>

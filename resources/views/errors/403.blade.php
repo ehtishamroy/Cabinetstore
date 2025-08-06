@@ -163,8 +163,8 @@
                 <h3>Need to log in?</h3>
                 <div class="login-details">
                     <p>If you're trying to access the admin panel, please make sure you're logged in with the correct credentials.</p>
-                    <p><strong>Email:</strong> support@bhcabinetry.com</p>
-                    <p><strong>Phone:</strong> (123) 456-7890</p>
+                    <p><strong>Email:</strong> info@bhcabinetry.com</p>
+                    <p><strong>Phone:</strong> (832) 422-5140</p>
                 </div>
             </div>
         </div>

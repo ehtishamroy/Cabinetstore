@@ -102,8 +102,8 @@ class CheckoutController extends Controller
                 'payment_method' => $validated['payment_method'],
                 'payment_status' => 'pending',
                 'customer_email' => $validated['customer_info']['email'],
-                'shipping_address' => json_encode($validated['customer_info']['shipping']),
-                'billing_address' => json_encode($validated['customer_info']['billing'] ?? $validated['customer_info']['shipping']),
+                'shipping_address' => $validated['customer_info']['shipping'],
+                'billing_address' => $validated['customer_info']['billing'] ?? $validated['customer_info']['shipping'],
             ]);
             Log::info('Order created successfully', ['order_id' => $order->id]);
 

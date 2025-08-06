@@ -61,7 +61,7 @@
             <p>Aura Cabinets ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how your personal information is collected, used, and disclosed by Aura Cabinets. This Privacy Policy applies to our website, and its associated subdomains (collectively, our "Service") alongside our application, Aura Cabinets. By accessing or using our Service, you signify that you have read, understood, and agree to our collection, storage, use, and disclosure of your personal information as described in this Privacy Policy and our Terms of Service.</p>
 
             <h2>1. Information We Collect</h2>
-            <p>We collect information from you when you visit our website, register on our site, place an order, subscribe to our newsletter, respond to a survey or fill out a form.</p>
+            <p>We collect information from you when you visit our website, place an order, subscribe to our newsletter, respond to a survey or fill out a form.</p>
             <ul>
                 <li><strong>Personal Identification Information:</strong> Name, email address, mailing address, phone number, credit card information.</li>
                 <li><strong>Order Information:</strong> Details about the products you purchase, order history, and shipping information.</li>

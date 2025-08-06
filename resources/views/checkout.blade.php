@@ -157,26 +157,7 @@
                  <div id="message-container"></div>
                  
                  <!-- Localhost Testing Notice -->
-                 <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-                     <div class="flex">
-                         <div class="flex-shrink-0">
-                             <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                                 <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                             </svg>
-                         </div>
-                         <div class="ml-3">
-                             <h3 class="text-sm font-medium text-yellow-800">Testing Mode</h3>
-                             <div class="mt-2 text-sm text-yellow-700">
-                                 <p>You're testing on localhost. If payments fail, try:</p>
-                                 <ul class="list-disc list-inside mt-1">
-                                     <li>Disable browser extensions (ad-blockers)</li>
-                                     <li>Use incognito/private browsing mode</li>
-                                     <li>Use Stripe test card: <code class="bg-yellow-100 px-1 rounded">4242 4242 4242 4242</code></li>
-                                 </ul>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
+                 
 
                 <!-- Shipping Form -->
                 <div id="shipping-step">
@@ -201,12 +182,91 @@
                         <input type="text" id="apartment" placeholder="Apartment, suite, etc. (optional)" class="form-input">
                          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                             <input type="text" id="city" placeholder="City *" class="form-input" required>
-                            <select id="country" class="form-input" required>
-                                <option value="">Select Country *</option>
-                                <option value="US">United States</option>
-                                <option value="CA">Canada</option>
+                            <select id="state" class="form-input" required>
+                                <option value="">Select State/Region *</option>
+                                <!-- United States -->
+                                <optgroup label="United States">
+                                    <option value="AL">Alabama</option>
+                                    <option value="AK">Alaska</option>
+                                    <option value="AZ">Arizona</option>
+                                    <option value="AR">Arkansas</option>
+                                    <option value="CA">California</option>
+                                    <option value="CO">Colorado</option>
+                                    <option value="CT">Connecticut</option>
+                                    <option value="DE">Delaware</option>
+                                    <option value="DC">District of Columbia</option>
+                                    <option value="FL">Florida</option>
+                                    <option value="GA">Georgia</option>
+                                    <option value="HI">Hawaii</option>
+                                    <option value="ID">Idaho</option>
+                                    <option value="IL">Illinois</option>
+                                    <option value="IN">Indiana</option>
+                                    <option value="IA">Iowa</option>
+                                    <option value="KS">Kansas</option>
+                                    <option value="KY">Kentucky</option>
+                                    <option value="LA">Louisiana</option>
+                                    <option value="ME">Maine</option>
+                                    <option value="MD">Maryland</option>
+                                    <option value="MA">Massachusetts</option>
+                                    <option value="MI">Michigan</option>
+                                    <option value="MN">Minnesota</option>
+                                    <option value="MS">Mississippi</option>
+                                    <option value="MO">Missouri</option>
+                                    <option value="MT">Montana</option>
+                                    <option value="NE">Nebraska</option>
+                                    <option value="NV">Nevada</option>
+                                    <option value="NH">New Hampshire</option>
+                                    <option value="NJ">New Jersey</option>
+                                    <option value="NM">New Mexico</option>
+                                    <option value="NY">New York</option>
+                                    <option value="NC">North Carolina</option>
+                                    <option value="ND">North Dakota</option>
+                                    <option value="OH">Ohio</option>
+                                    <option value="OK">Oklahoma</option>
+                                    <option value="OR">Oregon</option>
+                                    <option value="PA">Pennsylvania</option>
+                                    <option value="RI">Rhode Island</option>
+                                    <option value="SC">South Carolina</option>
+                                    <option value="SD">South Dakota</option>
+                                    <option value="TN">Tennessee</option>
+                                    <option value="TX">Texas</option>
+                                    <option value="UT">Utah</option>
+                                    <option value="VT">Vermont</option>
+                                    <option value="VA">Virginia</option>
+                                    <option value="WA">Washington</option>
+                                    <option value="WV">West Virginia</option>
+                                    <option value="WI">Wisconsin</option>
+                                    <option value="WY">Wyoming</option>
+                                </optgroup>
+                                <!-- West Africa -->
+                                <optgroup label="West Africa">
+                                    <option value="NG">Nigeria</option>
+                                    <option value="GH">Ghana</option>
+                                    <option value="CI">Côte d'Ivoire</option>
+                                    <option value="SN">Senegal</option>
+                                    <option value="ML">Mali</option>
+                                    <option value="BF">Burkina Faso</option>
+                                    <option value="NE">Niger</option>
+                                    <option value="TD">Chad</option>
+                                    <option value="CM">Cameroon</option>
+                                    <option value="CF">Central African Republic</option>
+                                    <option value="CG">Republic of the Congo</option>
+                                    <option value="CD">Democratic Republic of the Congo</option>
+                                    <option value="GA">Gabon</option>
+                                    <option value="GQ">Equatorial Guinea</option>
+                                    <option value="ST">São Tomé and Príncipe</option>
+                                    <option value="GW">Guinea-Bissau</option>
+                                    <option value="GN">Guinea</option>
+                                    <option value="SL">Sierra Leone</option>
+                                    <option value="LR">Liberia</option>
+                                    <option value="TG">Togo</option>
+                                    <option value="BJ">Benin</option>
+                                    <option value="MR">Mauritania</option>
+                                    <option value="GM">Gambia</option>
+                                    <option value="CV">Cape Verde</option>
+                                </optgroup>
                             </select>
-                            <input type="text" id="zip-code" placeholder="ZIP code *" class="form-input" required>
+                            <input type="text" id="zip-code" placeholder="ZIP/Postal code *" class="form-input" required>
                         </div>
                         <input type="tel" id="phone" placeholder="Phone *" class="form-input" required>
                     </form>
@@ -539,7 +599,7 @@ function initializePayPal() {
             const lastName = document.getElementById('last-name').value.trim();
             const address = document.getElementById('address').value.trim();
             const city = document.getElementById('city').value.trim();
-            const country = document.getElementById('country').value;
+            const state = document.getElementById('state').value;
             const zipCode = document.getElementById('zip-code').value.trim();
             const phone = document.getElementById('phone').value.trim();
             
@@ -550,8 +610,8 @@ function initializePayPal() {
                 { value: lastName, name: 'Last Name' },
                 { value: address, name: 'Address' },
                 { value: city, name: 'City' },
-                { value: country, name: 'Country' },
-                { value: zipCode, name: 'ZIP Code' },
+                { value: state, name: 'State/Region' },
+                { value: zipCode, name: 'ZIP/Postal Code' },
                 { value: phone, name: 'Phone' }
             ];
             
@@ -565,7 +625,7 @@ function initializePayPal() {
             
             // Update summary
             document.getElementById('summary-email').textContent = email;
-            document.getElementById('summary-address').textContent = `${address}, ${city}, ${country} ${zipCode}`;
+            document.getElementById('summary-address').textContent = `${address}, ${city}, ${state} ${zipCode}`;
             
             // Switch to payment step
             document.getElementById('shipping-step').classList.add('hidden');
@@ -619,7 +679,7 @@ function initializePayPal() {
                         address: document.getElementById('address').value,
                         apartment: document.getElementById('apartment').value,
                         city: document.getElementById('city').value,
-                        country: document.getElementById('country').value,
+                        state: document.getElementById('state').value,
                         zipCode: document.getElementById('zip-code').value,
                         phone: document.getElementById('phone').value,
                     }

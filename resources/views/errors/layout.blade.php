@@ -170,8 +170,8 @@
             <div class="additional-info">
                 <h3>Need help?</h3>
                 <div class="additional-details">
-                    <p><strong>Email:</strong> support@bhcabinetry.com</p>
-                    <p><strong>Phone:</strong> (123) 456-7890</p>
+                    <p><strong>Email:</strong> info@bhcabinetry.com</p>
+                    <p><strong>Phone:</strong> (832) 422-5140</p>
                     <p><strong>Hours:</strong> Monday-Friday, 9AM-6PM EST</p>
                 </div>
             </div>

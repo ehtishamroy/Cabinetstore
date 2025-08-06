@@ -37,7 +37,7 @@
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                    <input type="tel" name="settings[store_phone][value]" value="{{ \App\Models\Setting::getValue('store_phone', '+1 (555) 123-4567') }}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    <input type="tel" name="settings[store_phone][value]" value="{{ \App\Models\Setting::getValue('store_phone', '+1 (832) 422-5140') }}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500">
                     <input type="hidden" name="settings[store_phone][key]" value="store_phone">
                     <input type="hidden" name="settings[store_phone][type]" value="string">
                     <input type="hidden" name="settings[store_phone][group]" value="general">
@@ -69,6 +69,32 @@
                         <p class="text-sm text-gray-500">Accept PayPal payments</p>
                     </div>
                     <button type="button" class="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-900">Configure</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Bar Settings -->
+        <div class="bg-white p-6 rounded-lg shadow">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Top Bar Settings</h2>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Top Bar Text</label>
+                    <input type="text" name="settings[top_bar_text][value]" value="{{ \App\Models\Setting::getValue('top_bar_text', 'Free shipping on orders over $2500') }}" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500" placeholder="Enter top bar announcement text">
+                    <input type="hidden" name="settings[top_bar_text][key]" value="top_bar_text">
+                    <input type="hidden" name="settings[top_bar_text][type]" value="string">
+                    <input type="hidden" name="settings[top_bar_text][group]" value="display">
+                    <p class="text-sm text-gray-500 mt-1">This text will appear in the top announcement bar on your website</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Top Bar Status</label>
+                    <select name="settings[top_bar_enabled][value]" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500">
+                        <option value="1" {{ \App\Models\Setting::getValue('top_bar_enabled', 1) == 1 ? 'selected' : '' }}>Enabled</option>
+                        <option value="0" {{ \App\Models\Setting::getValue('top_bar_enabled', 1) == 0 ? 'selected' : '' }}>Disabled</option>
+                    </select>
+                    <input type="hidden" name="settings[top_bar_enabled][key]" value="top_bar_enabled">
+                    <input type="hidden" name="settings[top_bar_enabled][type]" value="boolean">
+                    <input type="hidden" name="settings[top_bar_enabled][group]" value="display">
+                    <p class="text-sm text-gray-500 mt-1">Enable or disable the top announcement bar</p>
                 </div>
             </div>
         </div>

@@ -90,7 +90,7 @@
                                 @if(isset($order->shipping_address['apartment']) && $order->shipping_address['apartment'])
                                     <p>{{ $order->shipping_address['apartment'] }}</p>
                                 @endif
-                                <p>{{ $order->shipping_address['city'] ?? '' }}, {{ $order->shipping_address['country'] ?? '' }} {{ $order->shipping_address['zipCode'] ?? '' }}</p>
+                                <p>{{ $order->shipping_address['city'] ?? '' }}, {{ $order->shipping_address['state'] ?? '' }} {{ $order->shipping_address['zipCode'] ?? '' }}</p>
                             </div>
                         @endif
                     </div>
@@ -191,10 +191,10 @@
                     <i data-lucide="mail" class="w-4 h-4 mr-2"></i>
                     Contact Support
                 </a>
-                <a href="tel:+1234567890" 
+                <a href="tel:+18324225140" 
                    class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center">
                     <i data-lucide="phone" class="w-4 h-4 mr-2"></i>
-                    (123) 456-7890
+                    (832) 422-5140
                 </a>
             </div>
         </div>

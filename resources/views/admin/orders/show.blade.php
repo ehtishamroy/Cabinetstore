@@ -84,7 +84,7 @@
                     <label class="block text-sm font-medium text-gray-700">Customer Type</label>
                     <p class="mt-1 text-sm text-gray-900">
                         @if($order->user)
-                            Registered User: {{ $order->user->name }}
+                            Admin User: {{ $order->user->name }}
                         @else
                             Guest Customer
                         @endif
@@ -115,7 +115,7 @@
                             @if(isset($order->shipping_address['apartment']) && $order->shipping_address['apartment'])
                                 <p>{{ $order->shipping_address['apartment'] }}</p>
                             @endif
-                            <p>{{ $order->shipping_address['city'] ?? '' }}, {{ $order->shipping_address['country'] ?? '' }} {{ $order->shipping_address['zipCode'] ?? '' }}</p>
+                            <p>{{ $order->shipping_address['city'] ?? '' }}, {{ $order->shipping_address['state'] ?? '' }} {{ $order->shipping_address['zipCode'] ?? '' }}</p>
                             @if(isset($order->shipping_address['phone']) && $order->shipping_address['phone'])
                                 <p>Phone: {{ $order->shipping_address['phone'] }}</p>
                             @endif
@@ -145,7 +145,7 @@
                                 @if(isset($order->billing_address['apartment']) && $order->billing_address['apartment'])
                                     <p>{{ $order->billing_address['apartment'] }}</p>
                                 @endif
-                                <p>{{ $order->billing_address['city'] ?? '' }}, {{ $order->billing_address['country'] ?? '' }} {{ $order->billing_address['zipCode'] ?? '' }}</p>
+                                <p>{{ $order->billing_address['city'] ?? '' }}, {{ $order->billing_address['state'] ?? '' }} {{ $order->billing_address['zipCode'] ?? '' }}</p>
                                 @if(isset($order->billing_address['phone']) && $order->billing_address['phone'])
                                     <p>Phone: {{ $order->billing_address['phone'] }}</p>
                                 @endif
