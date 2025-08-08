@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class Blog extends Model
 {
@@ -53,7 +54,7 @@ class Blog extends Model
 
     public function getFeaturedImageUrlAttribute()
     {
-        if ($this->featured_image) {
+        if ($this->featured_image && Storage::disk('public')->exists('uploads/blog/' . $this->featured_image)) {
             return asset('storage/uploads/blog/' . $this->featured_image);
         }
         return 'https://placehold.co/800x600/cccccc/666666?text=Blog+Post';

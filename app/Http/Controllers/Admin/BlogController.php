@@ -56,8 +56,8 @@ class BlogController extends Controller
         // Handle featured image upload
         if ($request->hasFile('featured_image')) {
             $image = $request->file('featured_image');
-            $filename = time() . '_' . $image->getClientOriginalName();
-            $image->storeAs('public/uploads/blog', $filename);
+            $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('uploads/blog', $filename, 'public');
             $data['featured_image'] = $filename;
         }
 
@@ -121,12 +121,12 @@ class BlogController extends Controller
         if ($request->hasFile('featured_image')) {
             // Delete old image
             if ($post->featured_image) {
-                Storage::delete('public/uploads/blog/' . $post->featured_image);
+                Storage::disk('public')->delete('uploads/blog/' . $post->featured_image);
             }
             
             $image = $request->file('featured_image');
-            $filename = time() . '_' . $image->getClientOriginalName();
-            $image->storeAs('public/uploads/blog', $filename);
+            $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('uploads/blog', $filename, 'public');
             $data['featured_image'] = $filename;
         }
 
@@ -149,7 +149,7 @@ class BlogController extends Controller
         
         // Delete featured image
         if ($post->featured_image) {
-            Storage::delete('public/uploads/blog/' . $post->featured_image);
+            Storage::disk('public')->delete('uploads/blog/' . $post->featured_image);
         }
         
         $post->delete();

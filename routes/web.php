@@ -11,9 +11,7 @@ use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/shop', [App\Http\Controllers\ShopController::class, 'index'])->name('shop');
 Route::get('/shop/door-colors', [App\Http\Controllers\ShopController::class, 'getDoorColors'])->name('shop.door-colors');

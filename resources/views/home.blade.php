@@ -8,7 +8,7 @@
     <section class="relative h-screen flex items-end justify-start text-white">
         <!-- Background Image -->
         <div class="absolute inset-0">
-            <img src="https://images.unsplash.com/photo-1600585152225-358b54e50ae9?q=80&w=2070&auto=format&fit=crop" 
+            <img src="{{ asset('uploads/hero/2941.jpg') }}" 
                  onerror="this.onerror=null;this.src='https://placehold.co/1920x1080/cccccc/666666?text=Modern+Kitchen';"
                  alt="Modern kitchen with beautiful cabinets" class="w-full h-full object-cover">
             <!-- Gradient Overlay -->
@@ -30,12 +30,12 @@
         <div class="px-6 md:px-10">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
                 <!-- Image Column -->
-                <div class="relative h-[450px] lg:h-[550px] flex items-center justify-center">
-                    <div class="absolute w-3/5 top-0 left-0 transform -rotate-6 shadow-2xl rounded-2xl overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1599696845671-74a74b4a324a?q=80&w=1974&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/400x500/cccccc/666666?text=Cabinet+Detail';" alt="Dark wood cabinet detail" class="w-full h-full object-cover">
+                <div class="relative h-[350px] lg:h-[450px] flex items-center justify-center">
+                    <div class="absolute w-2/5 top-0 left-0 transform -rotate-6 shadow-2xl rounded-2xl overflow-hidden group">
+                        <img src="{{ asset('uploads/hero/2150710629.jpg') }}" onerror="this.onerror=null;this.src='https://placehold.co/400x500/cccccc/666666?text=Cabinet+Detail';" alt="Cabinet detail" class="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110">
                     </div>
-                    <div class="relative w-3/5 bottom-0 right-0 transform rotate-3 shadow-2xl rounded-2xl overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1620626011761-99639688d08b?q=80&w=1974&auto=format&fit=crop" onerror="this.onerror=null;this.src='https://placehold.co/400x500/cccccc/666666?text=Cabinet+Detail';" alt="Light wood cabinet detail" class="w-full h-full object-cover">
+                    <div class="relative w-2/5 bottom-0 right-0 transform rotate-3 shadow-2xl rounded-2xl overflow-hidden group">
+                        <img src="{{ asset('uploads/hero/2151008695.jpg') }}" onerror="this.onerror=null;this.src='https://placehold.co/400x500/cccccc/666666?text=Cabinet+Detail';" alt="Cabinet detail" class="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110">
                     </div>
                 </div>
                 <!-- Text Column -->
@@ -53,69 +53,25 @@
     <!-- ===== Shop by Style Section (REDESIGNED) ===== -->
     <section id="styles" class="py-10 md:py-16">
         <div class="px-6 md:px-10">
-            <h2 class="text-3xl md:text-4xl font-semibold text-center mb-10">Find Your Perfect Style</h2>
+            <h2 class="text-3xl md:text-4xl font-semibold text-center mb-10">Choose Your Door Style</h2>
             <div class="swiper style-swiper">
                 <div class="swiper-wrapper pb-12">
-                    <!-- Style Card 1 -->
-                    <div class="swiper-slide">
-                        <a href="#" class="block bg-[#D6C7B9] rounded-2xl p-4 text-primary h-full flex flex-col">
-                            <div class="flex-grow">
-                                <h3 class="text-xl font-semibold">Shaker</h3>
-                                <p class="text-sm opacity-70">18 items</p>
-                            </div>
-                            <img src="https://placehold.co/400x300/F8F7F4/D6C7B9?text=Shaker" alt="Shaker style cabinets" class="w-full rounded-lg mt-4">
-                        </a>
-                    </div>
-                    <!-- Style Card 2 -->
-                    <div class="swiper-slide">
-                        <a href="#" class="block bg-[#3C413B] rounded-2xl p-4 text-white h-full flex flex-col">
-                            <div class="flex-grow">
-                                <h3 class="text-xl font-semibold">Modern</h3>
-                                <p class="text-sm opacity-70">12 items</p>
-                            </div>
-                            <img src="https://placehold.co/400x300/F8F7F4/3C413B?text=Modern" alt="Modern style cabinets" class="w-full rounded-lg mt-4">
-                        </a>
-                    </div>
-                    <!-- Style Card 3 -->
-                    <div class="swiper-slide">
-                        <a href="#" class="block bg-[#B9614A] rounded-2xl p-4 text-white h-full flex flex-col">
-                            <div class="flex-grow">
-                                <h3 class="text-xl font-semibold">Farmhouse</h3>
-                                <p class="text-sm opacity-70">9 items</p>
-                            </div>
-                            <img src="https://placehold.co/400x300/F8F7F4/B9614A?text=Farmhouse" alt="Farmhouse style cabinets" class="w-full rounded-lg mt-4">
-                        </a>
-                    </div>
-                    <!-- Style Card 4 -->
-                    <div class="swiper-slide">
-                        <a href="#" class="block bg-[#A99D8E] rounded-2xl p-4 text-white h-full flex flex-col">
-                            <div class="flex-grow">
-                                <h3 class="text-xl font-semibold">Traditional</h3>
-                                <p class="text-sm opacity-70">22 items</p>
-                            </div>
-                            <img src="https://placehold.co/400x300/F8F7F4/A99D8E?text=Traditional" alt="Traditional style cabinets" class="w-full rounded-lg mt-4">
-                        </a>
-                    </div>
-                    <!-- Style Card 5 -->
-                    <div class="swiper-slide">
-                        <a href="#" class="block bg-[#6C4B43] rounded-2xl p-4 text-white h-full flex flex-col">
-                            <div class="flex-grow">
-                                <h3 class="text-xl font-semibold">Slab</h3>
-                                <p class="text-sm opacity-70">7 items</p>
-                            </div>
-                            <img src="https://placehold.co/400x300/F8F7F4/6C4B43?text=Slab" alt="Slab style cabinets" class="w-full rounded-lg mt-4">
-                        </a>
-                    </div>
-                    <!-- Style Card 6 -->
-                    <div class="swiper-slide">
-                        <a href="#" class="block bg-[#EAEAEA] rounded-2xl p-4 text-primary h-full flex flex-col">
-                            <div class="flex-grow">
-                                <h3 class="text-xl font-semibold">Glass Front</h3>
-                                <p class="text-sm opacity-70">5 items</p>
-                            </div>
-                            <img src="https://placehold.co/400x300/FFFFFF/EAEAEA?text=Glass" alt="Glass Front style cabinets" class="w-full rounded-lg mt-4">
-                        </a>
-                    </div>
+                    @foreach($doorStyles as $doorStyle)
+                        @php
+                            $colorCount = isset($doorColorsByStyle[$doorStyle['name']]) ? count($doorColorsByStyle[$doorStyle['name']]) : 0;
+                            $bgColor = $colorCount > 0 ? 'bg-[#F8F7F4]' : 'bg-gray-200';
+                            $textColor = $colorCount > 0 ? 'text-primary' : 'text-gray-500';
+                        @endphp
+                        <div class="swiper-slide">
+                            <a href="{{ route('shop') }}" class="block {{ $bgColor }} rounded-2xl p-4 {{ $textColor }} h-full flex flex-col">
+                                <div class="flex-grow">
+                                    <h3 class="text-xl font-semibold">{{ $doorStyle['name'] }}</h3>
+                                    <p class="text-sm opacity-70">{{ $colorCount }} color{{ $colorCount !== 1 ? 's' : '' }} available</p>
+                                </div>
+                                <img src="{{ $doorStyle['image_url'] }}" alt="{{ $doorStyle['name'] }} style cabinets" class="w-full rounded-lg mt-4 object-cover aspect-square">
+                            </a>
+                        </div>
+                    @endforeach
                 </div>
                 <!-- Add Pagination -->
                 <div class="swiper-pagination"></div>
@@ -123,104 +79,7 @@
         </div>
     </section>
 
-    <!-- ===== NEW Product Carousel Section (FIXED) ===== -->
-    <section class="py-10 md:py-16">
-        <div class="px-6 md:px-10">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-3xl md:text-4xl font-semibold">New Arrivals</h2>
-                <a href="#" class="text-sm font-semibold text-accent tracking-wider uppercase border-b-2 border-accent pb-1">Shop New Arrivals</a>
-            </div>
-            <div class="swiper product-swiper">
-                <div class="swiper-wrapper pb-12">
-                    <!-- Product Slide 1 -->
-                    <div class="swiper-slide group">
-                        <a href="#">
-                            <div class="bg-white p-4 transition-shadow duration-300 group-hover:shadow-xl">
-                                <img src="https://placehold.co/400x500/EAEAEA/333333?text=Cabinet+Door" alt="New Cabinet Door" class="w-full mb-4 transition-transform duration-300 group-hover:scale-105">
-                            </div>
-                            <div class="mt-4">
-                                <h3 class="font-semibold text-primary">Classic White Door</h3>
-                                <p class="text-gray-500">$125.00</p>
-                                <div class="flex space-x-2 mt-2">
-                                    <button class="w-6 h-6 rounded-full border-2 border-white ring-2 ring-black bg-center bg-cover" style="background-image: url('https://placehold.co/24x24/ffffff/ffffff')"></button>
-                                    <button class="w-6 h-6 rounded-full border-2 border-gray-200 bg-center bg-cover" style="background-image: url('https://placehold.co/24x24/D6C7B9/D6C7B9')"></button>
-                                    <button class="w-6 h-6 rounded-full border-2 border-gray-200 bg-center bg-cover" style="background-image: url('https://placehold.co/24x24/3C413B/3C413B')"></button>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <!-- Product Slide 2 -->
-                    <div class="swiper-slide group">
-                        <a href="#">
-                            <div class="bg-white p-4 transition-shadow duration-300 group-hover:shadow-xl">
-                                <img src="https://placehold.co/400x500/2D2D2D/F8F7F4?text=Cabinet+Handle" alt="New Cabinet Handle" class="w-full mb-4 transition-transform duration-300 group-hover:scale-105">
-                            </div>
-                            <div class="mt-4">
-                                <h3 class="font-semibold text-primary">Matte Black Handle</h3>
-                                <p class="text-gray-500">$28.00</p>
-                                <div class="flex space-x-2 mt-2">
-                                    <button class="w-6 h-6 rounded-full border-2 border-white ring-2 ring-black bg-center bg-cover" style="background-image: url('https://placehold.co/24x24/000000/000000')"></button>
-                                    <button class="w-6 h-6 rounded-full border-2 border-gray-200 bg-center bg-cover" style="background-image: url('https://placehold.co/24x24/C0C0C0/C0C0C0')"></button>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="swiper-slide group">
-                        <a href="#">
-                            <div class="bg-white p-4 transition-shadow duration-300 group-hover:shadow-xl">
-                                <img src="https://placehold.co/400x500/2D2D2D/F8F7F4?text=Cabinet+Handle" alt="New Cabinet Handle" class="w-full mb-4 transition-transform duration-300 group-hover:scale-105">
-                            </div>
-                            <div class="mt-4">
-                                <h3 class="font-semibold text-primary">Matte Black Handle</h3>
-                                <p class="text-gray-500">$28.00</p>
-                                <div class="flex space-x-2 mt-2">
-                                    <button class="w-6 h-6 rounded-full border-2 border-white ring-2 ring-black bg-center bg-cover" style="background-image: url('https://placehold.co/24x24/000000/000000')"></button>
-                                    <button class="w-6 h-6 rounded-full border-2 border-gray-200 bg-center bg-cover" style="background-image: url('https://placehold.co/24x24/C0C0C0/C0C0C0')"></button>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <!-- Product Slide 3 -->
-                    <div class="swiper-slide group">
-                        <a href="#">
-                            <div class="bg-white p-4 transition-shadow duration-300 group-hover:shadow-xl">
-                                <img src="https://placehold.co/400x500/E86A33/FFFFFF?text=Sample+Kit" alt="New Sample Kit" class="w-full mb-4 transition-transform duration-300 group-hover:scale-105">
-                            </div>
-                            <div class="mt-4">
-                                <h3 class="font-semibold text-primary">Wood Finish Sample Kit</h3>
-                                <p class="text-gray-500">$15.00</p>
-                            </div>
-                        </a>
-                    </div>
-                    <!-- Product Slide 4 -->
-                    <div class="swiper-slide group">
-                        <a href="#">
-                            <div class="bg-white p-4 transition-shadow duration-300 group-hover:shadow-xl">
-                                <img src="https://placehold.co/400x500/F8F7F4/333333?text=Floating+Shelf" alt="New Floating Shelf" class="w-full mb-4 transition-transform duration-300 group-hover:scale-105">
-                            </div>
-                            <div class="mt-4">
-                                <h3 class="font-semibold text-primary">Oak Floating Shelf</h3>
-                                <p class="text-gray-500">$85.00</p>
-                                <div class="flex space-x-2 mt-2">
-                                    <button class="w-6 h-6 rounded-full border-2 border-white ring-2 ring-black bg-center bg-cover" style="background-image: url('https://placehold.co/24x24/A99D8E/A99D8E')"></button>
-                                    <button class="w-6 h-6 rounded-full border-2 border-gray-200 bg-center bg-cover" style="background-image: url('https://placehold.co/24x24/6C4B43/6C4B43')"></button>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <!-- Add Pagination & Navigation -->
-                <div class="swiper-pagination"></div>
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-            </div>
-            <div class="text-center mt-12">
-                 <a href="#" class="inline-block btn-minimal font-bold py-3 px-8 text-lg transition-colors duration-300">
-                    Shop All New Arrivals
-                </a>
-            </div>
-        </div>
-    </section>
+
     
     <!-- ===== Why Choose Us Section ===== -->
     <section class="py-12 md:py-20 bg-white">
@@ -397,25 +256,7 @@
         },
     });
 
-    // --- Product Carousel Initialization ---
-    const productSwiper = new Swiper('.product-swiper', {
-        loop: true,
-        slidesPerView: 2,
-        spaceBetween: 20,
-         pagination: {
-            el: '.product-swiper .swiper-pagination',
-            clickable: true,
-        },
-        navigation: {
-            nextEl: '.product-swiper .swiper-button-next',
-            prevEl: '.product-swiper .swiper-button-prev',
-        },
-        breakpoints: {
-            640: { slidesPerView: 2, spaceBetween: 20 },
-            768: { slidesPerView: 3, spaceBetween: 30 },
-            1024: { slidesPerView: 4, spaceBetween: 40 },
-        },
-    });
+
 
     // --- Style Carousel Initialization ---
     const styleSwiper = new Swiper('.style-swiper', {

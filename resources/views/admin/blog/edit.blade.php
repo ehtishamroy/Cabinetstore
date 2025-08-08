@@ -155,12 +155,7 @@
 @endsection
 
 @section('scripts')
-<!-- jQuery (required for Summernote) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Summernote -->
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/summernote-bs4.min.js"></script>
-<script>
+<script
     document.addEventListener('DOMContentLoaded', function() {
         lucide.createIcons();
         
