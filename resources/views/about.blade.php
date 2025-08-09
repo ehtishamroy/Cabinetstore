@@ -6,9 +6,9 @@
 <main>
     <!-- Hero Section -->
     <section class="relative h-[50vh] flex items-center justify-center text-center text-white bg-dark-section">
-        <img src="https://images.unsplash.com/photo-1556742044-53c242bd8aa4?q=80&w=2070&auto=format&fit=crop" 
+        <img src="{{ asset('uploads/hero/68874.jpg') }}" 
              onerror="this.onerror=null;this.src='https://placehold.co/1920x800/cccccc/666666?text=Our+Workspace';"
-             alt="A bright and modern design studio" class="absolute inset-0 w-full h-full object-cover opacity-30">
+             alt="About us hero image" class="absolute inset-0 w-full h-full object-cover opacity-30">
         <div class="relative z-10 px-6">
             <h1 class="text-4xl md:text-6xl font-light">Our Story</h1>
             <p class="mt-4 text-lg md:text-xl max-w-2xl mx-auto text-gray-300">Making beautiful, high-quality kitchen design accessible to everyone.</p>

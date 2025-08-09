@@ -50,7 +50,7 @@
                         <div>
                             <h3 class="font-semibold">Call Us</h3>
                             <p class="text-gray-600">Our design experts are here to help.</p>
-                            <a href="tel:1-800-555-AURA" class="text-accent font-medium hover:underline">1-800-555-AURA</a>
+                            <a href="tel:+18324225140" class="text-accent font-medium hover:underline">(832) 422-5140</a>
                         </div>
                     </div>
                     <div class="flex items-start">
@@ -60,52 +60,45 @@
                         <div>
                             <h3 class="font-semibold">Email Us</h3>
                             <p class="text-gray-600">Get in touch via email for any inquiries.</p>
-                            <a href="mailto:hello@aura.com" class="text-accent font-medium hover:underline">hello@aura.com</a>
+                            <a href="mailto:info@bhkabinets.com" class="text-accent font-medium hover:underline">info@bhkabinets.com</a>
                         </div>
                     </div>
-                    <div class="flex items-start">
-                         <div class="bg-[#F8F7F4] p-3 rounded-lg mr-4">
-                            <i data-lucide="map-pin" class="w-6 h-6 text-accent"></i>
-                         </div>
-                        <div>
-                            <h3 class="font-semibold">Our Showroom</h3>
-                            <p class="text-gray-600">123 Design Lane,<br>New York, NY 10001</p>
-                        </div>
-                    </div>
-                     <div class="flex items-start">
-                         <div class="bg-[#F8F7F4] p-3 rounded-lg mr-4">
-                            <i data-lucide="clock" class="w-6 h-6 text-accent"></i>
-                         </div>
-                        <div>
-                            <h3 class="font-semibold">Business Hours</h3>
-                            <p class="text-gray-600">Mon - Fri: 9am - 6pm<br>Sat: 10am - 4pm EST</p>
-                        </div>
-                    </div>
+                    
                 </div>
 
                 <!-- Contact Form -->
-                <form action="#" method="POST" class="space-y-8">
+                @if(session('status'))
+                    <div class="bg-green-50 border border-green-200 text-green-700 p-3 rounded">{{ session('status') }}</div>
+                @endif
+                @if($errors->any())
+                    <div class="bg-red-50 border border-red-200 text-red-700 p-3 rounded mb-4">
+                        {{ $errors->first() }}
+                    </div>
+                @endif
+
+                <form action="{{ route('contact.submit') }}" method="POST" class="space-y-8">
+                    @csrf
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
                        <div>
                             <label for="first-name" class="sr-only">First name</label>
-                            <input type="text" name="first-name" id="first-name" placeholder="First Name" class="form-input w-full">
+                            <input type="text" name="first-name" id="first-name" placeholder="First Name" value="{{ old('first-name') }}" class="form-input w-full" required>
                        </div>
                        <div>
                             <label for="last-name" class="sr-only">Last name</label>
-                            <input type="text" name="last-name" id="last-name" placeholder="Last Name" class="form-input w-full">
+                            <input type="text" name="last-name" id="last-name" placeholder="Last Name" value="{{ old('last-name') }}" class="form-input w-full" required>
                        </div>
                     </div>
                     <div>
                         <label for="email" class="sr-only">Email</label>
-                        <input type="email" name="email" id="email" placeholder="Email Address" class="form-input w-full">
+                        <input type="email" name="email" id="email" placeholder="Email Address" value="{{ old('email') }}" class="form-input w-full" required>
                     </div>
                      <div>
                         <label for="subject" class="sr-only">Subject</label>
-                        <input type="text" name="subject" id="subject" placeholder="Subject" class="form-input w-full">
+                        <input type="text" name="subject" id="subject" placeholder="Subject" value="{{ old('subject') }}" class="form-input w-full">
                     </div>
                     <div>
                         <label for="message" class="sr-only">Message</label>
-                        <textarea name="message" id="message" rows="4" placeholder="Your Message" class="form-input w-full resize-none"></textarea>
+                        <textarea name="message" id="message" rows="4" placeholder="Your Message" class="form-input w-full resize-none" required>{{ old('message') }}</textarea>
                     </div>
                     <div>
                         <button type="submit" class="w-full btn-minimal text-lg font-bold py-3 px-8 rounded-md">

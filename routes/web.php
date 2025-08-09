@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -32,6 +33,9 @@ Route::get('/privacy', function () {
 Route::get('/contact', function () {
     return view('contact');
 })->name('contact');
+
+// Contact form submission
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
 Route::get('/checkout', [App\Http\Controllers\CheckoutController::class, 'index'])->name('checkout');
 Route::post('/checkout/create-payment-intent', [App\Http\Controllers\CheckoutController::class, 'createPaymentIntent'])->name('checkout.create-payment-intent');

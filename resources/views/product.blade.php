@@ -112,12 +112,12 @@
                             @endforeach
                         @endif
                         @if(!$doorColor->main_image_url && !$doorColor->gallery_images_urls)
-                            <a href="https://placehold.co/600x600/D6C7B9/333333?text=Main+View" class="gallery-thumbnail block border-2 rounded-md overflow-hidden active">
+                        <a href="https://placehold.co/600x600/D6C7B9/333333?text=Main+View" class="gallery-thumbnail block border-2 rounded-md overflow-hidden active">
                                 <img src="https://placehold.co/100x100/D6C7B9/333333?text=View+1" alt="Thumbnail 1" class="w-full h-20 object-cover">
-                            </a>
-                            <a href="https://placehold.co/600x600/A99D8E/FFFFFF?text=Kitchen+Angle" class="gallery-thumbnail block border-2 rounded-md overflow-hidden">
+                        </a>
+                        <a href="https://placehold.co/600x600/A99D8E/FFFFFF?text=Kitchen+Angle" class="gallery-thumbnail block border-2 rounded-md overflow-hidden">
                                 <img src="https://placehold.co/100x100/A99D8E/FFFFFF?text=View+2" alt="Thumbnail 2" class="w-full h-20 object-cover">
-                            </a>
+                        </a>
                         @endif
                     </div>
                 </div>
@@ -144,12 +144,12 @@
                     
                     <!-- Dynamic Description Section -->
                     @if($doorColor->description)
-                        <div class="bg-gray-50/50 backdrop-blur-lg border border-gray-200/50 rounded-xl p-6 mb-8 fade-in-section">
+                    <div class="backdrop-blur-lg border border-gray-200/50 rounded-xl p-6 mb-8 fade-in-section" style="background-color:#F6F5F3;">
                             <h3 class="text-xl font-semibold mb-4">Product Description</h3>
                             <div class="text-sm text-gray-700 leading-relaxed">
                                 {!! $doorColor->description !!}
                             </div>
-                        </div>
+                            </div>
                     @endif
                     
 
@@ -158,14 +158,30 @@
                     <div class="bg-gray-50/50 backdrop-blur-lg border border-gray-200/50 rounded-xl p-6 mb-8 fade-in-section">
                          <h3 class="text-xl font-semibold mb-4">Materials</h3>
                          <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm">
-                            <div class="flex items-center"><img src="https://placehold.co/40x40/cccccc/333333?text=ICON" alt="icon" class="w-10 h-10 mr-4"><span class="text-gray-700">Dovetailed Drawer Construction</span></div>
-                            <div class="flex items-center"><img src="https://placehold.co/40x40/cccccc/333333?text=ICON" alt="icon" class="w-10 h-10 mr-4"><span class="text-gray-700">Full Overlay</span></div>
-                            <div class="flex items-center"><img src="https://placehold.co/40x40/cccccc/333333?text=ICON" alt="icon" class="w-10 h-10 mr-4"><span class="text-gray-700">Soft-Closing Undermount, Full Extension Drawer Glides</span></div>
-                            <div class="flex items-center"><img src="https://placehold.co/40x40/cccccc/333333?text=ICON" alt="icon" class="w-10 h-10 mr-4"><span class="text-gray-700">3/4" Plywood Shelves</span></div>
-                            <div class="flex items-center"><img src="https://placehold.co/40x40/cccccc/333333?text=ICON" alt="icon" class="w-10 h-10 mr-4"><span class="text-gray-700">Solid Wood Face Frame</span></div>
-                            <div class="flex items-center"><img src="https://placehold.co/40x40/cccccc/333333?text=ICON" alt="icon" class="w-10 h-10 mr-4"><span class="text-gray-700">Concealed with Soft Close Hinges</span></div>
-                            <div class="flex items-center"><img src="https://placehold.co/40x40/cccccc/333333?text=ICON" alt="icon" class="w-10 h-10 mr-4"><span class="text-gray-700">White Finish/Color</span></div>
-                            <div class="flex items-center"><img src="https://placehold.co/40x40/cccccc/333333?text=ICON" alt="icon" class="w-10 h-10 mr-4"><span class="text-gray-700">5/8" Solid Wood Drawer Box</span></div>
+                            <div class="flex items-center">
+                                <img src="{{ asset('uploads/material/1.png') }}" alt="Dovetailed Drawer Construction" class="w-10 h-10 mr-4">
+                                <span class="text-gray-700">Dovetailed Drawer Construction</span>
+                            </div>
+                            <div class="flex items-center">
+                                <img src="{{ asset('uploads/material/2.png') }}" alt="Full Overlay" class="w-10 h-10 mr-4">
+                                <span class="text-gray-700">Full Overlay</span>
+                            </div>
+                            <div class="flex items-center">
+                                <img src="{{ asset('uploads/material/3.png') }}" alt="Sand Finish/Color" class="w-10 h-10 mr-4">
+                                <span class="text-gray-700">Sand Finish/Color</span>
+                            </div>
+                            <div class="flex items-center">
+                                <img src="{{ asset('uploads/material/4.png') }}" alt="3/4&quot; Plywood Shelves" class="w-10 h-10 mr-4">
+                                <span class="text-gray-700">3/4&quot; Plywood Shelves</span>
+                            </div>
+                            <div class="flex items-center">
+                                <img src="{{ asset('uploads/material/5.png') }}" alt="Soft-Closing Undermount, Full Extension Drawer Glides" class="w-10 h-10 mr-4">
+                                <span class="text-gray-700">Soft-Closing Undermount, Full Extension Drawer Glides</span>
+                            </div>
+                            <div class="flex items-center">
+                                <img src="{{ asset('uploads/material/6.png') }}" alt="Concealed with Soft Close Hinges" class="w-10 h-10 mr-4">
+                                <span class="text-gray-700">Concealed with Soft Close Hinges</span>
+                            </div>
                          </div>
                     </div>
 
@@ -193,9 +209,9 @@
                     <div class="bg-gray-100 rounded-lg p-6 mt-8 flex items-center justify-between gap-4 fade-in-section">
                         <div>
                             <p class="font-semibold">Still have questions?</p>
-                            <p class="text-2xl font-bold text-accent">1-800-555-AURA</p>
+                            <p class="text-2xl font-bold text-accent">(832) 422-5140</p>
                         </div>
-                        <a href="tel:1-800-555-2872" class="flex items-center justify-center btn-minimal font-bold py-3 px-6">
+                        <a href="tel:+18324225140" class="flex items-center justify-center btn-minimal font-bold py-3 px-6">
                             <i data-lucide="phone" class="mr-2 w-4 h-4"></i>
                             Call Now
                         </a>
@@ -367,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <!-- Desktop Grid -->
                 <div class="hidden lg:grid grid-cols-12 gap-4 items-center">
                     <div class="col-span-3">
-                        <p class="font-bold">${item.name}</p>
+                            <p class="font-bold">${item.name}</p>
                     </div>
                     <div class="text-center text-sm">${item.stock}</div>
                     <div class="flex justify-center"><input type="number" value="${cartItem.qty}" min="0" class="qty-input w-16 text-center border border-gray-300 rounded-md p-1 bg-white"></div>
@@ -517,9 +533,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateCart(id, qty, assembly) {
         if (qty > 0) {
-            cart[id] = { qty, assembly };
+             cart[id] = { qty, assembly };
         } else {
-            delete cart[id];
+             delete cart[id];
         }
     }
     
@@ -590,10 +606,10 @@ document.addEventListener('DOMContentLoaded', function () {
         renderMainFilters();
         // Use a small timeout to ensure the DOM is fully ready for the clicks
         setTimeout(() => {
-            const firstMainFilter = mainFiltersContainer.querySelector('.filter-button');
-            if (firstMainFilter) {
-                firstMainFilter.click();
-            }
+        const firstMainFilter = mainFiltersContainer.querySelector('.filter-button');
+        if (firstMainFilter) {
+            firstMainFilter.click();
+        }
         }, 100);
     }
     

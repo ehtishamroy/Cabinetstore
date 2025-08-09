@@ -19,7 +19,7 @@
         <div class="relative z-10 p-6 md:p-10 text-left">
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight">Beautiful Kitchens, Simply Delivered.</h1>
             <p class="mt-4 text-lg md:text-xl max-w-xl">High-quality, ready-to-assemble cabinets designed for modern living.</p>
-            <a href="#styles" class="mt-8 inline-block bg-primary-cta hover:bg-cta-hover text-white font-bold py-3 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105">
+            <a href="{{ route('shop') }}" class="mt-8 inline-block bg-primary-cta hover:bg-cta-hover text-white font-bold py-3 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105">
                 Shop All Cabinet Styles
             </a>
         </div>
@@ -226,12 +226,12 @@
                 <div class="text-center mt-8">
                     <div class="cta-button-container w-full max-w-xs mx-auto h-12">
                          <span class="cta-button-base"></span>
-                         <a href="#" class="cta-button-link flex items-center justify-center bg-gray-900 text-white font-bold rounded-full text-lg">
+                         <a href="{{ route('contact') }}" class="cta-button-link flex items-center justify-center bg-gray-900 text-white font-bold rounded-full text-lg">
                              Book a Discovery Call
                              <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
                          </a>
                     </div>
-                    <p class="mt-6 text-sm text-gray-500">Or, email us at <a href="mailto:hello@bhcabinetry.com" class="text-accent font-semibold">hello@bhcabinetry.com</a></p>
+                    <p class="mt-6 text-sm text-gray-500">Or, email us at <a href="mailto:info@bhcabinetry.com" class="text-accent font-semibold">info@bhcabinetry.com</a></p>
                 </div>
             </div>
         </div>

@@ -311,37 +311,37 @@
                                 <input type="radio" id="stripe" name="payment-method" value="stripe" class="h-4 w-4 text-accent focus:ring-accent" checked>
                                 <label for="stripe" class="ml-3 block text-sm font-medium text-primary">
                                     Credit Card (Stripe)
-                                </label>
+                            </label>
                             </div>
                         </div>
                         <div class="payment-method" data-method="paypal">
                             <div class="flex items-center">
-                                <input type="radio" id="paypal" name="payment-method" value="paypal" class="h-4 w-4 text-accent focus:ring-accent">
-                                <label for="paypal" class="ml-3 block text-sm font-medium text-primary">
+                                <input type="radio" id="paypal-option" name="payment-method" value="paypal" class="h-4 w-4 text-accent focus:ring-accent">
+                                <label for="paypal-option" class="ml-3 block text-sm font-medium text-primary">
                                     PayPal
                                 </label>
                             </div>
                         </div>
                    </div>
-
+                   
                    <!-- Stripe Payment Form -->
                    <div id="stripe-payment-form" class="space-y-4">
                         <div class="border-2 border-gray-200 rounded-lg p-6 space-y-4 bg-white shadow-sm">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Card Information</label>
                             <div id="card-element" class="min-h-[50px]">
                                 <!-- Stripe Elements will be inserted here -->
-                            </div>
+                        </div>
                             <div id="card-errors" class="text-red-500 text-sm hidden"></div>
                         </div>
-                   </div>
+                    </div>
 
                    <!-- PayPal Button -->
                    <div id="paypal-button-container" class="hidden">
                         <div id="paypal-button"></div>
                    </div>
 
-                   <div class="mt-8">
-                        <button id="pay-now-btn" class="w-full btn-minimal text-lg font-bold py-3.5 px-8 rounded-md">
+                    <div class="mt-8">
+                         <button id="pay-now-btn" class="w-full btn-minimal text-lg font-bold py-3.5 px-8 rounded-md">
                             Pay Now
                         </button>
                         <button id="back-to-shipping" onclick="backToShipping()" class="w-full bg-gray-200 text-gray-800 text-lg font-bold py-3.5 px-8 rounded-md mt-4">
@@ -366,14 +366,14 @@
                  </div>
 
                  <div class="mt-6 pt-6 border-t border-gray-300 space-y-3">
-                     <div class="flex justify-between text-sm">
-                         <span>Subtotal</span>
+                    <div class="flex justify-between text-sm">
+                        <span>Subtotal</span>
                          <span id="subtotal">$0.00</span>
-                     </div>
+                    </div>
                      <div class="flex justify-between text-sm">
-                         <span>Shipping</span>
-                         <span class="font-semibold">$50.00</span>
-                     </div>
+                        <span>Shipping</span>
+                        <span class="font-semibold">$50.00</span>
+                    </div>
                  </div>
 
                  <div class="mt-6 pt-6 border-t border-gray-300">
@@ -391,8 +391,8 @@
 @section('scripts')
 <!-- Stripe.js -->
 <script src="https://js.stripe.com/v3/"></script>
-<!-- PayPal SDK -->
-<script src="https://www.paypal.com/sdk/js?client-id={{ config('services.paypal.client_id', 'test') }}&currency=USD"></script>
+<!-- PayPal SDK (explicitly request buttons component) -->
+<script src="https://www.paypal.com/sdk/js?client-id={{ config('services.paypal.client_id', 'test') }}&currency=USD&components=buttons"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -403,6 +403,7 @@
         let card;
         let paymentIntent;
         let cart = JSON.parse(localStorage.getItem('cart')) || {};
+        const paypalClientId = '{{ config('services.paypal.client_id', '') }}';
         
         // Initialize Stripe
         function initializeStripe() {
@@ -451,13 +452,27 @@
         }
         
         // Initialize PayPal
-function initializePayPal() {
-    if (typeof paypal === 'undefined') {
+ function initializePayPal() {
+    const paypalBtnEl = document.getElementById('paypal-button');
+    // If already rendered once, don't render again
+    if (paypalBtnEl && paypalBtnEl.children && paypalBtnEl.children.length > 0) {
+        return true;
+    }
+    if (typeof window.paypal === 'undefined' || typeof window.paypal.Buttons !== 'function') {
         console.error('PayPal SDK not loaded');
-        return;
+        if (paypalBtnEl && paypalBtnEl.children.length === 0) {
+            paypalBtnEl.innerHTML = '<div class="error-message">PayPal SDK failed to load. Please disable ad blockers or try an incognito window, then click "Retry PayPal".</div>';
+        }
+        return false;
+    }
+    if (!paypalClientId || paypalClientId === 'test') {
+        if (paypalBtnEl && paypalBtnEl.children.length === 0) {
+            paypalBtnEl.innerHTML = '<div class="error-message">PayPal is not configured. Please add a valid client ID.</div>';
+        }
+        return false;
     }
     
-    paypal.Buttons({
+    window.paypal.Buttons({
                 createOrder: async function(data, actions) {
                     const total = await calculateTotal();
                     return actions.order.create({
@@ -474,7 +489,8 @@ function initializePayPal() {
                     });
                 }
             }).render('#paypal-button');
-        }
+    return true;
+ }
         
         // Load shipping settings
         let shippingSettings = {
@@ -591,6 +607,35 @@ function initializePayPal() {
             `;
             showMessage(message, 'error');
         }
+
+        // Map Stripe.js errors to friendly messages
+        function mapStripeError(error) {
+            if (!error) return 'Payment failed. Please try again.';
+            if (error.message && (error.message.includes('network') || error.message.includes('blocked') || error.message.includes('fetch'))) {
+                return 'Network issue detected. Please disable ad blockers or try a private window.';
+            }
+            if (error.type === 'card_error' || error.type === 'validation_error') {
+                switch (error.code) {
+                    case 'incorrect_number': return 'The card number is incorrect.';
+                    case 'invalid_number': return 'The card number is not a valid credit card number.';
+                    case 'invalid_expiry_month': return "The card's expiration month is invalid.";
+                    case 'invalid_expiry_year': return "The card's expiration year is invalid.";
+                    case 'invalid_cvc': return "The card's security code is invalid.";
+                    case 'expired_card': return 'The card has expired.';
+                    case 'incorrect_cvc': return "The card's security code is incorrect.";
+                    case 'incorrect_zip': return "The card's ZIP/postal code failed validation.";
+                    case 'incomplete_number': return 'The card number is incomplete.';
+                    case 'incomplete_cvc': return 'The CVC is incomplete.';
+                    case 'incomplete_expiry': return 'The expiration date is incomplete.';
+                    case 'card_declined': return 'The card was declined.';
+                    case 'insufficient_funds': return 'The card has insufficient funds.';
+                    case 'processing_error': return 'An error occurred while processing the card.';
+                    case 'incorrect_address': return 'The card address is incorrect.';
+                    default: return error.message || 'Your card was declined. Please try another card.';
+                }
+            }
+            return error.message || 'Payment failed. Please try again.';
+        }
         
         // Continue to payment
         document.getElementById('continue-to-payment').addEventListener('click', function() {
@@ -636,18 +681,58 @@ function initializePayPal() {
             // Initialize payment methods
             initializeStripe();
             initializePayPal();
+            // Default UI for selected method
+            const selectedMethod = document.querySelector('input[name="payment-method"]:checked').value;
+            updatePaymentUI(selectedMethod);
         });
         
-        // Payment method selection
+        // Payment method selection (toggle forms and buttons)
+        function updatePaymentUI(method) {
+            const stripeForm = document.getElementById('stripe-payment-form');
+            const paypalContainer = document.getElementById('paypal-button-container');
+            const payNowBtn = document.getElementById('pay-now-btn');
+            if (method === 'stripe') {
+                stripeForm.classList.remove('hidden');
+                paypalContainer.classList.add('hidden');
+                payNowBtn.classList.remove('hidden');
+                payNowBtn.textContent = 'Pay Now';
+                payNowBtn.onclick = null;
+            } else {
+                stripeForm.classList.add('hidden');
+                paypalContainer.classList.remove('hidden');
+                // Scroll to the PayPal area for clarity
+                const paypalBtnEl = document.getElementById('paypal-button');
+                if (paypalBtnEl) {
+                    paypalBtnEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                if (typeof window.paypal === 'undefined' || typeof window.paypal.Buttons !== 'function') {
+                    // SDK not loaded; show retry button and inline guidance
+                    payNowBtn.classList.remove('hidden');
+                    payNowBtn.textContent = 'Retry PayPal';
+                    payNowBtn.onclick = function() {
+                        const ok = initializePayPal();
+                        if (ok) {
+                            payNowBtn.classList.add('hidden');
+                            payNowBtn.textContent = 'Pay Now';
+                            payNowBtn.onclick = null;
+                        }
+                    };
+                    if (paypalBtnEl && paypalBtnEl.children.length === 0) {
+                        paypalBtnEl.innerHTML = '<div class="error-message">PayPal could not load. Disable ad blockers or refresh, then click "Retry PayPal".</div>';
+                    }
+                } else {
+                    // Ensure buttons are rendered when selecting PayPal
+                    initializePayPal();
+                    payNowBtn.classList.add('hidden');
+                    payNowBtn.textContent = 'Pay Now';
+                    payNowBtn.onclick = null;
+                }
+            }
+        }
+
         document.querySelectorAll('input[name="payment-method"]').forEach(radio => {
             radio.addEventListener('change', function() {
-                if (this.value === 'stripe') {
-                    document.getElementById('stripe-payment-form').classList.remove('hidden');
-                    document.getElementById('paypal-button-container').classList.add('hidden');
-                } else {
-                    document.getElementById('stripe-payment-form').classList.add('hidden');
-                    document.getElementById('paypal-button-container').classList.remove('hidden');
-                }
+                updatePaymentUI(this.value);
             });
         });
         
@@ -771,7 +856,12 @@ function initializePayPal() {
                     if (!response.ok) {
                         const errorText = await response.text();
                         console.error('Server error response:', errorText);
-                        showMessage('Server error occurred. Please try again.');
+                        try {
+                            const parsed = JSON.parse(errorText);
+                            showMessage(parsed.error || 'Server error occurred. Please try again.');
+                        } catch (_) {
+                            showMessage('Server error occurred. Please try again.');
+                        }
                         return;
                     }
                     
@@ -783,7 +873,7 @@ function initializePayPal() {
                         
                         // Confirm payment
                         try {
-                            const { error } = await stripe.confirmCardPayment(result.clientSecret, {
+                            const { error, paymentIntent: confirmedIntent } = await stripe.confirmCardPayment(result.clientSecret, {
                                 payment_method: {
                                     card: card,
                                     billing_details: {
@@ -795,14 +885,16 @@ function initializePayPal() {
                             
                             if (error) {
                                 console.error('Stripe error:', error);
-                                // Check if it's a network/blocking issue
-                                if (error.message && (error.message.includes('network') || error.message.includes('blocked') || error.message.includes('fetch'))) {
+                                const friendly = mapStripeError(error);
+                                if (friendly.toLowerCase().includes('ad blocker') || friendly.toLowerCase().includes('network')) {
                                     showAdBlockerMessage();
                                 } else {
-                                    showMessage(error.message);
+                                    showMessage(friendly);
                                 }
-                            } else {
+                            } else if (confirmedIntent && confirmedIntent.status === 'succeeded') {
                                 processPayment('stripe', paymentIntent);
+                            } else {
+                                showMessage('Payment could not be completed.');
                             }
                         } catch (confirmError) {
                             console.error('Payment confirmation error:', confirmError);
@@ -822,8 +914,15 @@ function initializePayPal() {
                     console.error('Payment intent error:', error);
                 }
             } else {
-                // PayPal payment is handled by the PayPal button
-                showMessage('Please use the PayPal button above to complete your payment.');
+                // Ensure PayPal buttons are rendered or prompt to retry
+                const ok = initializePayPal();
+                const paypalBtnEl = document.getElementById('paypal-button');
+                if (paypalBtnEl) {
+                    paypalBtnEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                if (!ok) {
+                    showMessage('PayPal is not ready. Please disable ad blockers or configure a valid PayPal Client ID, then click "Retry PayPal".');
+                }
             }
         });
         

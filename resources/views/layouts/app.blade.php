@@ -141,10 +141,16 @@
 </head>
 <body class="bg-primary-background">
 
-    <!-- ===== Announcement Bar ===== -->
-    <div id="announcement-bar" class="bg-dark-section text-white text-sm font-medium text-center py-2.5 w-full relative z-[60]">
-        <span id="announcement-text" class="transition-opacity duration-500 ease-in-out opacity-0"></span>
-    </div>
+    <!-- ===== Announcement Bar (Dynamic via Settings) ===== -->
+    @php
+        $topBarEnabled = \App\Models\Setting::getValue('top_bar_enabled', 1);
+        $topBarText = \App\Models\Setting::getValue('top_bar_text', 'Free shipping on orders over $2500');
+    @endphp
+    @if($topBarEnabled)
+        <div id="announcement-bar" class="bg-dark-section text-white text-sm font-medium text-center py-2.5 w-full relative z-[60]">
+            <span id="announcement-text" class="transition-opacity duration-500 ease-in-out">{{ $topBarText }}</span>
+        </div>
+    @endif
 
     <!-- ===== Header ===== -->
     <header id="main-header" class="fixed left-0 right-0 z-50 py-4 px-6 md:px-10">
@@ -155,7 +161,6 @@
             <!-- Desktop Navigation -->
             <nav class="hidden md:flex items-center space-x-8">
                 <a href="{{ route('shop') }}" class="hover:text-accent transition-colors duration-300">Shop</a>
-                <a href="/product" class="hover:text-accent transition-colors duration-300">Products</a>
                 <a href="{{ route('track-order') }}" class="hover:text-accent transition-colors duration-300">Track Order</a>
                 <a href="{{ route('about') }}" class="hover:text-accent transition-colors duration-300">About Us</a>
                 <a href="{{ route('blog') }}" class="hover:text-accent transition-colors duration-300">Blog</a>
@@ -191,7 +196,7 @@
                     <span id="cart-count" class="absolute -top-2 -right-2 bg-accent text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">0</span>
                     
                     <!-- Cart Dropdown -->
-                    <div id="cart-dropdown" class="absolute right-0 top-full pt-2 w-80 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out">
+                    <div id="cart-dropdown" class="absolute right-0 top-full pt-2 w-80 bg-white rounded-md shadow-lg py-1 z-50 border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ease-in-out text-gray-900">
                         <div id="cart-items" class="max-h-64 overflow-y-auto">
                             <!-- Cart items will be populated here -->
                         </div>
@@ -222,7 +227,6 @@
         </button>
         <nav class="flex flex-col space-y-6 text-lg mt-12">
             <a href="{{ route('shop') }}" class="hover:text-accent transition-colors duration-300">Shop</a>
-            <a href="/product" class="hover:text-accent transition-colors duration-300">Products</a>
             <a href="{{ route('track-order') }}" class="hover:text-accent transition-colors duration-300 flex items-center"><i data-lucide="package-search" class="mr-2"></i> Track Order</a>
             <a href="{{ route('about') }}" class="hover:text-accent transition-colors duration-300">About Us</a>
             <a href="{{ route('blog') }}" class="hover:text-accent transition-colors duration-300">Blog</a>
@@ -253,7 +257,7 @@
     <!-- ===== Footer ===== -->
     <footer class="bg-dark-section text-gray-300 pt-16 pb-8">
         <div class="px-6 md:px-10">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Column 1: Brand -->
                 <div class="md:col-span-1">
                     <h3 class="text-2xl font-bold text-white mb-4">BH CABINETRY</h3>
@@ -281,17 +285,7 @@
                         <li><a href="#" class="hover:text-white transition-colors">My Account</a></li>
                     </ul>
                 </div>
-                <!-- Column 4: Newsletter -->
-                <div>
-                    <h4 class="font-semibold text-white mb-4">Join Our Newsletter</h4>
-                    <p class="text-sm mb-4">Get design inspiration and exclusive offers straight to your inbox.</p>
-                    <form class="flex">
-                        <input type="email" placeholder="Your email" class="w-full p-2 text-gray-800 focus:outline-none">
-                        <button type="submit" class="btn-minimal text-white font-bold py-2 px-4 transition-colors">
-                            <i data-lucide="arrow-right"></i>
-                        </button>
-                    </form>
-                </div>
+                
             </div>
             <hr class="border-gray-700 my-8">
             <div class="text-center text-sm text-gray-500">
@@ -306,29 +300,13 @@
             // Initialize Lucide Icons
             lucide.createIcons();
 
-            // --- Announcement Bar & Header Logic ---
-            const announcements = [
-                "Free Delivery On All Orders Over $1500",
-                "Use Coupon 'SUMMER25' for 25% Off",
-                "New Modern Grey Styles Arriving Weekly!"
-            ];
-            let announcementIndex = 0;
+            // --- Announcement Bar & Header Logic (Dynamic from settings) ---
             const announcementTextEl = document.getElementById('announcement-text');
             const announcementBar = document.getElementById('announcement-bar');
             const mainHeader = document.getElementById('main-header');
             const logo = document.getElementById('logo');
             const mobileMenuBtn = document.getElementById('mobile-menu-button');
-
-            function cycleAnnouncements() {
-                if (!announcementTextEl) return;
-                announcementTextEl.style.opacity = '0';
-                
-                setTimeout(() => {
-                    announcementIndex = (announcementIndex + 1) % announcements.length;
-                    announcementTextEl.textContent = announcements[announcementIndex];
-                    announcementTextEl.style.opacity = '1';
-                }, 500);
-            }
+            // No rotation here; text is managed via admin settings and rendered server-side
             
             const updateHeaderStyle = () => {
                 const barHeight = announcementBar ? announcementBar.offsetHeight : 0;
@@ -365,11 +343,9 @@
                 }
             };
 
-            // Initial setup for announcement bar
+            // Initial setup: if announcement bar exists, ensure it is visible
             if (announcementTextEl) {
-                announcementTextEl.textContent = announcements[0];
                 announcementTextEl.style.opacity = '1';
-                setInterval(cycleAnnouncements, 5000);
             }
 
             // Initial check and event listeners
@@ -437,11 +413,11 @@
                         itemsHtml += `
                             <div class="flex items-center justify-between p-3 border-b border-gray-100">
                                 <div class="flex-1">
-                                    <div class="font-medium text-sm">${item.name}</div>
-                                    <div class="text-xs text-gray-500">Qty: ${item.qty} | ${item.assembly ? 'Assembly: Yes' : 'Assembly: No'}</div>
+                                    <div class="font-medium text-sm text-gray-900">${item.name}</div>
+                                    <div class="text-xs text-gray-900">Qty: ${item.qty} | ${item.assembly ? 'Assembly: Yes' : 'Assembly: No'}</div>
                                 </div>
                                 <div class="text-right">
-                                    <div class="font-medium text-sm">$${itemTotal.toFixed(2)}</div>
+                                    <div class="font-medium text-sm text-gray-900">$${itemTotal.toFixed(2)}</div>
                                     <button onclick="removeFromCart('${productId}')" class="text-xs text-red-500 hover:text-red-700">Remove</button>
                                 </div>
                             </div>

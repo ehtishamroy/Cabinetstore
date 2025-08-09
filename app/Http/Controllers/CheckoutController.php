@@ -36,17 +36,22 @@ class CheckoutController extends Controller
             // Set Stripe API key
             Stripe::setApiKey($stripeSecret);
 
-            $amount = $request->input('amount'); // Amount in cents
+            $amount = (int) $request->input('amount'); // Amount in cents
             $currency = 'usd';
 
             Log::info('Creating Stripe PaymentIntent with amount: ' . $amount . ' and currency: ' . $currency);
 
+            // Enforce Stripe minimum amount for card payments (USD $0.50 = 50 cents)
+            if ($amount < 50) {
+                Log::error('Amount below Stripe minimum: ' . $amount);
+                return response()->json(['error' => 'Amount is too low. Minimum charge is $0.50.'], 422);
+            }
+
             $paymentIntent = PaymentIntent::create([
                 'amount' => $amount,
                 'currency' => $currency,
-                'automatic_payment_methods' => [
-                    'enabled' => true,
-                ],
+                // Explicitly use card payments to avoid "No valid payment method types" errors
+                'payment_method_types' => ['card'],
                 'metadata' => [
                     'order_id' => uniqid('order_'),
                 ],
@@ -60,7 +65,9 @@ class CheckoutController extends Controller
             ]);
         } catch (ApiException $e) {
             Log::error('Stripe API error: ' . $e->getMessage());
-            return response()->json(['error' => 'Payment setup failed: ' . $e->getMessage()], 500);
+            return response()->json([
+                'error' => 'Payment setup failed: ' . $e->getMessage(),
+            ], 400);
         } catch (\Exception $e) {
             Log::error('Stripe payment intent creation failed: ' . $e->getMessage());
             Log::error('Stack trace: ' . $e->getTraceAsString());
